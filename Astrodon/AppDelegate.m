@@ -3,16 +3,21 @@
 //
 
 #import "AppDelegate.h"
+#import "DDHTimelineViewController.h"
 
 @interface AppDelegate ()
-
-@property (strong) IBOutlet NSWindow *window;
+@property (strong) NSWindow *window;
 @end
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  // Insert code here to initialize your application
+  DDHTimelineViewController *timeLineViewController = [DDHTimelineViewController new];
+  timeLineViewController.title = @"Timeline";
+
+  NSWindow *window = [NSWindow windowWithContentViewController:timeLineViewController];
+  [window makeKeyAndOrderFront:self];
+  self.window = window;
 }
 
 
