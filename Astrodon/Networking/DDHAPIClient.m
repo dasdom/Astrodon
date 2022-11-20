@@ -4,6 +4,7 @@
 
 #import "DDHAPIClient.h"
 #import "DDHToot.h"
+#import "DDHAccount.h"
 #import "DDHRequestFactory.h"
 #import "DDHErrorCodes.h"
 

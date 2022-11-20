@@ -7,7 +7,8 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHTimelineCellView : NSTableCellView
-
+@property IBOutlet NSTextField *displayNameTextField;
+@property IBOutlet NSTextField *acctTextField;
 @end
 
 NS_ASSUME_NONNULL_END
