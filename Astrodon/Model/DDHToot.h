@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) DDHAccount *account;
 @property (strong) NSString *content;
 @property (strong) NSDate *createdAt;
+@property (strong) DDHToot *boostedToot;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 @end
 

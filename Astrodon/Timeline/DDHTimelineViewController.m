@@ -33,12 +33,6 @@
 - (void)viewWillAppear {
   [super viewWillAppear];
 
-//  [self.apiClient publicTimeline:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
-//    self.toots = toots;
-//    dispatch_async(dispatch_get_main_queue(), ^{
-//      [self.tableView reloadData];
-//    });
-//  }];
 }
 
 - (void)viewDidAppear {
@@ -68,8 +62,10 @@
 
   DDHToot *toot = self.toots[row];
   DDHTimelineCellView *cellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
-  NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithHTML:[toot.content dataUsingEncoding:NSUTF16StringEncoding] documentAttributes:nil];
-  [attributedString addAttributes:@{NSFontAttributeName: [NSFont preferredFontForTextStyle:NSFontTextStyleBody options:@{}]} range:NSMakeRange(0, attributedString.length)];
+  NSData *contentData = [toot.content dataUsingEncoding:NSUTF16StringEncoding];
+  NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithHTML:contentData documentAttributes:nil];
+  [attributedString addAttributes:@{NSFontAttributeName: [NSFont preferredFontForTextStyle:NSFontTextStyleBody options:@{}]}
+                            range:NSMakeRange(0, attributedString.length)];
   cellView.textField.attributedStringValue = attributedString;
   DDHAccount *account = toot.account;
   cellView.displayNameTextField.stringValue = account.displayName;

@@ -10,12 +10,15 @@
   NSString *imageName = [url lastPathComponent];
 
   NSFileManager *fileManager = NSFileManager.defaultManager;
-  NSURL *supportURL = [[fileManager URLsForDirectory:NSApplicationSupportDirectory inDomains:NSUserDomainMask] firstObject];
+  NSURL *supportURL = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSAllDomainsMask] firstObject];
   NSURL *avatarsImagesURL = [supportURL URLByAppendingPathComponent:@"avatarImages"];
 
   if (NO == [fileManager fileExistsAtPath:[avatarsImagesURL path]]) {
     NSError *createDirectoryError = nil;
     [fileManager createDirectoryAtURL:avatarsImagesURL withIntermediateDirectories:YES attributes:nil error:&createDirectoryError];
+    if (createDirectoryError) {
+      NSLog(@"createDirectoryError: %@", createDirectoryError);
+    }
   }
 
   NSURL *imageURL = [avatarsImagesURL URLByAppendingPathComponent:imageName];
@@ -32,6 +35,7 @@
     NSURLSessionDataTask *dataTask = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
       if (data) {
+        [data writeToURL:imageURL atomically:YES];
         NSImage *image = [[NSImage alloc] initWithData:data];
         completionHandler(image);
         return;

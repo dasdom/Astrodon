@@ -12,6 +12,11 @@
 
     NSDictionary *accountDict = dict[@"account"];
     _account = [[DDHAccount alloc] initWithDictionary:accountDict];
+
+    NSDictionary *reblogDict = dict[@"reblog"];
+    if ([reblogDict isKindOfClass:[NSDictionary class]]) {
+      _boostedToot = [[DDHToot alloc] initWithDictionary:reblogDict];
+    }
   }
   return self;
 }
