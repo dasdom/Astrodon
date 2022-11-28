@@ -8,6 +8,10 @@
 #import "DDHAPIClient.h"
 #import "DDHTimelineCellView.h"
 #import "DDHImageLoader.h"
+#import "DDHServerInputViewController.h"
+#import "DDHKeychain.h"
+#import "DDHConstants.h"
+#import "DDHEndpoint.h"
 
 @interface DDHTimelineViewController () <NSTableViewDataSource, NSTableViewDelegate>
 @property (strong) NSArray<DDHToot *> *toots;
@@ -29,12 +33,29 @@
 - (void)viewWillAppear {
   [super viewWillAppear];
 
-  [self.apiClient publicTimeline:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
-    self.toots = toots;
-    dispatch_async(dispatch_get_main_queue(), ^{
-      [self.tableView reloadData];
-    });
-  }];
+//  [self.apiClient publicTimeline:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+//    self.toots = toots;
+//    dispatch_async(dispatch_get_main_queue(), ^{
+//      [self.tableView reloadData];
+//    });
+//  }];
+}
+
+- (void)viewDidAppear {
+  [super viewDidAppear];
+
+  NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
+  if (code.length < 1) {
+    [self presentViewControllerAsSheet:[DDHServerInputViewController new]];
+  } else {
+    [self.apiClient timelineFromEndpoint:DDHEndpointHome completionHandler:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+      NSLog(@"error: %@", error);
+      self.toots = toots;
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [self.tableView reloadData];
+      });
+    }];
+  }
 }
 
 // MARK: - NSTableViewDataSource

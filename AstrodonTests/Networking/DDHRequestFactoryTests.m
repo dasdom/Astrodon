@@ -19,9 +19,15 @@
 }
 
 - (void)test_publicURL_shouldBeAsExpected {
-  NSURL *publicURL = [DDHRequestFactory urlForEndpoint:DDHEndpointPublic];
+  NSURL *publicURL = [DDHRequestFactory urlForEndpoint:DDHEndpointPublic code:nil];
 
   XCTAssertEqualObjects(publicURL, [NSURL URLWithString:@"https://chaos.social/api/v1/timelines/public"]);
+}
+
+- (void)test_token {
+  NSURL *tokenURL = [DDHRequestFactory urlForEndpoint:DDHEndpointFetchToken code:@"EH53AYi_pCwv6hb_iFd8DJP4-Ta5IiNork-PSjXVyVo"];
+
+  XCTAssertNotNil(tokenURL);
 }
 
 

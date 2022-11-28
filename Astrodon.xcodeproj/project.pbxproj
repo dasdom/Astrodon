@@ -20,6 +20,11 @@
 		F238586C2926D31C0065DE0B /* DDHTimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F238586A2926D31C0065DE0B /* DDHTimelineViewController.xib */; };
 		F23858702926D7B20065DE0B /* DDHTimelineCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F238586F2926D7B20065DE0B /* DDHTimelineCellView.m */; };
 		F2C7B1CB292A23AE00554EA2 /* DDHImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1CA292A23AE00554EA2 /* DDHImageLoader.m */; };
+		F2C7B1CF2930B82900554EA2 /* DDHServerInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1CD2930B82900554EA2 /* DDHServerInputViewController.m */; };
+		F2C7B1D02930B82900554EA2 /* DDHServerInputViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F2C7B1CE2930B82900554EA2 /* DDHServerInputViewController.xib */; };
+		F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */; };
+		F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1FE29350EF400554EA2 /* DDHConstants.m */; };
+		F2C7B20129351BA100554EA2 /* DDHClientKeys.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B20029351BA100554EA2 /* DDHClientKeys.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -59,6 +64,15 @@
 		F238586F2926D7B20065DE0B /* DDHTimelineCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHTimelineCellView.m; sourceTree = "<group>"; };
 		F2C7B1C9292A23AE00554EA2 /* DDHImageLoader.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHImageLoader.h; sourceTree = "<group>"; };
 		F2C7B1CA292A23AE00554EA2 /* DDHImageLoader.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHImageLoader.m; sourceTree = "<group>"; };
+		F2C7B1CC2930B82900554EA2 /* DDHServerInputViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHServerInputViewController.h; sourceTree = "<group>"; };
+		F2C7B1CD2930B82900554EA2 /* DDHServerInputViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHServerInputViewController.m; sourceTree = "<group>"; };
+		F2C7B1CE2930B82900554EA2 /* DDHServerInputViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DDHServerInputViewController.xib; sourceTree = "<group>"; };
+		F2C7B1F82934A52100554EA2 /* DDHClientKeys.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHClientKeys.h; sourceTree = "<group>"; };
+		F2C7B1F92935084B00554EA2 /* DDHKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHKeychain.h; sourceTree = "<group>"; };
+		F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHKeychain.m; sourceTree = "<group>"; };
+		F2C7B1FD29350EF400554EA2 /* DDHConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHConstants.h; sourceTree = "<group>"; };
+		F2C7B1FE29350EF400554EA2 /* DDHConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHConstants.m; sourceTree = "<group>"; };
+		F2C7B20029351BA100554EA2 /* DDHClientKeys.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHClientKeys.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -102,6 +116,11 @@
 			children = (
 				F23858382926A1C00065DE0B /* AppDelegate.h */,
 				F23858392926A1C00065DE0B /* AppDelegate.m */,
+				F2C7B1F92935084B00554EA2 /* DDHKeychain.h */,
+				F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */,
+				F2C7B1FD29350EF400554EA2 /* DDHConstants.h */,
+				F2C7B1FE29350EF400554EA2 /* DDHConstants.m */,
+				F2C7B1D12930B83300554EA2 /* Server Input */,
 				F238586D2926D3240065DE0B /* Timeline */,
 				F238585B2926ABF70065DE0B /* Networking */,
 				F238585C2926AC010065DE0B /* Model */,
@@ -124,6 +143,8 @@
 		F238585B2926ABF70065DE0B /* Networking */ = {
 			isa = PBXGroup;
 			children = (
+				F2C7B1F82934A52100554EA2 /* DDHClientKeys.h */,
+				F2C7B20029351BA100554EA2 /* DDHClientKeys.m */,
 				F23858552926A1FB0065DE0B /* DDHAPIClient.h */,
 				F23858562926A1FB0065DE0B /* DDHAPIClient.m */,
 				F23858612926AFA70065DE0B /* DDHRequestFactory.h */,
@@ -165,6 +186,16 @@
 				F238586F2926D7B20065DE0B /* DDHTimelineCellView.m */,
 			);
 			path = Timeline;
+			sourceTree = "<group>";
+		};
+		F2C7B1D12930B83300554EA2 /* Server Input */ = {
+			isa = PBXGroup;
+			children = (
+				F2C7B1CC2930B82900554EA2 /* DDHServerInputViewController.h */,
+				F2C7B1CD2930B82900554EA2 /* DDHServerInputViewController.m */,
+				F2C7B1CE2930B82900554EA2 /* DDHServerInputViewController.xib */,
+			);
+			path = "Server Input";
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -249,6 +280,7 @@
 			files = (
 				F238586C2926D31C0065DE0B /* DDHTimelineViewController.xib in Resources */,
 				F238583C2926A1C10065DE0B /* Assets.xcassets in Resources */,
+				F2C7B1D02930B82900554EA2 /* DDHServerInputViewController.xib in Resources */,
 				F238583F2926A1C10065DE0B /* MainMenu.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -271,9 +303,13 @@
 				F23858412926A1C10065DE0B /* main.m in Sources */,
 				F23858572926A1FB0065DE0B /* DDHAPIClient.m in Sources */,
 				F23858702926D7B20065DE0B /* DDHTimelineCellView.m in Sources */,
+				F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */,
 				F238585A2926ABF20065DE0B /* DDHToot.m in Sources */,
+				F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */,
+				F2C7B1CF2930B82900554EA2 /* DDHServerInputViewController.m in Sources */,
 				F23858632926AFA70065DE0B /* DDHRequestFactory.m in Sources */,
 				F238585F2926ACA30065DE0B /* DDHAccount.m in Sources */,
+				F2C7B20129351BA100554EA2 /* DDHClientKeys.m in Sources */,
 				F238586B2926D31C0065DE0B /* DDHTimelineViewController.m in Sources */,
 				F238583A2926A1C00065DE0B /* AppDelegate.m in Sources */,
 			);
@@ -429,6 +465,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q6PD97MRX4;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;
@@ -455,6 +492,7 @@
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q6PD97MRX4;
 				ENABLE_HARDENED_RUNTIME = YES;
+				GCC_NO_COMMON_BLOCKS = NO;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_NSHumanReadableCopyright = "";
 				INFOPLIST_KEY_NSMainNibFile = MainMenu;

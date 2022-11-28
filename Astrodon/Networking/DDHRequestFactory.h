@@ -5,11 +5,8 @@
 #import <Foundation/Foundation.h>
 #import "DDHEndpoint.h"
 
-NS_ASSUME_NONNULL_BEGIN
-
 @interface DDHRequestFactory : NSObject
-+ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint;
++ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint code:(NSString *)code;
 + (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint;
++ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint code:(NSString *)code;
 @end
-
-NS_ASSUME_NONNULL_END

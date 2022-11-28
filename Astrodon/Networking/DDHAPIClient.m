@@ -21,25 +21,37 @@
   return self;
 }
 
-- (void)publicTimeline:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointPublic];
+- (void)fetchTokenWithCode:(NSString *)code completionHandler:(void(^)(NSString *token, NSError *error))completionHandler {
+
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointFetchToken code:code];
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
-    if (error) {
-      completionHandler(nil, error);
+    NSError *requestError = [self errorFromData:data response:response error:error];
+    if (requestError) {
+      completionHandler(nil, requestError);
       return;
     }
 
-    NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
-    if (httpResponse.statusCode != 200) {
-      NSError *responseError = [[NSError alloc] initWithDomain:@"DDHAPIClientErrorDomain" code:DDHErrorCodeResponseNotOK userInfo:nil];
-      completionHandler(nil, responseError);
-      return;
-    }
+    NSError *jsonError = nil;
+    NSDictionary *dict = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+    NSString *token = dict[@"access_token"];
+    completionHandler(token, nil);
+  }];
 
-    if (data == nil) {
-      NSError *responseError = [[NSError alloc] initWithDomain:@"DDHAPIClientErrorDomain" code:DDHErrorCodeDataEmpty userInfo:nil];
-      completionHandler(nil, responseError);
+  [dataTask resume];
+}
+
+- (void)timelineFromEndpoint:(DDHEndpoint)endpoint completionHandler:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
+
+  if (endpoint != DDHEndpointPublic && endpoint != DDHEndpointHome) {
+    return;
+  }
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:endpoint];
+  NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+
+    NSError *requestError = [self errorFromData:data response:response error:error];
+    if (requestError) {
+      completionHandler(nil, requestError);
       return;
     }
 
@@ -56,6 +68,25 @@
   }];
 
   [dataTask resume];
+}
+
+- (NSError *)errorFromData:(NSData *)data response:(NSURLResponse *)response error:(NSError *)error {
+  if (error) {
+    return error;
+  }
+
+  NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
+  if (httpResponse.statusCode != 200) {
+    NSError *responseError = [[NSError alloc] initWithDomain:@"DDHAPIClientErrorDomain" code:DDHErrorCodeResponseNotOK userInfo:nil];
+    return responseError;
+  }
+
+  if (data == nil) {
+    NSError *responseError = [[NSError alloc] initWithDomain:@"DDHAPIClientErrorDomain" code:DDHErrorCodeDataEmpty userInfo:nil];
+    return responseError;
+  }
+
+  return nil;
 }
 
 @end

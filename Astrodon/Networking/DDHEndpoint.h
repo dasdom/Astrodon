@@ -6,7 +6,9 @@
 #define DDHEndpoint_h
 
 typedef NS_ENUM(NSInteger, DDHEndpoint) {
-  DDHEndpointPublic
+  DDHEndpointFetchToken,
+  DDHEndpointPublic,
+  DDHEndpointHome
 };
 
 #endif /* DDHEndpoint_h */
