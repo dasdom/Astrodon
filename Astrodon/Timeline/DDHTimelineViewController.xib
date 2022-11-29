@@ -51,16 +51,37 @@
                                                     <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="7" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1gS-wB-khb">
                                                         <rect key="frame" x="3" y="8" width="455" height="60"/>
                                                         <subviews>
-                                                            <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zjC-rO-99m">
-                                                                <rect key="frame" x="0.0" y="-2.5" width="60" height="65"/>
-                                                                <constraints>
-                                                                    <constraint firstAttribute="height" constant="60" id="GYZ-in-z7Y"/>
-                                                                    <constraint firstAttribute="width" constant="60" id="Tet-Ge-GNT"/>
-                                                                </constraints>
-                                                                <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSTouchBarUserTemplate" id="zes-XR-vex"/>
-                                                            </imageView>
+                                                            <stackView distribution="fill" orientation="horizontal" alignment="top" spacing="-15" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="1BX-zd-xB1">
+                                                                <rect key="frame" x="0.0" y="0.0" width="75" height="60"/>
+                                                                <subviews>
+                                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="zjC-rO-99m">
+                                                                        <rect key="frame" x="0.0" y="-2.5" width="60" height="65"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="height" constant="60" id="GYZ-in-z7Y"/>
+                                                                            <constraint firstAttribute="width" constant="60" id="Tet-Ge-GNT"/>
+                                                                        </constraints>
+                                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSTouchBarUserTemplate" id="zes-XR-vex"/>
+                                                                    </imageView>
+                                                                    <imageView horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="8BC-LX-xle">
+                                                                        <rect key="frame" x="45" y="27.5" width="30" height="35"/>
+                                                                        <constraints>
+                                                                            <constraint firstAttribute="width" constant="30" id="gp4-E9-YyR"/>
+                                                                            <constraint firstAttribute="height" constant="30" id="v4r-XT-bM0"/>
+                                                                        </constraints>
+                                                                        <imageCell key="cell" refusesFirstResponder="YES" alignment="left" imageScaling="proportionallyDown" image="NSTouchBarUserTemplate" id="3Mg-Qr-H4e"/>
+                                                                    </imageView>
+                                                                </subviews>
+                                                                <visibilityPriorities>
+                                                                    <integer value="1000"/>
+                                                                    <integer value="1000"/>
+                                                                </visibilityPriorities>
+                                                                <customSpacing>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                    <real value="3.4028234663852886e+38"/>
+                                                                </customSpacing>
+                                                            </stackView>
                                                             <stackView distribution="fill" orientation="vertical" alignment="leading" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="CFh-Ub-4JW">
-                                                                <rect key="frame" x="67" y="5" width="388" height="55"/>
+                                                                <rect key="frame" x="82" y="5" width="373" height="55"/>
                                                                 <subviews>
                                                                     <stackView distribution="fill" orientation="vertical" alignment="leading" spacing="0.0" horizontalStackHuggingPriority="249.99998474121094" verticalStackHuggingPriority="249.99998474121094" detachesHiddenViews="YES" translatesAutoresizingMaskIntoConstraints="NO" id="51w-Ax-QX8">
                                                                         <rect key="frame" x="0.0" y="24" width="36" height="31"/>
@@ -131,6 +152,7 @@
                                                 </constraints>
                                                 <connections>
                                                     <outlet property="acctTextField" destination="UzO-3d-oDd" id="KH0-kD-1Wa"/>
+                                                    <outlet property="booterImageView" destination="8BC-LX-xle" id="Pl8-FD-q1L"/>
                                                     <outlet property="displayNameTextField" destination="XlD-7t-TXd" id="WOZ-0t-xNc"/>
                                                     <outlet property="imageView" destination="zjC-rO-99m" id="SZq-Vj-aj0"/>
                                                     <outlet property="textField" destination="db1-rD-PLE" id="9hO-q4-R36"/>

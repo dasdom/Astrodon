@@ -71,13 +71,33 @@
   cellView.displayNameTextField.stringValue = account.displayName;
   cellView.acctTextField.stringValue = account.acct;
 
-  [self.imageLoader loadImageForURL:account.avatarURL completionHandler:^(NSImage *image) {
-    if (image) {
-      dispatch_async(dispatch_get_main_queue(), ^{
-        cellView.imageView.image = image;
-      });
-    }
-  }];
+  if (toot.boostedToot) {
+    [self.imageLoader loadImageForURL:toot.boostedToot.account.avatarURL completionHandler:^(NSImage *image) {
+      if (image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          cellView.imageView.image = image;
+        });
+      }
+    }];
+    [self.imageLoader loadImageForURL:account.avatarURL completionHandler:^(NSImage *image) {
+      if (image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          cellView.booterImageView.image = image;
+        });
+      }
+    }];
+    cellView.booterImageView.hidden = NO;
+  } else {
+    [self.imageLoader loadImageForURL:account.avatarURL completionHandler:^(NSImage *image) {
+      if (image) {
+        dispatch_async(dispatch_get_main_queue(), ^{
+          cellView.imageView.image = image;
+        });
+      }
+    }];
+    cellView.booterImageView.hidden = YES;
+  }
+
 
   return cellView;
 }
