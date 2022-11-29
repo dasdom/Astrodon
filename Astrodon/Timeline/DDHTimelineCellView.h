@@ -10,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property IBOutlet NSTextField *displayNameTextField;
 @property IBOutlet NSTextField *acctTextField;
 @property IBOutlet NSImageView *booterImageView;
+@property IBOutlet NSLayoutConstraint *avatarImageWidthConstraint;
 @end
 
 NS_ASSUME_NONNULL_END

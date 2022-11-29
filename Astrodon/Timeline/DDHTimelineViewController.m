@@ -67,9 +67,7 @@
   [attributedString addAttributes:@{NSFontAttributeName: [NSFont preferredFontForTextStyle:NSFontTextStyleBody options:@{}]}
                             range:NSMakeRange(0, attributedString.length)];
   cellView.textField.attributedStringValue = attributedString;
-  DDHAccount *account = toot.account;
-  cellView.displayNameTextField.stringValue = account.displayName;
-  cellView.acctTextField.stringValue = account.acct;
+  DDHAccount *account;
 
   if (toot.boostedToot) {
     [self.imageLoader loadImageForURL:toot.boostedToot.account.avatarURL completionHandler:^(NSImage *image) {
@@ -79,7 +77,7 @@
         });
       }
     }];
-    [self.imageLoader loadImageForURL:account.avatarURL completionHandler:^(NSImage *image) {
+    [self.imageLoader loadImageForURL:toot.account.avatarURL completionHandler:^(NSImage *image) {
       if (image) {
         dispatch_async(dispatch_get_main_queue(), ^{
           cellView.booterImageView.image = image;
@@ -87,8 +85,10 @@
       }
     }];
     cellView.booterImageView.hidden = NO;
+    cellView.avatarImageWidthConstraint.constant = 45;
+    account = toot.boostedToot.account;
   } else {
-    [self.imageLoader loadImageForURL:account.avatarURL completionHandler:^(NSImage *image) {
+    [self.imageLoader loadImageForURL:toot.account.avatarURL completionHandler:^(NSImage *image) {
       if (image) {
         dispatch_async(dispatch_get_main_queue(), ^{
           cellView.imageView.image = image;
@@ -96,8 +96,12 @@
       }
     }];
     cellView.booterImageView.hidden = YES;
+    cellView.avatarImageWidthConstraint.constant = 60;
+    account = toot.account;
   }
 
+  cellView.displayNameTextField.stringValue = account.displayName;
+  cellView.acctTextField.stringValue = account.acct;
 
   return cellView;
 }
