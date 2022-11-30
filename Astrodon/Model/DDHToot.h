@@ -12,8 +12,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) DDHAccount *account;
 @property (strong) NSString *content;
 @property (strong) NSDate *createdAt;
+@property BOOL sensitive;
+@property (strong) NSString *spoilerText;
 @property (strong) DDHToot *boostedToot;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
+- (BOOL)isBoost;
 @end
 
 NS_ASSUME_NONNULL_END

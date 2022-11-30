@@ -13,6 +13,10 @@
     NSDictionary *accountDict = dict[@"account"];
     _account = [[DDHAccount alloc] initWithDictionary:accountDict];
 
+    _sensitive = [dict[@"sensitive"] boolValue];
+
+    _spoilerText = dict[@"spoiler_text"];
+
     NSDictionary *reblogDict = dict[@"reblog"];
     if ([reblogDict isKindOfClass:[NSDictionary class]]) {
       _boostedToot = [[DDHToot alloc] initWithDictionary:reblogDict];
@@ -20,4 +24,9 @@
   }
   return self;
 }
+
+- (BOOL)isBoost {
+  return self.boostedToot;
+}
+
 @end
