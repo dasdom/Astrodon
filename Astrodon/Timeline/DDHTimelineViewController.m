@@ -62,11 +62,7 @@
 
   DDHToot *toot = self.toots[row];
   DDHTimelineCellView *cellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
-  NSData *contentData = [toot.content dataUsingEncoding:NSUTF16StringEncoding];
-  NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithHTML:contentData documentAttributes:nil];
-  [attributedString addAttributes:@{NSFontAttributeName: [NSFont preferredFontForTextStyle:NSFontTextStyleBody options:@{}]}
-                            range:NSMakeRange(0, attributedString.length)];
-  cellView.textField.attributedStringValue = attributedString;
+  NSData *contentData;
   DDHAccount *account;
 
   if (toot.boostedToot) {
@@ -86,6 +82,9 @@
     }];
     cellView.booterImageView.hidden = NO;
     cellView.avatarImageWidthConstraint.constant = 45;
+
+    contentData = [toot.boostedToot.content dataUsingEncoding:NSUTF16StringEncoding];
+
     account = toot.boostedToot.account;
   } else {
     [self.imageLoader loadImageForURL:toot.account.avatarURL completionHandler:^(NSImage *image) {
@@ -97,11 +96,19 @@
     }];
     cellView.booterImageView.hidden = YES;
     cellView.avatarImageWidthConstraint.constant = 60;
+
+    contentData = [toot.content dataUsingEncoding:NSUTF16StringEncoding];
+
     account = toot.account;
   }
 
   cellView.displayNameTextField.stringValue = account.displayName;
   cellView.acctTextField.stringValue = account.acct;
+
+  NSMutableAttributedString *attributedString = [[NSMutableAttributedString alloc] initWithHTML:contentData documentAttributes:nil];
+  [attributedString addAttributes:@{NSFontAttributeName: [NSFont preferredFontForTextStyle:NSFontTextStyleBody options:@{}]}
+                            range:NSMakeRange(0, attributedString.length)];
+  cellView.textField.attributedStringValue = attributedString;
 
   return cellView;
 }
