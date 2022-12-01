@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F220BFD129388F060003FF9C /* DDHMediaAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD029388F060003FF9C /* DDHMediaAttachment.m */; };
+		F220BFD7293892870003FF9C /* DDHImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD6293892870003FF9C /* DDHImageDimensions.m */; };
 		F238583A2926A1C00065DE0B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858392926A1C00065DE0B /* AppDelegate.m */; };
 		F238583C2926A1C10065DE0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F238583B2926A1C10065DE0B /* Assets.xcassets */; };
 		F238583F2926A1C10065DE0B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = F238583D2926A1C10065DE0B /* MainMenu.xib */; };
@@ -38,6 +40,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F220BFCF29388F060003FF9C /* DDHMediaAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHMediaAttachment.h; sourceTree = "<group>"; };
+		F220BFD029388F060003FF9C /* DDHMediaAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHMediaAttachment.m; sourceTree = "<group>"; };
+		F220BFD5293892870003FF9C /* DDHImageDimensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHImageDimensions.h; sourceTree = "<group>"; };
+		F220BFD6293892870003FF9C /* DDHImageDimensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHImageDimensions.m; sourceTree = "<group>"; };
 		F23858352926A1C00065DE0B /* Astrodon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Astrodon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F23858382926A1C00065DE0B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F23858392926A1C00065DE0B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -164,6 +170,10 @@
 				F23858592926ABF20065DE0B /* DDHToot.m */,
 				F238585D2926ACA30065DE0B /* DDHAccount.h */,
 				F238585E2926ACA30065DE0B /* DDHAccount.m */,
+				F220BFCF29388F060003FF9C /* DDHMediaAttachment.h */,
+				F220BFD029388F060003FF9C /* DDHMediaAttachment.m */,
+				F220BFD5293892870003FF9C /* DDHImageDimensions.h */,
+				F220BFD6293892870003FF9C /* DDHImageDimensions.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -305,7 +315,9 @@
 				F23858702926D7B20065DE0B /* DDHTimelineCellView.m in Sources */,
 				F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */,
 				F238585A2926ABF20065DE0B /* DDHToot.m in Sources */,
+				F220BFD129388F060003FF9C /* DDHMediaAttachment.m in Sources */,
 				F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */,
+				F220BFD7293892870003FF9C /* DDHImageDimensions.m in Sources */,
 				F2C7B1CF2930B82900554EA2 /* DDHServerInputViewController.m in Sources */,
 				F23858632926AFA70065DE0B /* DDHRequestFactory.m in Sources */,
 				F238585F2926ACA30065DE0B /* DDHAccount.m in Sources */,

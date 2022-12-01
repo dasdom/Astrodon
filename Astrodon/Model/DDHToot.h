@@ -5,6 +5,7 @@
 #import <Foundation/Foundation.h>
 
 @class DDHAccount;
+@class DDHMediaAttachment;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDate *createdAt;
 @property BOOL sensitive;
 @property (strong) NSString *spoilerText;
+@property (strong) NSArray<DDHMediaAttachment *> *mediaAttachments;
 @property (strong) DDHToot *boostedToot;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 - (BOOL)isBoost;

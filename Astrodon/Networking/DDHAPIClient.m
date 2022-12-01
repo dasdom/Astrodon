@@ -7,6 +7,7 @@
 #import "DDHAccount.h"
 #import "DDHRequestFactory.h"
 #import "DDHErrorCodes.h"
+#import <OSLog/OSLog.h>
 
 @interface DDHAPIClient ()
 @property (strong) NSURLSession *session;
@@ -59,7 +60,7 @@
     NSArray<NSDictionary *> *rawArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
     NSMutableArray *toots = [NSMutableArray new];
     [rawArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dict, NSUInteger idx, BOOL * _Nonnull stop) {
-      NSLog(@"dict: %@", dict);
+      os_log(OS_LOG_DEFAULT, "dict: %@", dict);
       DDHToot *toot = [[DDHToot alloc] initWithDictionary:dict];
       [toots addObject:toot];
     }];

@@ -4,6 +4,7 @@
 
 #import "DDHToot.h"
 #import "DDHAccount.h"
+#import "DDHMediaAttachment.h"
 
 @implementation DDHToot
 - (instancetype)initWithDictionary:(NSDictionary *)dict {
@@ -17,10 +18,19 @@
 
     _spoilerText = dict[@"spoiler_text"];
 
+    NSMutableArray<DDHMediaAttachment *> *mediaAttachments = [NSMutableArray new];
+    NSArray<NSDictionary *> *rawMediaAttachments = dict[@"media_attachments"];
+    [rawMediaAttachments enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull rawAttachment, NSUInteger idx, BOOL * _Nonnull stop) {
+      DDHMediaAttachment *attachment = [[DDHMediaAttachment alloc] initWithDictionary:rawAttachment];
+      [mediaAttachments addObject:attachment];
+    }];
+    _mediaAttachments = mediaAttachments;
+
     NSDictionary *reblogDict = dict[@"reblog"];
     if ([reblogDict isKindOfClass:[NSDictionary class]]) {
       _boostedToot = [[DDHToot alloc] initWithDictionary:reblogDict];
     }
+
   }
   return self;
 }
