@@ -14,6 +14,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString *content;
 @property (strong) NSDate *createdAt;
 @property BOOL sensitive;
+@property BOOL showsSensitive;
 @property (strong) NSString *spoilerText;
 @property (strong) NSArray<DDHMediaAttachment *> *mediaAttachments;
 @property (strong) DDHToot *boostedToot;

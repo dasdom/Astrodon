@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property IBOutlet NSImageView *boostersImageView;
 @property IBOutlet NSLayoutConstraint *avatarImageWidthConstraint;
 @property IBOutlet NSButton *showMoreButton;
+@property IBOutlet NSImageView *attachmentImageView;
 - (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader;
 @end
 

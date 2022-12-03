@@ -12,6 +12,7 @@
 #import "DDHKeychain.h"
 #import "DDHConstants.h"
 #import "DDHEndpoint.h"
+#import <OSLog/OSLog.h>
 
 @interface DDHTimelineViewController () <NSTableViewDataSource, NSTableViewDelegate>
 @property (strong) NSArray<DDHToot *> *toots;
@@ -71,6 +72,15 @@
       });
     }];
   }
+}
+
+- (IBAction)showMore:(NSButton *)sender {
+  NSInteger index = [self.tableView rowForView:sender];
+  os_log(OS_LOG_DEFAULT, "index: %ld", index);
+  DDHToot *toot = self.toots[index];
+  toot.showsSensitive = !toot.showsSensitive;
+
+  [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:index] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
 }
 
 @end

@@ -5,9 +5,15 @@
 #import <Foundation/Foundation.h>
 #import "DDHImageDimensions.h"
 
+typedef NS_ENUM(NSInteger, DDHAttachmentType) {
+  DDHAttachmentTypeUnknown,
+  DDHAttachmentTypeImage
+};
+
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHMediaAttachment : NSObject
+@property DDHAttachmentType type;
 @property (strong) NSString *attachmentDescription;
 @property NSInteger attachmentId;
 @property (strong) NSURL *previewURL;

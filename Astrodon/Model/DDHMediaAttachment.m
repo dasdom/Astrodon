@@ -17,6 +17,13 @@
     NSString *urlString = dict[@"url"];
     _url = [NSURL URLWithString:urlString];
 
+    NSString *typeString = dict[@"type"];
+    if ([typeString isEqualToString:@"image"]) {
+      _type = DDHAttachmentTypeImage;
+    } else {
+      _type = DDHAttachmentTypeUnknown;
+    }
+
     NSDictionary *metaDict = dict[@"meta"];
     NSDictionary *focusDict = metaDict[@"focus"];
 
