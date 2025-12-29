@@ -10,6 +10,7 @@
 NSString * const apiPath = @"/api";
 NSString * const version = @"/v1";
 NSString * const timelines = @"/timelines";
+NSString * const statuses = @"/statuses";
 
 @implementation DDHRequestFactory
 
@@ -24,6 +25,10 @@ NSString * const timelines = @"/timelines";
       break;
     case DDHEndpointHome:
       path = [NSString stringWithFormat:@"%@%@%@/home", apiPath, version, timelines];
+      break;
+    case DDHEndpointNewStatus:
+      path = [NSString stringWithFormat:@"%@%@%@", apiPath, version, statuses];
+      break;
     default:
       break;
   }
@@ -63,10 +68,20 @@ NSString * const timelines = @"/timelines";
   switch (endpoint) {
     case DDHEndpointFetchToken:
       request.HTTPMethod = @"POST";
+      break;
     case DDHEndpointHome: {
       NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
       [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
     }
+      break;
+    case DDHEndpointNewStatus: {
+      NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
+      [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
+      [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+      [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+      request.HTTPMethod = @"POST";
+    }
+      break;
     default:
       break;
   }

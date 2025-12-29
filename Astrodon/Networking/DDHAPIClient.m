@@ -4,6 +4,7 @@
 
 #import "DDHAPIClient.h"
 #import "DDHToot.h"
+#import "DDHStatus.h"
 #import "DDHAccount.h"
 #import "DDHRequestFactory.h"
 #import "DDHErrorCodes.h"
@@ -66,6 +67,21 @@
     }];
 
     completionHandler(toots, nil);
+  }];
+
+  [dataTask resume];
+}
+
+- (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler {
+  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointNewStatus] mutableCopy];
+  request.HTTPBody = status.data;
+  NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+    NSError *requestError = [self errorFromData:data response:response error:error];
+    if (requestError) {
+      completionHandler(requestError);
+      return;
+    }
+    completionHandler(nil);
   }];
 
   [dataTask resume];

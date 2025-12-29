@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		F205A2492F02CA960002887F /* DDHTootInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = F205A2482F02CA960002887F /* DDHTootInputView.m */; };
+		F205A24D2F02CDE60002887F /* DDHTootInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F205A24C2F02CDE60002887F /* DDHTootInputViewController.m */; };
+		F205A2502F02D5A00002887F /* DDHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = F205A24F2F02D5A00002887F /* DDHStatus.m */; };
 		F220BFD129388F060003FF9C /* DDHMediaAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD029388F060003FF9C /* DDHMediaAttachment.m */; };
 		F220BFD7293892870003FF9C /* DDHImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD6293892870003FF9C /* DDHImageDimensions.m */; };
 		F238583A2926A1C00065DE0B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858392926A1C00065DE0B /* AppDelegate.m */; };
@@ -41,6 +44,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		F205A2472F02CA960002887F /* DDHTootInputView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHTootInputView.h; sourceTree = "<group>"; };
+		F205A2482F02CA960002887F /* DDHTootInputView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHTootInputView.m; sourceTree = "<group>"; };
+		F205A24B2F02CDE60002887F /* DDHTootInputViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHTootInputViewController.h; sourceTree = "<group>"; };
+		F205A24C2F02CDE60002887F /* DDHTootInputViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHTootInputViewController.m; sourceTree = "<group>"; };
+		F205A24E2F02D5A00002887F /* DDHStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHStatus.h; sourceTree = "<group>"; };
+		F205A24F2F02D5A00002887F /* DDHStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHStatus.m; sourceTree = "<group>"; };
 		F220BFCF29388F060003FF9C /* DDHMediaAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHMediaAttachment.h; sourceTree = "<group>"; };
 		F220BFD029388F060003FF9C /* DDHMediaAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHMediaAttachment.m; sourceTree = "<group>"; };
 		F220BFD5293892870003FF9C /* DDHImageDimensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHImageDimensions.h; sourceTree = "<group>"; };
@@ -102,6 +111,17 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		F205A24A2F02CAD70002887F /* Input */ = {
+			isa = PBXGroup;
+			children = (
+				F205A2472F02CA960002887F /* DDHTootInputView.h */,
+				F205A2482F02CA960002887F /* DDHTootInputView.m */,
+				F205A24B2F02CDE60002887F /* DDHTootInputViewController.h */,
+				F205A24C2F02CDE60002887F /* DDHTootInputViewController.m */,
+			);
+			path = Input;
+			sourceTree = "<group>";
+		};
 		F238582C2926A1C00065DE0B = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +151,7 @@
 				F2C7B1FE29350EF400554EA2 /* DDHConstants.m */,
 				F2C7B1D12930B83300554EA2 /* Server Input */,
 				F238586D2926D3240065DE0B /* Timeline */,
+				F205A24A2F02CAD70002887F /* Input */,
 				F238585B2926ABF70065DE0B /* Networking */,
 				F238585C2926AC010065DE0B /* Model */,
 				F238583B2926A1C10065DE0B /* Assets.xcassets */,
@@ -177,6 +198,8 @@
 				F220BFD029388F060003FF9C /* DDHMediaAttachment.m */,
 				F220BFD5293892870003FF9C /* DDHImageDimensions.h */,
 				F220BFD6293892870003FF9C /* DDHImageDimensions.m */,
+				F205A24E2F02D5A00002887F /* DDHStatus.h */,
+				F205A24F2F02D5A00002887F /* DDHStatus.m */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -314,13 +337,16 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				F205A2502F02D5A00002887F /* DDHStatus.m in Sources */,
 				F2C7B1CB292A23AE00554EA2 /* DDHImageLoader.m in Sources */,
+				F205A2492F02CA960002887F /* DDHTootInputView.m in Sources */,
 				F23858412926A1C10065DE0B /* main.m in Sources */,
 				F23858572926A1FB0065DE0B /* DDHAPIClient.m in Sources */,
 				F23858702926D7B20065DE0B /* DDHTimelineCellView.m in Sources */,
 				F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */,
 				F238585A2926ABF20065DE0B /* DDHToot.m in Sources */,
 				F220BFD129388F060003FF9C /* DDHMediaAttachment.m in Sources */,
+				F205A24D2F02CDE60002887F /* DDHTootInputViewController.m in Sources */,
 				F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */,
 				F220BFD7293892870003FF9C /* DDHImageDimensions.m in Sources */,
 				F2C7B1CF2930B82900554EA2 /* DDHServerInputViewController.m in Sources */,

@@ -183,7 +183,6 @@
         self.textBottomConstraint.active = NO;
         self.attachmentBottomConstraint.active = YES;
         self.aspectConstraint = [self.attachmentImageView.widthAnchor constraintEqualToAnchor:self.attachmentImageView.heightAnchor multiplier:mediaAttachment.smallDimensions.aspect];
-        self.aspectConstraint.priority = 750;
         self.aspectConstraint.active = YES;
         [imageLoader loadImageForURL:mediaAttachment.previewURL completionHandler:^(NSImage *image) {
           dispatch_async(dispatch_get_main_queue(), ^{
