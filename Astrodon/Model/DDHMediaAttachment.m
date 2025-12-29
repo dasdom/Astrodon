@@ -25,6 +25,9 @@
     }
 
     NSDictionary *metaDict = dict[@"meta"];
+    if ([metaDict isKindOfClass:[NSNull class]]) {
+      return self;
+    }
     NSDictionary *focusDict = metaDict[@"focus"];
 
     _focus = CGPointMake([focusDict[@"x"] floatValue], [focusDict[@"y"] floatValue]);

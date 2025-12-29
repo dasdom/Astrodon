@@ -3,6 +3,7 @@
 //
 
 #import "DDHTimelineViewController.h"
+#import "DDHTimelineView.h"
 #import "DDHToot.h"
 #import "DDHAccount.h"
 #import "DDHAPIClient.h"
@@ -17,14 +18,32 @@
 @interface DDHTimelineViewController () <NSTableViewDataSource, NSTableViewDelegate>
 @property (strong) NSArray<DDHToot *> *toots;
 @property (strong) DDHAPIClient *apiClient;
-@property IBOutlet NSTableView *tableView;
+//@property IBOutlet NSTableView *tableView;
 @property (strong) DDHImageLoader *imageLoader;
 @end
 
 @implementation DDHTimelineViewController
 
+- (DDHTimelineView *)contentView {
+  return (DDHTimelineView *)self.view;
+}
+
+- (NSTableView *)tableView {
+  return self.contentView.tableView;
+}
+
+- (void)loadView {
+  self.view = [[DDHTimelineView alloc] initWithFrame:CGRectMake(0, 0, 480, 600)];
+}
+
 - (void)viewDidLoad {
   [super viewDidLoad];
+
+  self.tableView.delegate = self;
+  self.tableView.dataSource = self;
+
+  self.tableView.usesAutomaticRowHeights = YES;
+  [self.tableView sizeLastColumnToFit];
 
   self.toots = @[];
   self.apiClient = [DDHAPIClient new];
@@ -52,10 +71,17 @@
 
   DDHToot *toot = self.toots[row];
   DDHTimelineCellView *cellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
+  if (nil == cellView) {
+    cellView = [[DDHTimelineCellView alloc] init];
+  }
 
   [cellView updateWithToot:toot imageLoader:self.imageLoader];
 
   return cellView;
+}
+
+- (void)tableViewSelectionDidChange:(NSNotification *)notification {
+  NSLog(@"notification: %@", notification);
 }
 
 // MARK: - Actions
