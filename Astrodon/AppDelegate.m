@@ -3,20 +3,20 @@
 //
 
 #import "AppDelegate.h"
-#import "DDHTimelineViewController.h"
+#import "DDHTimelineWindowController.h"
 #import "DDHTootInputViewController.h"
 
 @interface AppDelegate ()
+@property (strong) DDHTimelineWindowController *windowController;
 @property (strong) NSWindow *window;
 @end
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  DDHTimelineViewController *timeLineViewController = [DDHTimelineViewController new];
-  timeLineViewController.title = @"Timeline";
+  _windowController = [[DDHTimelineWindowController alloc] init];
 
-  NSWindow *window = [NSWindow windowWithContentViewController:timeLineViewController];
+  NSWindow *window = _windowController.window;
   [window makeKeyAndOrderFront:self];
   self.window = window;
 }

@@ -85,7 +85,7 @@
 }
 
 // MARK: - Actions
-- (IBAction)loadToots:(NSButton *)sender {
+- (void)loadToots:(id)sender {
   NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
   if (code.length < 1) {
     [self presentViewControllerAsSheet:[DDHServerInputViewController new]];

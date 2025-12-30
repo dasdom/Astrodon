@@ -17,6 +17,6 @@
 - (NSData *)data {
   NSDictionary *dictionary = @{@"status": self.text};
   NSError *error;
-  return [NSJSONSerialization dataWithJSONObject:dictionary options:NSJSONWritingPrettyPrinted error:&error];
+  return [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:&error];
 }
 @end

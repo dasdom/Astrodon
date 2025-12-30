@@ -10,6 +10,7 @@
 		F205A2492F02CA960002887F /* DDHTootInputView.m in Sources */ = {isa = PBXBuildFile; fileRef = F205A2482F02CA960002887F /* DDHTootInputView.m */; };
 		F205A24D2F02CDE60002887F /* DDHTootInputViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F205A24C2F02CDE60002887F /* DDHTootInputViewController.m */; };
 		F205A2502F02D5A00002887F /* DDHStatus.m in Sources */ = {isa = PBXBuildFile; fileRef = F205A24F2F02D5A00002887F /* DDHStatus.m */; };
+		F205A2532F03222F0002887F /* DDHTimelineWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F205A2522F03222F0002887F /* DDHTimelineWindowController.m */; };
 		F220BFD129388F060003FF9C /* DDHMediaAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD029388F060003FF9C /* DDHMediaAttachment.m */; };
 		F220BFD7293892870003FF9C /* DDHImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD6293892870003FF9C /* DDHImageDimensions.m */; };
 		F238583A2926A1C00065DE0B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858392926A1C00065DE0B /* AppDelegate.m */; };
@@ -50,6 +51,8 @@
 		F205A24C2F02CDE60002887F /* DDHTootInputViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHTootInputViewController.m; sourceTree = "<group>"; };
 		F205A24E2F02D5A00002887F /* DDHStatus.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHStatus.h; sourceTree = "<group>"; };
 		F205A24F2F02D5A00002887F /* DDHStatus.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHStatus.m; sourceTree = "<group>"; };
+		F205A2512F03222F0002887F /* DDHTimelineWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHTimelineWindowController.h; sourceTree = "<group>"; };
+		F205A2522F03222F0002887F /* DDHTimelineWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHTimelineWindowController.m; sourceTree = "<group>"; };
 		F220BFCF29388F060003FF9C /* DDHMediaAttachment.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHMediaAttachment.h; sourceTree = "<group>"; };
 		F220BFD029388F060003FF9C /* DDHMediaAttachment.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHMediaAttachment.m; sourceTree = "<group>"; };
 		F220BFD5293892870003FF9C /* DDHImageDimensions.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHImageDimensions.h; sourceTree = "<group>"; };
@@ -222,6 +225,8 @@
 				F238586A2926D31C0065DE0B /* DDHTimelineViewController.xib */,
 				F238586E2926D7B20065DE0B /* DDHTimelineCellView.h */,
 				F238586F2926D7B20065DE0B /* DDHTimelineCellView.m */,
+				F205A2512F03222F0002887F /* DDHTimelineWindowController.h */,
+				F205A2522F03222F0002887F /* DDHTimelineWindowController.m */,
 			);
 			path = Timeline;
 			sourceTree = "<group>";
@@ -344,6 +349,7 @@
 				F23858572926A1FB0065DE0B /* DDHAPIClient.m in Sources */,
 				F23858702926D7B20065DE0B /* DDHTimelineCellView.m in Sources */,
 				F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */,
+				F205A2532F03222F0002887F /* DDHTimelineWindowController.m in Sources */,
 				F238585A2926ABF20065DE0B /* DDHToot.m in Sources */,
 				F220BFD129388F060003FF9C /* DDHMediaAttachment.m in Sources */,
 				F205A24D2F02CDE60002887F /* DDHTootInputViewController.m in Sources */,
