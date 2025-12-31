@@ -6,7 +6,7 @@
 #import "DDHEndpoint.h"
 
 @interface DDHRequestFactory : NSObject
-+ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint code:(NSString *)code;
++ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)code;
 + (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint;
-+ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint code:(NSString *)code;
++ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo;
 @end

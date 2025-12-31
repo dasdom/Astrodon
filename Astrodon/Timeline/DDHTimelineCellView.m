@@ -44,7 +44,8 @@
     _tootTextField = [NSTextField wrappingLabelWithString:@"toot text"];
     _tootTextField.translatesAutoresizingMaskIntoConstraints = NO;
     _tootTextField.selectable = NO;
-    [_tootTextField setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSUserInterfaceLayoutOrientationVertical];
+    [_tootTextField setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];
+    [_tootTextField setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];
     self.textField = _tootTextField;
 
     _showMoreButton = [NSButton buttonWithTitle:@"show more" target:nil action:nil];
@@ -55,16 +56,26 @@
     [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
     [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationVertical];
 
+    _replyButton = [[NSButton alloc] init];
+    _replyButton.translatesAutoresizingMaskIntoConstraints = NO;
+    _replyButton.image = [NSImage imageWithSystemSymbolName:@"arrow.turn.up.left" accessibilityDescription:@"reply"];
+
+    _boostButton = [[NSButton alloc] init];
+    _boostButton.translatesAutoresizingMaskIntoConstraints = NO;
+    _boostButton.image = [NSImage imageWithSystemSymbolName:@"arrow.2.squarepath" accessibilityDescription:@"reply"];
+
     [self addSubview:_avatarImageView];
     [self addSubview:_boostersImageView];
     [self addSubview:_displayNameTextField];
     [self addSubview:_acctTextField];
     [self addSubview:_tootTextField];
     [self addSubview:_attachmentImageView];
+    [self addSubview:_replyButton];
+    [self addSubview:_boostButton];
 
     _avatarImageWidthConstraint = [_avatarImageView.widthAnchor constraintEqualToConstant:60];
-    _textBottomConstraint = [_tootTextField.bottomAnchor constraintEqualToAnchor:self.layoutMarginsGuide.bottomAnchor];
-    _attachmentBottomConstraint = [_attachmentImageView.bottomAnchor constraintEqualToAnchor:self.layoutMarginsGuide.bottomAnchor];
+    _textBottomConstraint = [_tootTextField.bottomAnchor constraintEqualToAnchor:_replyButton.topAnchor];
+    _attachmentBottomConstraint = [_attachmentImageView.bottomAnchor constraintEqualToAnchor:_replyButton.topAnchor constant:-4];
 
     [NSLayoutConstraint activateConstraints:@[
       [_avatarImageView.topAnchor constraintEqualToAnchor:self.layoutMarginsGuide.topAnchor],
@@ -88,9 +99,15 @@
       _textBottomConstraint,
       [_tootTextField.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
 
-      [_attachmentImageView.topAnchor constraintEqualToAnchor:_tootTextField.bottomAnchor constant:8],
+      [_attachmentImageView.topAnchor constraintEqualToAnchor:_tootTextField.bottomAnchor constant:4],
       [_attachmentImageView.leadingAnchor constraintEqualToAnchor:_tootTextField.leadingAnchor],
       [_attachmentImageView.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
+
+      [_boostButton.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
+      [_boostButton.bottomAnchor constraintEqualToAnchor:self.layoutMarginsGuide.bottomAnchor],
+
+      [_replyButton.trailingAnchor constraintEqualToAnchor:_boostButton.leadingAnchor constant:-4],
+      [_replyButton.bottomAnchor constraintEqualToAnchor:_boostButton.bottomAnchor],
     ]];
   }
   return self;
@@ -113,7 +130,8 @@
 - (void)setTextForToot:(DDHToot *)toot {
   DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
 
-  NSData *contentData = [tootToShow.content dataUsingEncoding:NSUTF16StringEncoding];
+  NSString *trimmedContent = [tootToShow.content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSData *contentData = [trimmedContent dataUsingEncoding:NSUTF16StringEncoding];
   DDHAccount *account = tootToShow.account;
 
   self.displayNameTextField.stringValue = account.displayName;

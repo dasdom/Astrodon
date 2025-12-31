@@ -73,6 +73,8 @@
   DDHTimelineCellView *cellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
   if (nil == cellView) {
     cellView = [[DDHTimelineCellView alloc] init];
+    cellView.boostButton.target = self;
+    cellView.boostButton.action = @selector(boost:);
   }
 
   [cellView updateWithToot:toot imageLoader:self.imageLoader];
@@ -107,6 +109,24 @@
   toot.showsSensitive = !toot.showsSensitive;
 
   [self.tableView reloadDataForRowIndexes:[NSIndexSet indexSetWithIndex:index] columnIndexes:[NSIndexSet indexSetWithIndex:0]];
+}
+
+- (void)boost:(NSButton *)sender {
+  NSPoint buttonOriginInCellView = sender.frame.origin;
+  NSPoint buttonOriginInTableView = [self.tableView convertPoint:buttonOriginInCellView fromView:sender.superview];
+  NSInteger row = [self.tableView rowAtPoint:buttonOriginInTableView];
+  NSLog(@"row: %ld", row);
+  DDHToot *toot = self.toots[row];
+  NSLog(@"toot id: %@", toot.statusId);
+  [self.apiClient boostStatusWithId:toot.statusId completionHandler:^(NSError * _Nonnull error) {
+    if (nil == error) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        sender.bezelColor = [NSColor greenColor];
+      });
+    } else {
+      NSLog(@"error: %@", error);
+    }
+  }];
 }
 
 @end

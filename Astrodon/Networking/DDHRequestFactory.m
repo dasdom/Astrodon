@@ -14,7 +14,7 @@ NSString * const statuses = @"/statuses";
 
 @implementation DDHRequestFactory
 
-+ (NSString *)pathForEndpoint:(DDHEndpoint)endpoint {
++ (NSString *)pathForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo {
   NSString *path;
   switch (endpoint) {
     case DDHEndpointFetchToken:
@@ -29,13 +29,16 @@ NSString * const statuses = @"/statuses";
     case DDHEndpointNewStatus:
       path = [NSString stringWithFormat:@"%@%@%@", apiPath, version, statuses];
       break;
+    case DDHEndpointBoost:
+      path = [NSString stringWithFormat:@"%@%@%@/%@/reblog", apiPath, version, statuses, additionalInfo];
+      break;
     default:
       break;
   }
   return path;
 }
 
-+ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint code:(NSString *)code {
++ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo {
   NSURLComponents *urlComponents = [NSURLComponents new];
   urlComponents.scheme = @"https";
   urlComponents.host = @"chaos.social";
@@ -46,7 +49,7 @@ NSString * const statuses = @"/statuses";
         [NSURLQueryItem queryItemWithName:@"client_secret" value:client_secret],
         [NSURLQueryItem queryItemWithName:@"redirect_uri" value:redirect_uri],
         [NSURLQueryItem queryItemWithName:@"grant_type" value:@"authorization_code"],
-        [NSURLQueryItem queryItemWithName:@"code" value:code],
+        [NSURLQueryItem queryItemWithName:@"code" value:additionalInfo],
         [NSURLQueryItem queryItemWithName:@"scope" value:@"read+write+follow+push"],
       ];
     }
@@ -54,16 +57,16 @@ NSString * const statuses = @"/statuses";
     default:
       break;
   }
-  urlComponents.path = [self pathForEndpoint:endpoint];
+  urlComponents.path = [self pathForEndpoint:endpoint additionalInfo:additionalInfo];
   return [urlComponents URL];
 }
 
 + (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint {
-  return [self requestForEndpoint:endpoint code:nil];
+  return [self requestForEndpoint:endpoint additionalInfo:nil];
 }
 
-+ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint code:(NSString *)code {
-  NSURL *url = [self urlForEndpoint:endpoint code:code];
++ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo {
+  NSURL *url = [self urlForEndpoint:endpoint additionalInfo:additionalInfo];
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   switch (endpoint) {
     case DDHEndpointFetchToken:
@@ -82,6 +85,13 @@ NSString * const statuses = @"/statuses";
       request.HTTPMethod = @"POST";
     }
       break;
+    case DDHEndpointBoost: {
+      NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
+      [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
+      [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
+      [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
+      request.HTTPMethod = @"POST";
+    }
     default:
       break;
   }

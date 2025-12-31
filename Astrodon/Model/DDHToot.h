@@ -10,6 +10,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHToot : NSObject
+@property (strong) NSString *statusId;
 @property (strong) DDHAccount *account;
 @property (strong) NSString *content;
 @property (strong) NSDate *createdAt;

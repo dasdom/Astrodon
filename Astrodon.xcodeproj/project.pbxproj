@@ -23,7 +23,6 @@
 		F23858632926AFA70065DE0B /* DDHRequestFactory.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858622926AFA70065DE0B /* DDHRequestFactory.m */; };
 		F23858652926BCAB0065DE0B /* DDHRequestFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858642926BCAB0065DE0B /* DDHRequestFactoryTests.m */; };
 		F238586B2926D31C0065DE0B /* DDHTimelineViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858692926D31C0065DE0B /* DDHTimelineViewController.m */; };
-		F238586C2926D31C0065DE0B /* DDHTimelineViewController.xib in Resources */ = {isa = PBXBuildFile; fileRef = F238586A2926D31C0065DE0B /* DDHTimelineViewController.xib */; };
 		F23858702926D7B20065DE0B /* DDHTimelineCellView.m in Sources */ = {isa = PBXBuildFile; fileRef = F238586F2926D7B20065DE0B /* DDHTimelineCellView.m */; };
 		F23AFFB12EFEE0ED0046B0D1 /* DDHTimelineView.m in Sources */ = {isa = PBXBuildFile; fileRef = F23AFFB02EFEE0ED0046B0D1 /* DDHTimelineView.m */; };
 		F2C7B1CB292A23AE00554EA2 /* DDHImageLoader.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1CA292A23AE00554EA2 /* DDHImageLoader.m */; };
@@ -78,7 +77,6 @@
 		F23858672926CCDD0065DE0B /* DDHErrorCodes.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHErrorCodes.h; sourceTree = "<group>"; };
 		F23858682926D31C0065DE0B /* DDHTimelineViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHTimelineViewController.h; sourceTree = "<group>"; };
 		F23858692926D31C0065DE0B /* DDHTimelineViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHTimelineViewController.m; sourceTree = "<group>"; };
-		F238586A2926D31C0065DE0B /* DDHTimelineViewController.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DDHTimelineViewController.xib; sourceTree = "<group>"; };
 		F238586E2926D7B20065DE0B /* DDHTimelineCellView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHTimelineCellView.h; sourceTree = "<group>"; };
 		F238586F2926D7B20065DE0B /* DDHTimelineCellView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHTimelineCellView.m; sourceTree = "<group>"; };
 		F23AFFAF2EFEE0ED0046B0D1 /* DDHTimelineView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHTimelineView.h; sourceTree = "<group>"; };
@@ -222,7 +220,6 @@
 				F23858692926D31C0065DE0B /* DDHTimelineViewController.m */,
 				F23AFFAF2EFEE0ED0046B0D1 /* DDHTimelineView.h */,
 				F23AFFB02EFEE0ED0046B0D1 /* DDHTimelineView.m */,
-				F238586A2926D31C0065DE0B /* DDHTimelineViewController.xib */,
 				F238586E2926D7B20065DE0B /* DDHTimelineCellView.h */,
 				F238586F2926D7B20065DE0B /* DDHTimelineCellView.m */,
 				F205A2512F03222F0002887F /* DDHTimelineWindowController.h */,
@@ -321,7 +318,6 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				F238586C2926D31C0065DE0B /* DDHTimelineViewController.xib in Resources */,
 				F238583C2926A1C10065DE0B /* Assets.xcassets in Resources */,
 				F2C7B1D02930B82900554EA2 /* DDHServerInputViewController.xib in Resources */,
 				F238583F2926A1C10065DE0B /* MainMenu.xib in Resources */,

@@ -49,7 +49,7 @@
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
 
   NSToolbarItem *reloadItem = [[NSToolbarItem alloc] initWithItemIdentifier:@"reload_toolbar_item"];
-  reloadItem.image = [NSImage imageWithSystemSymbolName:@"arrow.trianglehead.clockwise" accessibilityDescription:@"reload"];
+  reloadItem.image = [NSImage imageWithSystemSymbolName:@"arrow.clockwise" accessibilityDescription:@"reload"];
   reloadItem.target = self;
   reloadItem.action = @selector(reloadTimeline:);
   return reloadItem;

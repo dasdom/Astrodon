@@ -18,6 +18,8 @@
 
     _spoilerText = dict[@"spoiler_text"];
 
+    _statusId = dict[@"id"];
+
     NSMutableArray<DDHMediaAttachment *> *mediaAttachments = [NSMutableArray new];
     NSArray<NSDictionary *> *rawMediaAttachments = dict[@"media_attachments"];
     [rawMediaAttachments enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull rawAttachment, NSUInteger idx, BOOL * _Nonnull stop) {

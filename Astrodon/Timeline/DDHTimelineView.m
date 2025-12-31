@@ -28,6 +28,7 @@
     NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame:frameRect];
     scrollView.translatesAutoresizingMaskIntoConstraints = NO;
     scrollView.documentView = _tableView;
+    scrollView.hasVerticalScroller = YES;
 
     [self addSubview:scrollView];
 

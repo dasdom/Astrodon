@@ -25,7 +25,7 @@
 
 - (void)fetchTokenWithCode:(NSString *)code completionHandler:(void(^)(NSString *token, NSError *error))completionHandler {
 
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointFetchToken code:code];
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointFetchToken additionalInfo:code];
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
     NSError *requestError = [self errorFromData:data response:response error:error];
@@ -75,6 +75,19 @@
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler {
   NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointNewStatus] mutableCopy];
   request.HTTPBody = status.data;
+  [self executeRequest:request completionHandler:^(NSError *error) {
+    completionHandler(error);
+  }];
+}
+
+- (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler {
+  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointBoost additionalInfo:statusId] mutableCopy];
+  [self executeRequest:request completionHandler:^(NSError *error) {
+    completionHandler(error);
+  }];
+}
+
+- (void)executeRequest:(NSURLRequest *)request completionHandler:(void(^)(NSError *error))completionHandler {
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
     NSError *requestError = [self errorFromData:data response:response error:error];
     if (requestError) {
@@ -87,6 +100,7 @@
   [dataTask resume];
 }
 
+// MARK: - Error helper
 - (NSError *)errorFromData:(NSData *)data response:(NSURLResponse *)response error:(NSError *)error {
   if (error) {
     return error;
