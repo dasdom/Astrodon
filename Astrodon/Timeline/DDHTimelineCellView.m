@@ -9,17 +9,18 @@
 #import "DDHMediaAttachment.h"
 
 @interface DDHTimelineCellView ()
-@property (nonatomic, strong) NSImageView *avatarImageView;
-@property (nonatomic, strong) NSImageView *boostersImageView;
-@property (nonatomic, strong) NSTextField *displayNameTextField;
-@property (nonatomic, strong) NSTextField *acctTextField;
-@property (nonatomic, strong) NSTextField *tootTextField;
-@property (nonatomic, strong) NSLayoutConstraint *avatarImageWidthConstraint;
-@property (nonatomic, strong) NSButton *showMoreButton;
-@property (nonatomic, strong) NSImageView *attachmentImageView;
-@property (nonatomic, strong) NSLayoutConstraint *aspectConstraint;
-@property (nonatomic, strong) NSLayoutConstraint *textBottomConstraint;
-@property (nonatomic, strong) NSLayoutConstraint *attachmentBottomConstraint;
+@property (strong) NSImageView *avatarImageView;
+@property (strong) NSImageView *boostersImageView;
+@property (strong) NSTextField *displayNameTextField;
+@property (strong) NSTextField *dateTextField;
+@property (strong) NSTextField *acctTextField;
+@property (strong) NSTextField *tootTextField;
+@property (strong) NSLayoutConstraint *avatarImageWidthConstraint;
+@property (strong) NSButton *showMoreButton;
+@property (strong) NSImageView *attachmentImageView;
+@property (strong) NSLayoutConstraint *aspectConstraint;
+@property (strong) NSLayoutConstraint *textBottomConstraint;
+@property (strong) NSLayoutConstraint *attachmentBottomConstraint;
 @end
 
 @implementation DDHTimelineCellView
@@ -35,6 +36,9 @@
 
     _displayNameTextField = [NSTextField labelWithString:@"displayName"];
     _displayNameTextField.translatesAutoresizingMaskIntoConstraints = NO;
+
+    _dateTextField = [NSTextField labelWithString:@"date"];
+    _dateTextField.translatesAutoresizingMaskIntoConstraints = NO;
 
     _acctTextField = [NSTextField labelWithString:@"acct"];
     _acctTextField.translatesAutoresizingMaskIntoConstraints = NO;
@@ -67,6 +71,7 @@
     [self addSubview:_avatarImageView];
     [self addSubview:_boostersImageView];
     [self addSubview:_displayNameTextField];
+    [self addSubview:_dateTextField];
     [self addSubview:_acctTextField];
     [self addSubview:_tootTextField];
     [self addSubview:_attachmentImageView];
@@ -90,6 +95,10 @@
 
       [_displayNameTextField.topAnchor constraintEqualToAnchor:_avatarImageView.topAnchor],
       [_displayNameTextField.leadingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.leadingAnchor constant:70],
+
+      [_dateTextField.leadingAnchor constraintEqualToAnchor:_displayNameTextField.trailingAnchor constant:8],
+      [_dateTextField.centerYAnchor constraintEqualToAnchor:_displayNameTextField.centerYAnchor],
+      [_dateTextField.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
 
       [_acctTextField.topAnchor constraintEqualToAnchor:_displayNameTextField.bottomAnchor],
       [_acctTextField.leadingAnchor constraintEqualToAnchor:_displayNameTextField.leadingAnchor],
@@ -119,15 +128,16 @@
     // Drawing code here.
 }
 
-- (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader {
+- (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {
 
   [self setImagesForToot:toot imageLoader:imageLoader];
-  [self setTextForToot:toot];
+  [self setTextForToot:toot relativeDateTimeFormatter:relativeDateTimeFormatter];
   [self setAttachmentsForToot:toot imageLoader:imageLoader];
+  [self setColorsForToot:toot];
 }
 
 // MARK: - Helper
-- (void)setTextForToot:(DDHToot *)toot {
+- (void)setTextForToot:(DDHToot *)toot relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {
   DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
 
   NSString *trimmedContent = [tootToShow.content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
@@ -136,6 +146,8 @@
 
   self.displayNameTextField.stringValue = account.displayName;
   self.acctTextField.stringValue = account.acct;
+
+  self.dateTextField.stringValue = [relativeDateTimeFormatter localizedStringForDate:toot.createdAt relativeToDate:[NSDate date]];
 
   if (tootToShow.sensitive && !tootToShow.showsSensitive) {
     self.textField.stringValue = tootToShow.spoilerText;
@@ -152,6 +164,14 @@
     self.textField.attributedStringValue = attributedString;
 
     self.showMoreButton.hidden = YES;
+  }
+}
+
+- (void)setColorsForToot:(DDHToot *)toot {
+  if (toot.reblogged) {
+    self.boostButton.bezelColor = [NSColor colorNamed:@"colors/boosted"];
+  } else {
+    self.boostButton.bezelColor = nil;
   }
 }
 
@@ -213,7 +233,7 @@
 }
 
 - (void)mouseDown:(NSEvent *)event {
-  NSLog(@"event: %@", event);
+//  NSLog(@"event: %@", event);
 
   NSAttributedString *attributedString = [self.tootTextField.attributedStringValue copy];
   NSTextStorage *textStorage = [[NSTextStorage alloc] initWithAttributedString:attributedString];
@@ -234,8 +254,12 @@
 
   [attributedString enumerateAttributesInRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
     if (NSLocationInRange(characterIndex, range)) {
-      NSLog(@"range: %@", [NSValue valueWithRange:range]);
+//      NSLog(@"range: %@", [NSValue valueWithRange:range]);
       NSLog(@"attrs: %@", attrs);
+      NSURL *url = (NSURL *)attrs[NSLinkAttributeName];
+      if (self.clickHandler) {
+        self.clickHandler(url);
+      }
     }
   }];
 }

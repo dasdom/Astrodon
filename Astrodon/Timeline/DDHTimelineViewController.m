@@ -16,13 +16,21 @@
 #import <OSLog/OSLog.h>
 
 @interface DDHTimelineViewController () <NSTableViewDataSource, NSTableViewDelegate>
+@property (strong) NSRelativeDateTimeFormatter *relativeDateTimeFormatter;
 @property (strong) NSArray<DDHToot *> *toots;
 @property (strong) DDHAPIClient *apiClient;
-//@property IBOutlet NSTableView *tableView;
 @property (strong) DDHImageLoader *imageLoader;
 @end
 
 @implementation DDHTimelineViewController
+
+- (instancetype)init {
+  if (self = [super initWithNibName:nil bundle:nil]) {
+    _relativeDateTimeFormatter = [[NSRelativeDateTimeFormatter alloc] init];
+    _relativeDateTimeFormatter.unitsStyle = NSRelativeDateTimeFormatterUnitsStyleAbbreviated;
+  }
+  return self;
+}
 
 - (DDHTimelineView *)contentView {
   return (DDHTimelineView *)self.view;
@@ -75,9 +83,13 @@
     cellView = [[DDHTimelineCellView alloc] init];
     cellView.boostButton.target = self;
     cellView.boostButton.action = @selector(boost:);
+    cellView.clickHandler = ^(NSURL *url) {
+      NSLog(@"url: %@", url);
+      [NSWorkspace.sharedWorkspace openURL:url];
+    };
   }
 
-  [cellView updateWithToot:toot imageLoader:self.imageLoader];
+  [cellView updateWithToot:toot imageLoader:self.imageLoader relativeDateTimeFormatter:self.relativeDateTimeFormatter];
 
   return cellView;
 }
@@ -115,13 +127,12 @@
   NSPoint buttonOriginInCellView = sender.frame.origin;
   NSPoint buttonOriginInTableView = [self.tableView convertPoint:buttonOriginInCellView fromView:sender.superview];
   NSInteger row = [self.tableView rowAtPoint:buttonOriginInTableView];
-  NSLog(@"row: %ld", row);
   DDHToot *toot = self.toots[row];
   NSLog(@"toot id: %@", toot.statusId);
   [self.apiClient boostStatusWithId:toot.statusId completionHandler:^(NSError * _Nonnull error) {
     if (nil == error) {
       dispatch_async(dispatch_get_main_queue(), ^{
-        sender.bezelColor = [NSColor greenColor];
+        sender.bezelColor = [NSColor colorNamed:@"colors/boosted"];
       });
     } else {
       NSLog(@"error: %@", error);

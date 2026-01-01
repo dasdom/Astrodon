@@ -12,7 +12,8 @@ NS_ASSUME_NONNULL_BEGIN
 @interface DDHTimelineCellView : NSTableCellView
 @property (nonatomic, strong) NSButton *replyButton;
 @property (nonatomic, strong) NSButton *boostButton;
-- (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader;
+@property (nonatomic, copy, nullable) void (^clickHandler)(NSURL *url);
+- (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter;
 @end
 
 NS_ASSUME_NONNULL_END

@@ -12,6 +12,7 @@
 
 @interface DDHAPIClient ()
 @property (strong) NSURLSession *session;
+@property (strong) NSISO8601DateFormatter *dateFormatter;
 @end
 
 @implementation DDHAPIClient
@@ -19,6 +20,8 @@
 - (instancetype)init {
   if (self = [super init]) {
     _session = [NSURLSession sharedSession];
+    _dateFormatter = [[NSISO8601DateFormatter alloc] init];
+    _dateFormatter.formatOptions = _dateFormatter.formatOptions | NSISO8601DateFormatWithFractionalSeconds;
   }
   return self;
 }
@@ -60,9 +63,10 @@
     NSError *jsonError = nil;
     NSArray<NSDictionary *> *rawArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
     NSMutableArray *toots = [NSMutableArray new];
+    typeof(self) __weak weakSelf = self;
     [rawArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dict, NSUInteger idx, BOOL * _Nonnull stop) {
       os_log(OS_LOG_DEFAULT, "dict: %@", dict);
-      DDHToot *toot = [[DDHToot alloc] initWithDictionary:dict];
+      DDHToot *toot = [[DDHToot alloc] initWithDictionary:dict dateFormatter:weakSelf.dateFormatter];
       [toots addObject:toot];
     }];
 

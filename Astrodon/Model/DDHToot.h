@@ -16,10 +16,11 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSDate *createdAt;
 @property BOOL sensitive;
 @property BOOL showsSensitive;
+@property BOOL reblogged;
 @property (strong) NSString *spoilerText;
 @property (strong) NSArray<DDHMediaAttachment *> *mediaAttachments;
 @property (strong) DDHToot *boostedToot;
-- (instancetype)initWithDictionary:(NSDictionary *)dict;
+- (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter;
 - (BOOL)isBoost;
 @end
 
