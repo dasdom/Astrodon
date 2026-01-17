@@ -1,14 +1,17 @@
-//  Created by Dominik Hauser on 17.11.22.
+//  Created by Dominik Hauser on 16.01.26.
 //  
 //
 
-#import "DDHTimelineCellView.h"
-#import "DDHToot.h"
+
+#import "DDHTootView.h"
 #import "DDHImageLoader.h"
+#import "DDHToot.h"
 #import "DDHAccount.h"
 #import "DDHMediaAttachment.h"
 
-@interface DDHTimelineCellView ()
+@interface DDHTootView ()
+@property (strong) NSImageView *imageView;
+@property (strong) NSTextField *textField;
 @property (strong) NSImageView *avatarImageView;
 @property (strong) NSImageView *boostersImageView;
 @property (strong) NSTextField *displayNameTextField;
@@ -23,22 +26,27 @@
 @property (strong) NSLayoutConstraint *attachmentBottomConstraint;
 @end
 
-@implementation DDHTimelineCellView
+@implementation DDHTootView
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
   if (self = [super initWithFrame:frameRect]) {
     _avatarImageView = [[NSImageView alloc] initWithFrame:CGRectMake(0, 0, 60, 60)];
     _avatarImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    _avatarImageView.wantsLayer = YES;
+    _avatarImageView.layer.cornerRadius = 8;
     self.imageView = _avatarImageView;
 
     _boostersImageView = [[NSImageView alloc] initWithFrame:CGRectMake(0, 0, 30, 30)];
     _boostersImageView.translatesAutoresizingMaskIntoConstraints = NO;
+    _boostersImageView.wantsLayer = YES;
+    _boostersImageView.layer.cornerRadius = 4;
 
     _displayNameTextField = [NSTextField labelWithString:@"displayName"];
     _displayNameTextField.translatesAutoresizingMaskIntoConstraints = NO;
 
     _dateTextField = [NSTextField labelWithString:@"date"];
     _dateTextField.translatesAutoresizingMaskIntoConstraints = NO;
+    _dateTextField.textColor = [NSColor systemGrayColor];
 
     _acctTextField = [NSTextField labelWithString:@"acct"];
     _acctTextField.translatesAutoresizingMaskIntoConstraints = NO;
@@ -50,6 +58,7 @@
     _tootTextField.selectable = NO;
     [_tootTextField setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];
     [_tootTextField setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];
+    [_tootTextField setContentHuggingPriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
     self.textField = _tootTextField;
 
     _showMoreButton = [NSButton buttonWithTitle:@"show more" target:nil action:nil];
@@ -60,14 +69,6 @@
     [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
     [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationVertical];
 
-    _replyButton = [[NSButton alloc] init];
-    _replyButton.translatesAutoresizingMaskIntoConstraints = NO;
-    _replyButton.image = [NSImage imageWithSystemSymbolName:@"arrow.turn.up.left" accessibilityDescription:@"reply"];
-
-    _boostButton = [[NSButton alloc] init];
-    _boostButton.translatesAutoresizingMaskIntoConstraints = NO;
-    _boostButton.image = [NSImage imageWithSystemSymbolName:@"arrow.2.squarepath" accessibilityDescription:@"reply"];
-
     [self addSubview:_avatarImageView];
     [self addSubview:_boostersImageView];
     [self addSubview:_displayNameTextField];
@@ -75,12 +76,11 @@
     [self addSubview:_acctTextField];
     [self addSubview:_tootTextField];
     [self addSubview:_attachmentImageView];
-    [self addSubview:_replyButton];
-    [self addSubview:_boostButton];
 
     _avatarImageWidthConstraint = [_avatarImageView.widthAnchor constraintEqualToConstant:60];
-    _textBottomConstraint = [_tootTextField.bottomAnchor constraintEqualToAnchor:_replyButton.topAnchor];
-    _attachmentBottomConstraint = [_attachmentImageView.bottomAnchor constraintEqualToAnchor:_replyButton.topAnchor constant:-4];
+    _textBottomConstraint = [_tootTextField.bottomAnchor constraintEqualToAnchor:self.bottomAnchor];
+    _textBottomConstraint.priority = 999;
+    _attachmentBottomConstraint = [_attachmentImageView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4];
 
     [NSLayoutConstraint activateConstraints:@[
       [_avatarImageView.topAnchor constraintEqualToAnchor:self.layoutMarginsGuide.topAnchor],
@@ -111,12 +111,6 @@
       [_attachmentImageView.topAnchor constraintEqualToAnchor:_tootTextField.bottomAnchor constant:4],
       [_attachmentImageView.leadingAnchor constraintEqualToAnchor:_tootTextField.leadingAnchor],
       [_attachmentImageView.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
-
-      [_boostButton.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
-      [_boostButton.bottomAnchor constraintEqualToAnchor:self.layoutMarginsGuide.bottomAnchor],
-
-      [_replyButton.trailingAnchor constraintEqualToAnchor:_boostButton.leadingAnchor constant:-4],
-      [_replyButton.bottomAnchor constraintEqualToAnchor:_boostButton.bottomAnchor],
     ]];
   }
   return self;
@@ -133,10 +127,9 @@
   [self setImagesForToot:toot imageLoader:imageLoader];
   [self setTextForToot:toot relativeDateTimeFormatter:relativeDateTimeFormatter];
   [self setAttachmentsForToot:toot imageLoader:imageLoader];
-  [self setColorsForToot:toot];
+//  [self setColorsForToot:toot];
 }
 
-// MARK: - Helper
 - (void)setTextForToot:(DDHToot *)toot relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {
   DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
 
@@ -164,16 +157,18 @@
     self.textField.attributedStringValue = attributedString;
 
     self.showMoreButton.hidden = YES;
+
+//    self.languageLabel.stringValue = tootToShow.language;
   }
 }
 
-- (void)setColorsForToot:(DDHToot *)toot {
-  if (toot.reblogged) {
-    self.boostButton.bezelColor = [NSColor colorNamed:@"colors/boosted"];
-  } else {
-    self.boostButton.bezelColor = nil;
-  }
-}
+//- (void)setColorsForToot:(DDHToot *)toot {
+//  if (toot.reblogged) {
+//    self.boostButton.bezelColor = [NSColor colorNamed:@"colors/boosted"];
+//  } else {
+//    self.boostButton.bezelColor = nil;
+//  }
+//}
 
 - (void)setImagesForToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader {
   if ([toot isBoost]) {
@@ -209,19 +204,22 @@
 - (void)setAttachmentsForToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader {
   DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
   self.attachmentImageView.hidden = YES;
+  self.attachmentBottomConstraint.active = NO;
   self.textBottomConstraint.active = YES;
   self.aspectConstraint.active = NO;
-  [tootToShow.mediaAttachments enumerateObjectsUsingBlock:^(DDHMediaAttachment * _Nonnull mediaAttachment, NSUInteger idx, BOOL * _Nonnull stop) {
+  DDHMediaAttachment * mediaAttachment = tootToShow.mediaAttachments.firstObject;
+//  [tootToShow.mediaAttachments enumerateObjectsUsingBlock:^(DDHMediaAttachment * _Nonnull mediaAttachment, NSUInteger idx, BOOL * _Nonnull stop) {
     switch (mediaAttachment.type) {
       case DDHAttachmentTypeUnknown:
         break;
       case DDHAttachmentTypeImage:
         self.attachmentImageView.hidden = NO;
-        self.aspectConstraint.active = NO;
         self.textBottomConstraint.active = NO;
         self.attachmentBottomConstraint.active = YES;
+
         self.aspectConstraint = [self.attachmentImageView.widthAnchor constraintEqualToAnchor:self.attachmentImageView.heightAnchor multiplier:mediaAttachment.smallDimensions.aspect];
         self.aspectConstraint.active = YES;
+
         [imageLoader loadImageForURL:mediaAttachment.previewURL completionHandler:^(NSImage *image) {
           dispatch_async(dispatch_get_main_queue(), ^{
             self.attachmentImageView.image = image;
@@ -229,11 +227,11 @@
         }];
         break;
     }
-  }];
+//  }];
 }
 
 - (void)mouseDown:(NSEvent *)event {
-//  NSLog(@"event: %@", event);
+  //  NSLog(@"event: %@", event);
 
   NSAttributedString *attributedString = [self.tootTextField.attributedStringValue copy];
   NSTextStorage *textStorage = [[NSTextStorage alloc] initWithAttributedString:attributedString];
@@ -254,7 +252,7 @@
 
   [attributedString enumerateAttributesInRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
     if (NSLocationInRange(characterIndex, range)) {
-//      NSLog(@"range: %@", [NSValue valueWithRange:range]);
+      //      NSLog(@"range: %@", [NSValue valueWithRange:range]);
       NSLog(@"attrs: %@", attrs);
       NSURL *url = (NSURL *)attrs[NSLinkAttributeName];
       if (self.clickHandler) {
@@ -263,5 +261,6 @@
     }
   }];
 }
+
 
 @end

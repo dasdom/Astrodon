@@ -4,7 +4,6 @@
 
 #import "AppDelegate.h"
 #import "DDHTimelineWindowController.h"
-#import "DDHTootInputViewController.h"
 
 @interface AppDelegate ()
 @property (strong) DDHTimelineWindowController *windowController;
@@ -29,14 +28,6 @@
 
 - (BOOL)applicationSupportsSecureRestorableState:(NSApplication *)app {
   return YES;
-}
-
-- (void)newDocument:(id)sender {
-  DDHTootInputViewController *tootInputViewController = [[DDHTootInputViewController alloc] init];
-  tootInputViewController.title = @"New Toot";
-
-  NSWindow *inputWindow = [NSWindow windowWithContentViewController:tootInputViewController];
-  [inputWindow makeKeyAndOrderFront:self];
 }
 
 @end

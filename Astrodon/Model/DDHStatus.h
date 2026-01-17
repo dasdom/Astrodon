@@ -8,8 +8,9 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHStatus : NSObject
-@property (nonatomic, strong) NSString *text;
-- (instancetype)initWithText:(NSString *)text;
+@property (strong) NSString *text;
+@property (strong) NSString *inReplyToId;
+- (instancetype)initWithText:(NSString *)text inReplyToId:(nullable NSString *)inReplyToId;
 - (NSData *)data;
 @end
 

@@ -5,6 +5,7 @@
 #import "DDHToot.h"
 #import "DDHAccount.h"
 #import "DDHMediaAttachment.h"
+#import "DDHQuote.h"
 
 @implementation DDHToot
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter {
@@ -18,6 +19,7 @@
     _reblogged = [dict[@"reblogged"] boolValue];
 
     _createdAt = [dateFormatter dateFromString:dict[@"created_at"]];
+    _language = dict[@"language"];
     _spoilerText = dict[@"spoiler_text"];
 
     _statusId = dict[@"id"];
@@ -35,6 +37,10 @@
       _boostedToot = [[DDHToot alloc] initWithDictionary:reblogDict dateFormatter:dateFormatter];
     }
 
+    NSDictionary *quoteDict = dict[@"quote"];
+    if ([quoteDict isKindOfClass:[NSDictionary class]]) {
+      _quote = [[DDHQuote alloc] initWithDictionary:quoteDict dateFormatter:dateFormatter];
+    }
   }
   return self;
 }

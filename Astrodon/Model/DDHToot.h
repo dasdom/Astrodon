@@ -6,6 +6,7 @@
 
 @class DDHAccount;
 @class DDHMediaAttachment;
+@class DDHQuote;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -14,12 +15,14 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) DDHAccount *account;
 @property (strong) NSString *content;
 @property (strong) NSDate *createdAt;
+@property (strong) NSString *language;
+@property (strong) NSString *spoilerText;
+@property (strong) NSArray<DDHMediaAttachment *> *mediaAttachments;
+@property (nullable, strong) DDHToot *boostedToot;
+@property (nullable, strong) DDHQuote *quote;
 @property BOOL sensitive;
 @property BOOL showsSensitive;
 @property BOOL reblogged;
-@property (strong) NSString *spoilerText;
-@property (strong) NSArray<DDHMediaAttachment *> *mediaAttachments;
-@property (strong) DDHToot *boostedToot;
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter;
 - (BOOL)isBoost;
 @end

@@ -7,10 +7,15 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+@class DDHTootView;
+
 @interface DDHTootInputView : NSView
-@property (nonatomic, strong) NSTextView *inputTextView;
-@property (nonatomic, strong) NSButton *sendButton;
-@property (nonatomic, strong) NSProgressIndicator *progressIndicator;
+@property (strong) DDHTootView *tootView;
+@property (strong) NSTextView *inputTextView;
+@property (strong) NSButton *sendButton;
+@property (strong) NSProgressIndicator *progressIndicator;
+- (instancetype)initWithFrame:(NSRect)frameRect showToot:(BOOL)showToot;
+- (void)scrollUp;
 @end
 
 NS_ASSUME_NONNULL_END

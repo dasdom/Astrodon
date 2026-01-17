@@ -7,15 +7,19 @@
 
 @implementation DDHStatus
 
-- (instancetype)initWithText:(NSString *)text {
+- (instancetype)initWithText:(NSString *)text inReplyToId:(nullable NSString *)inReplyToId {
   if (self = [super init]) {
     _text = text;
+    _inReplyToId = inReplyToId;
   }
   return self;
 }
 
 - (NSData *)data {
-  NSDictionary *dictionary = @{@"status": self.text};
+  NSMutableDictionary *dictionary = [[NSMutableDictionary alloc] initWithDictionary:@{@"status": self.text}];
+  if (self.inReplyToId) {
+    [dictionary setValue:self.inReplyToId forKey:@"in_reply_to_id"];
+  }
   NSError *error;
   return [NSJSONSerialization dataWithJSONObject:dictionary options:0 error:&error];
 }

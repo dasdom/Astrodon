@@ -7,8 +7,11 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DDHTootInputViewController : NSViewController
+@class DDHToot;
+@class DDHImageLoader;
 
+@interface DDHTootInputViewController : NSViewController
+- (instancetype)initWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter;
 @end
 
 NS_ASSUME_NONNULL_END
