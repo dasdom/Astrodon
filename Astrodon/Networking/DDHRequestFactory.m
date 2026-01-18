@@ -32,7 +32,8 @@ NSString * const statuses = @"/statuses";
     case DDHEndpointBoost:
       path = [NSString stringWithFormat:@"%@%@%@/%@/reblog", apiPath, version, statuses, additionalInfo];
       break;
-    default:
+    case DDHEndpointFavorite:
+      path = [NSString stringWithFormat:@"%@%@%@/%@/favourite", apiPath, version, statuses, additionalInfo];
       break;
   }
   return path;
@@ -72,27 +73,23 @@ NSString * const statuses = @"/statuses";
     case DDHEndpointFetchToken:
       request.HTTPMethod = @"POST";
       break;
+    case DDHEndpointPublic:
+      break;
     case DDHEndpointHome: {
       NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
       [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
     }
       break;
-    case DDHEndpointNewStatus: {
+    case DDHEndpointNewStatus:
+    case DDHEndpointBoost:
+    case DDHEndpointFavorite:
+    {
       NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
       [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
       [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
       [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
       request.HTTPMethod = @"POST";
     }
-      break;
-    case DDHEndpointBoost: {
-      NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
-      [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
-      [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
-      [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
-      request.HTTPMethod = @"POST";
-    }
-    default:
       break;
   }
   return request;

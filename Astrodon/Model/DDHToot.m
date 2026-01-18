@@ -17,6 +17,7 @@
 
     _sensitive = [dict[@"sensitive"] boolValue];
     _reblogged = [dict[@"reblogged"] boolValue];
+    _favourited = [dict[@"favourited"] boolValue];
 
     _createdAt = [dateFormatter dateFromString:dict[@"created_at"]];
     _language = dict[@"language"];

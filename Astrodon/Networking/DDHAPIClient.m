@@ -91,6 +91,13 @@
   }];
 }
 
+- (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler {
+  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointFavorite additionalInfo:statusId] mutableCopy];
+  [self executeRequest:request completionHandler:^(NSError *error) {
+    completionHandler(error);
+  }];
+}
+
 - (void)executeRequest:(NSURLRequest *)request completionHandler:(void(^)(NSError *error))completionHandler {
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
     NSError *requestError = [self errorFromData:data response:response error:error];

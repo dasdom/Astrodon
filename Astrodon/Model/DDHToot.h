@@ -23,6 +23,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property BOOL sensitive;
 @property BOOL showsSensitive;
 @property BOOL reblogged;
+@property BOOL favourited;
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter;
 - (BOOL)isBoost;
 @end

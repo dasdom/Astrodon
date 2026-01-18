@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)timelineFromEndpoint:(DDHEndpoint)endpoint completionHandler:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler;
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
+- (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
 @end
 
 NS_ASSUME_NONNULL_END

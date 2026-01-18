@@ -10,7 +10,8 @@ typedef NS_ENUM(NSInteger, DDHEndpoint) {
   DDHEndpointPublic,
   DDHEndpointHome,
   DDHEndpointNewStatus,
-  DDHEndpointBoost
+  DDHEndpointBoost,
+  DDHEndpointFavorite
 };
 
 #endif /* DDHEndpoint_h */

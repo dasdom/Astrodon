@@ -79,10 +79,16 @@
       if (nil == tootCellView) {
         tootCellView = [[DDHTootCellView alloc] init];
         tootCellView.identifier = @"DDHTimelineCellView";
+
         tootCellView.boostButton.target = weakSelf;
         tootCellView.boostButton.action = @selector(boost:);
+
+        tootCellView.favoriteButton.target = weakSelf;
+        tootCellView.favoriteButton.action = @selector(favorite:);
+
         tootCellView.replyButton.target = weakSelf;
         tootCellView.replyButton.action = @selector(reply:);
+
         tootCellView.tootView.clickHandler = ^(NSURL *url) {
           NSLog(@"url: %@", url);
           [NSWorkspace.sharedWorkspace openURL:url];
@@ -112,7 +118,7 @@
 - (void)viewDidAppear {
   [super viewDidAppear];
 
-  [self loadToots:nil];
+  [self loadToots:nil withCompletionHandler:nil];
 }
 
 - (void)updateWithToots:(NSArray<DDHToot *> *)toots {
@@ -127,13 +133,16 @@
 }
 
 // MARK: - Actions
-- (void)loadToots:(id)sender {
+- (void)loadToots:(id)sender withCompletionHandler:(void(^)(void))completionHandler {
   NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
   if (code.length < 1) {
     [self presentViewControllerAsSheet:[DDHServerInputViewController new]];
   } else {
     __weak typeof(self)weakSelf = self;
     [self.apiClient timelineFromEndpoint:DDHEndpointHome completionHandler:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+      if (completionHandler) {
+        completionHandler();
+      }
       NSLog(@"error: %@", error);
       weakSelf.toots = toots;
 //      dispatch_async(dispatch_get_main_queue(), ^{
@@ -163,6 +172,24 @@
     if (nil == error) {
       dispatch_async(dispatch_get_main_queue(), ^{
         sender.bezelColor = [NSColor colorNamed:@"colors/boosted"];
+      });
+    } else {
+      NSLog(@"error: %@", error);
+    }
+  }];
+}
+
+- (void)favorite:(NSButton *)sender {
+  NSInteger row = [self.tableView rowForView:sender];
+  DDHToot *toot = self.toots[row];
+  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
+  NSLog(@"toot id: %@", toot.statusId);
+  NSLog(@"replying to toot with id: %@", tootToShow.statusId);
+  [self.apiClient favoriteStatusWithId:tootToShow.statusId completionHandler:^(NSError * _Nonnull error) {
+    if (nil == error) {
+      dispatch_async(dispatch_get_main_queue(), ^{
+        sender.bezelColor = [NSColor colorNamed:@"colors/boosted"];
+        sender.image = [NSImage imageWithSystemSymbolName:@"star.fill" accessibilityDescription:@"favorite filled"];
       });
     } else {
       NSLog(@"error: %@", error);

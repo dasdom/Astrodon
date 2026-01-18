@@ -7,7 +7,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHTimelineViewController : NSViewController
-- (void)loadToots:(nullable id)sender;
+- (void)loadToots:(nullable id)sender withCompletionHandler:(nullable void(^)(void))completionHandler;
 @end
 
 NS_ASSUME_NONNULL_END
