@@ -55,6 +55,7 @@
   [self.contentView.progressIndicator startAnimation:self];
   self.contentView.progressIndicator.hidden = NO;
 
+#error "Add mentions to toot text"
   DDHStatus *status = [[DDHStatus alloc] initWithText:self.contentView.inputTextView.string inReplyToId:self.toot.statusId];
 
   typeof(self) __weak weakSelf = self;
