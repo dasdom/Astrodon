@@ -25,12 +25,12 @@
 
   NSData *imageData = [NSData dataWithContentsOfURL:imageURL];
   if (imageData) {
-    NSLog(@">>> Use existing image >>>");
+//    NSLog(@">>> Use existing image >>>");
     NSImage *image = [[NSImage alloc] initWithData:imageData];
     completionHandler(image);
     return;
   } else {
-    NSLog(@"-- loading image");
+//    NSLog(@"-- loading image");
     NSURLSession *session = [NSURLSession sharedSession];
     NSURLSessionDataTask *dataTask = [session dataTaskWithURL:url completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 

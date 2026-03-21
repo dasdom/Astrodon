@@ -9,6 +9,8 @@
 #import "DDHStatus.h"
 #import "DDHToot.h"
 #import "DDHTootView.h"
+#import "DDHAccount.h"
+#import "DDHMention.h"
 
 @interface DDHTootInputViewController ()
 @property (nonatomic, strong) DDHTootInputView *contentView;
@@ -48,6 +50,12 @@
   if (self.toot) {
     [self.contentView.tootView updateWithToot:self.toot imageLoader:self.imageLoader relativeDateTimeFormatter:self.relativeDateTimeFormatter];
     [self.contentView scrollUp];
+
+    NSMutableString *string = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"@%@", self.toot.account.acct]];
+    for (DDHMention *mention in self.toot.mentions) {
+      [string appendFormat:@"@%@", mention.acct];
+    }
+    self.contentView.inputTextView.string = string;
   }
 }
 
@@ -55,7 +63,6 @@
   [self.contentView.progressIndicator startAnimation:self];
   self.contentView.progressIndicator.hidden = NO;
 
-#error "Add mentions to toot text"
   DDHStatus *status = [[DDHStatus alloc] initWithText:self.contentView.inputTextView.string inReplyToId:self.toot.statusId];
 
   typeof(self) __weak weakSelf = self;

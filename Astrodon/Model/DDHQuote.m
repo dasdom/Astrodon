@@ -10,7 +10,12 @@
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter {
   if (self = [super init]) {
     _quoteState = [self quoteStateFromString:dict[@"state"]];
-    _quotedStatus = [[DDHToot alloc] initWithDictionary:dict[@"quoted_status"] dateFormatter:dateFormatter];
+    NSDictionary *quotedStatusDict = dict[@"quoted_status"];
+    if (quotedStatusDict) {
+      _quotedStatus = [[DDHToot alloc] initWithDictionary:dict[@"quoted_status"] dateFormatter:dateFormatter];
+    } else {
+      _quotedStatus = nil;
+    }
   }
   return self;
 }

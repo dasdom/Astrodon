@@ -6,6 +6,7 @@
 #import "DDHAccount.h"
 #import "DDHMediaAttachment.h"
 #import "DDHQuote.h"
+#import "DDHMention.h"
 
 @implementation DDHToot
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter {
@@ -42,6 +43,14 @@
     if ([quoteDict isKindOfClass:[NSDictionary class]]) {
       _quote = [[DDHQuote alloc] initWithDictionary:quoteDict dateFormatter:dateFormatter];
     }
+
+    NSMutableArray<DDHMention *> *mentions = [[NSMutableArray alloc] init];
+    NSArray<NSDictionary *> *rawMentions = dict[@"mentions"];
+    [rawMentions enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull rawMention, NSUInteger idx, BOOL * _Nonnull stop) {
+      DDHMention *mention = [[DDHMention alloc] initWithDictionary:rawMention];
+      [mentions addObject:mention];
+    }];
+    _mentions = mentions;
   }
   return self;
 }

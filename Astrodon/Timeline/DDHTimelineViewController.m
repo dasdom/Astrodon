@@ -59,6 +59,8 @@
     DDHToot *toot = weakSelf.toots[row];
     DDHTootCellView *cellView;
 
+    NSLog(@"%lf %lf", self.tableView.visibleRect.origin.y + self.tableView.visibleRect.size.height, self.tableView.frame.size.height);
+
 //    if (nil != toot.quote) {
 //      DDHTootWithQuoteCellView *tootWithQuoteCellView = [tableView makeViewWithIdentifier:@"DDHTootWithQuoteCellView" owner:self];
 //      if (nil == tootWithQuoteCellView) {
@@ -139,16 +141,21 @@
     [self presentViewControllerAsSheet:[DDHServerInputViewController new]];
   } else {
     __weak typeof(self)weakSelf = self;
-    [self.apiClient timelineFromEndpoint:DDHEndpointHome completionHandler:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+    DDHToot *firstToot = self.toots.firstObject;
+    [self.apiClient timelineFromEndpoint:DDHEndpointHome sinceId:firstToot.statusId completionHandler:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
       if (completionHandler) {
         completionHandler();
       }
       NSLog(@"error: %@", error);
-      weakSelf.toots = toots;
+      if ([weakSelf.toots count] > 0) {
+        weakSelf.toots = [toots arrayByAddingObjectsFromArray:weakSelf.toots];
+      } else {
+        weakSelf.toots = toots;
+      }
 //      dispatch_async(dispatch_get_main_queue(), ^{
 //        [self.tableView reloadData];
 //      });
-      [weakSelf updateWithToots:toots];
+      [weakSelf updateWithToots:weakSelf.toots];
     }];
   }
 }

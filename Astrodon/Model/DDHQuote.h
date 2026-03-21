@@ -12,7 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHQuote : NSObject
 @property (assign) DDHQuoteState quoteState;
-@property (strong) DDHToot *quotedStatus;
+@property (nullable, strong) DDHToot *quotedStatus;
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter;
 @end
 

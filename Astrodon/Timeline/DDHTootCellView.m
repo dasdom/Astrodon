@@ -96,7 +96,7 @@
   self.languageLabel.stringValue = tootToShow.language;
 
   [self.tootView updateWithToot:toot imageLoader:imageLoader relativeDateTimeFormatter:relativeDateTimeFormatter];
-  [self setColorsForToot:toot];
+  [self setColorsForToot:tootToShow];
 
   if (tootToShow.quote) {
     self.tootViewToButtonConstraint.active = NO;

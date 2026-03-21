@@ -46,12 +46,12 @@
   [dataTask resume];
 }
 
-- (void)timelineFromEndpoint:(DDHEndpoint)endpoint completionHandler:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
+- (void)timelineFromEndpoint:(DDHEndpoint)endpoint sinceId:(NSString *)sinceId completionHandler:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
 
   if (endpoint != DDHEndpointPublic && endpoint != DDHEndpointHome) {
     return;
   }
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:endpoint];
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:endpoint additionalInfo:sinceId];
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
     NSError *requestError = [self errorFromData:data response:response error:error];

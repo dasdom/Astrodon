@@ -53,8 +53,16 @@ NSString * const statuses = @"/statuses";
         [NSURLQueryItem queryItemWithName:@"code" value:additionalInfo],
         [NSURLQueryItem queryItemWithName:@"scope" value:@"read+write+follow+push"],
       ];
-    }
       break;
+    }
+    case DDHEndpointHome: {
+      if (additionalInfo.length > 0) {
+        urlComponents.queryItems = @[
+          [NSURLQueryItem queryItemWithName:@"since_id" value:additionalInfo],
+        ];
+      }
+      break;
+    }
     default:
       break;
   }
