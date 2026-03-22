@@ -10,7 +10,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DDHImageViewController : NSViewController
+@interface DDHImageViewerViewController : NSViewController
 - (instancetype)initWithMediaAttachment:(DDHMediaAttachment *)mediaAttachment imageLoader:(DDHImageLoader *)imageLoader;
 @end
 

@@ -10,7 +10,7 @@
 #import "DDHTootCellView.h"
 #import "DDHImageLoader.h"
 #import "DDHServerInputViewController.h"
-#import "DDHImageViewController.h"
+#import "DDHImageViewerViewController.h"
 #import "DDHKeychain.h"
 #import "DDHConstants.h"
 #import "DDHEndpoint.h"
@@ -101,7 +101,7 @@
             [NSWorkspace.sharedWorkspace openURL:url];
           } else if ([item isKindOfClass:[DDHMediaAttachment class]]) {
             DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
-            DDHImageViewController *imageViewController = [[DDHImageViewController alloc] initWithMediaAttachment:attachment imageLoader:weakSelf.imageLoader];
+            DDHImageViewerViewController *imageViewController = [[DDHImageViewerViewController alloc] initWithMediaAttachment:attachment imageLoader:weakSelf.imageLoader];
             [weakSelf presentViewControllerAsModalWindow:imageViewController];
           }
         };

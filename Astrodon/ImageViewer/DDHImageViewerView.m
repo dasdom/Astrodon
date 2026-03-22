@@ -3,13 +3,13 @@
 //
 
 
-#import "DDHImageView.h"
+#import "DDHImageViewerView.h"
 
-@interface DDHImageView ()
+@interface DDHImageViewerView ()
 @property (strong) NSImageView *imageView;
 @end
 
-@implementation DDHImageView
+@implementation DDHImageViewerView
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
   if (self = [super initWithFrame:frameRect]) {

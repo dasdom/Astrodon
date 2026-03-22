@@ -7,7 +7,7 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DDHImageView : NSView
+@interface DDHImageViewerView : NSView
 - (void)updateWithImage:(NSImage *)image;
 @end
 

@@ -3,17 +3,17 @@
 //
 
 
-#import "DDHImageViewController.h"
-#import "DDHImageView.h"
+#import "DDHImageViewerViewController.h"
+#import "DDHImageViewerView.h"
 #import "DDHMediaAttachment.h"
 #import "DDHImageLoader.h"
 
-@interface DDHImageViewController ()
+@interface DDHImageViewerViewController ()
 @property (strong) DDHMediaAttachment *mediaAttachment;
 @property (strong) DDHImageLoader *imageLoader;
 @end
 
-@implementation DDHImageViewController
+@implementation DDHImageViewerViewController
 
 - (instancetype)initWithMediaAttachment:(DDHMediaAttachment *)mediaAttachment imageLoader:(DDHImageLoader *)imageLoader {
   if (self = [super initWithNibName:nil bundle:nil]) {
@@ -24,11 +24,11 @@
 }
 
 - (void)loadView {
-  self.view = [[DDHImageView alloc] initWithFrame:CGRectMake(0, 0, 480, 600)];
+  self.view = [[DDHImageViewerView alloc] initWithFrame:CGRectMake(0, 0, 480, 600)];
 }
 
-- (DDHImageView *)contentView {
-  return (DDHImageView *)self.view;
+- (DDHImageViewerView *)contentView {
+  return (DDHImageViewerView *)self.view;
 }
 
 - (void)viewDidLoad {
