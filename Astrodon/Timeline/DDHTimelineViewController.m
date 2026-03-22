@@ -10,11 +10,13 @@
 #import "DDHTootCellView.h"
 #import "DDHImageLoader.h"
 #import "DDHServerInputViewController.h"
+#import "DDHImageViewController.h"
 #import "DDHKeychain.h"
 #import "DDHConstants.h"
 #import "DDHEndpoint.h"
 #import "DDHTootInputViewController.h"
 #import "DDHTootView.h"
+#import "DDHMediaAttachment.h"
 #import <OSLog/OSLog.h>
 
 @interface DDHTimelineViewController () <NSTableViewDataSource, NSTableViewDelegate>
@@ -91,10 +93,19 @@
         tootCellView.replyButton.target = weakSelf;
         tootCellView.replyButton.action = @selector(reply:);
 
-        tootCellView.tootView.clickHandler = ^(NSURL *url) {
-          NSLog(@"url: %@", url);
-          [NSWorkspace.sharedWorkspace openURL:url];
+        __weak typeof(self)weakSelf = self;
+        tootCellView.tootView.clickHandler = ^(id item) {
+          if ([item isKindOfClass:[NSURL class]]) {
+            NSURL *url = (NSURL *)item;
+            NSLog(@"url: %@", url);
+            [NSWorkspace.sharedWorkspace openURL:url];
+          } else if ([item isKindOfClass:[DDHMediaAttachment class]]) {
+            DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
+            DDHImageViewController *imageViewController = [[DDHImageViewController alloc] initWithMediaAttachment:attachment imageLoader:weakSelf.imageLoader];
+            [weakSelf presentViewControllerAsModalWindow:imageViewController];
+          }
         };
+
       }
       cellView = tootCellView;
 //      }

@@ -14,6 +14,8 @@
 		F220BFD129388F060003FF9C /* DDHMediaAttachment.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD029388F060003FF9C /* DDHMediaAttachment.m */; };
 		F220BFD7293892870003FF9C /* DDHImageDimensions.m in Sources */ = {isa = PBXBuildFile; fileRef = F220BFD6293892870003FF9C /* DDHImageDimensions.m */; };
 		F233411B2F1D13FE00E93676 /* DDHMention.m in Sources */ = {isa = PBXBuildFile; fileRef = F233411A2F1D13FE00E93676 /* DDHMention.m */; };
+		F2378E9F2F6E994F007CF261 /* DDHImageViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F2378E9E2F6E994F007CF261 /* DDHImageViewController.m */; };
+		F2378EA22F6E996C007CF261 /* DDHImageView.m in Sources */ = {isa = PBXBuildFile; fileRef = F2378EA12F6E996C007CF261 /* DDHImageView.m */; };
 		F238583A2926A1C00065DE0B /* AppDelegate.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858392926A1C00065DE0B /* AppDelegate.m */; };
 		F238583C2926A1C10065DE0B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = F238583B2926A1C10065DE0B /* Assets.xcassets */; };
 		F238583F2926A1C10065DE0B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = F238583D2926A1C10065DE0B /* MainMenu.xib */; };
@@ -61,6 +63,10 @@
 		F220BFD6293892870003FF9C /* DDHImageDimensions.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHImageDimensions.m; sourceTree = "<group>"; };
 		F23341192F1D13FE00E93676 /* DDHMention.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHMention.h; sourceTree = "<group>"; };
 		F233411A2F1D13FE00E93676 /* DDHMention.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHMention.m; sourceTree = "<group>"; };
+		F2378E9D2F6E994F007CF261 /* DDHImageViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHImageViewController.h; sourceTree = "<group>"; };
+		F2378E9E2F6E994F007CF261 /* DDHImageViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHImageViewController.m; sourceTree = "<group>"; };
+		F2378EA02F6E996C007CF261 /* DDHImageView.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHImageView.h; sourceTree = "<group>"; };
+		F2378EA12F6E996C007CF261 /* DDHImageView.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHImageView.m; sourceTree = "<group>"; };
 		F23858352926A1C00065DE0B /* Astrodon.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Astrodon.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		F23858382926A1C00065DE0B /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		F23858392926A1C00065DE0B /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
@@ -160,6 +166,10 @@
 				F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */,
 				F2C7B1FD29350EF400554EA2 /* DDHConstants.h */,
 				F2C7B1FE29350EF400554EA2 /* DDHConstants.m */,
+				F2378E9D2F6E994F007CF261 /* DDHImageViewController.h */,
+				F2378E9E2F6E994F007CF261 /* DDHImageViewController.m */,
+				F2378EA02F6E996C007CF261 /* DDHImageView.h */,
+				F2378EA12F6E996C007CF261 /* DDHImageView.m */,
 				F2C7B1D12930B83300554EA2 /* Server Input */,
 				F238586D2926D3240065DE0B /* Timeline */,
 				F205A24A2F02CAD70002887F /* Input */,
@@ -360,6 +370,7 @@
 				F205A2492F02CA960002887F /* DDHTootInputView.m in Sources */,
 				F245306B2F1AB16F0000FFCD /* DDHTootView.m in Sources */,
 				F23858412926A1C10065DE0B /* main.m in Sources */,
+				F2378E9F2F6E994F007CF261 /* DDHImageViewController.m in Sources */,
 				F23858572926A1FB0065DE0B /* DDHAPIClient.m in Sources */,
 				F24530672F1AA2530000FFCD /* DDHQuote.m in Sources */,
 				F23858702926D7B20065DE0B /* DDHTootCellView.m in Sources */,
@@ -374,6 +385,7 @@
 				F23858632926AFA70065DE0B /* DDHRequestFactory.m in Sources */,
 				F238585F2926ACA30065DE0B /* DDHAccount.m in Sources */,
 				F233411B2F1D13FE00E93676 /* DDHMention.m in Sources */,
+				F2378EA22F6E996C007CF261 /* DDHImageView.m in Sources */,
 				F2C7B20129351BA100554EA2 /* DDHClientKeys.m in Sources */,
 				F238586B2926D31C0065DE0B /* DDHTimelineViewController.m in Sources */,
 				F23AFFB12EFEE0ED0046B0D1 /* DDHTimelineView.m in Sources */,

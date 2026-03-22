@@ -24,6 +24,7 @@
 @property (strong) NSLayoutConstraint *aspectConstraint;
 @property (strong) NSLayoutConstraint *textBottomConstraint;
 @property (strong) NSLayoutConstraint *attachmentBottomConstraint;
+@property (strong) DDHToot *toot;
 @end
 
 @implementation DDHTootView
@@ -128,6 +129,8 @@
   [self setTextForToot:toot relativeDateTimeFormatter:relativeDateTimeFormatter];
   [self setAttachmentsForToot:toot imageLoader:imageLoader];
 //  [self setColorsForToot:toot];
+
+  self.toot = toot;
 }
 
 - (void)setTextForToot:(DDHToot *)toot relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {
@@ -207,7 +210,7 @@
   self.attachmentBottomConstraint.active = NO;
   self.textBottomConstraint.active = YES;
   self.aspectConstraint.active = NO;
-  DDHMediaAttachment * mediaAttachment = tootToShow.mediaAttachments.firstObject;
+  DDHMediaAttachment *mediaAttachment = tootToShow.mediaAttachments.firstObject;
 //  [tootToShow.mediaAttachments enumerateObjectsUsingBlock:^(DDHMediaAttachment * _Nonnull mediaAttachment, NSUInteger idx, BOOL * _Nonnull stop) {
     switch (mediaAttachment.type) {
       case DDHAttachmentTypeUnknown:
@@ -233,6 +236,41 @@
 - (void)mouseDown:(NSEvent *)event {
   //  NSLog(@"event: %@", event);
 
+  NSPoint pointInWindow = [event locationInWindow];
+  NSPoint convertedPointInSelf = [self convertPoint:pointInWindow fromView:nil];
+
+  BOOL clickedInTextField = [self mouse:convertedPointInSelf inRect:self.tootTextField.frame];
+
+  if (clickedInTextField) {
+    NSLog(@"clicked in text field");
+    [self handleClickInTextField:pointInWindow];
+    return;
+  }
+
+  BOOL clickedInTextAttachmentImage = [self mouse:convertedPointInSelf inRect:self.attachmentImageView.frame];
+
+  if (clickedInTextAttachmentImage) {
+    NSLog(@"clicked in attachment image");
+    DDHToot *tootToShow = [self.toot isBoost] ? self.toot.boostedToot : self.toot;
+    DDHMediaAttachment *mediaAttachment = tootToShow.mediaAttachments.firstObject;
+
+    if (mediaAttachment && self.clickHandler) {
+      self.clickHandler(mediaAttachment);
+    }
+    return;
+  }
+
+  BOOL clickedAvatarImage = [self mouse:convertedPointInSelf inRect:self.avatarImageView.frame];
+
+  if (clickedAvatarImage) {
+    NSLog(@"clicked avatar");
+  }
+}
+
+- (void)handleClickInTextField:(NSPoint)pointInWindow {
+  NSPoint convertedPointInTootTextField = [self.tootTextField convertPoint:pointInWindow fromView:nil];
+  NSLog(@"clicked in text field");
+
   NSAttributedString *attributedString = [self.tootTextField.attributedStringValue copy];
   NSTextStorage *textStorage = [[NSTextStorage alloc] initWithAttributedString:attributedString];
   NSLayoutManager *layoutManager = [[NSLayoutManager alloc] init];
@@ -245,9 +283,7 @@
   [layoutManager addTextContainer:textContainer];
   [textStorage addLayoutManager:layoutManager];
 
-  NSPoint pointInWindow = [event locationInWindow];
-  NSPoint convertedPoint = [self.tootTextField convertPoint:pointInWindow fromView:nil];
-  NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:convertedPoint inTextContainer:textContainer];
+  NSUInteger glyphIndex = [layoutManager glyphIndexForPoint:convertedPointInTootTextField inTextContainer:textContainer];
   NSUInteger characterIndex = [layoutManager characterIndexForGlyphAtIndex:glyphIndex];
 
   [attributedString enumerateAttributesInRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
@@ -255,12 +291,10 @@
       //      NSLog(@"range: %@", [NSValue valueWithRange:range]);
       NSLog(@"attrs: %@", attrs);
       NSURL *url = (NSURL *)attrs[NSLinkAttributeName];
-      if (self.clickHandler) {
+      if (url && self.clickHandler) {
         self.clickHandler(url);
       }
     }
   }];
 }
-
-
 @end

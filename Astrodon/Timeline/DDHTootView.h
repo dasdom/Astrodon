@@ -7,11 +7,12 @@
 
 @class DDHToot;
 @class DDHImageLoader;
+@class DDHMediaAttachment;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHTootView : NSView
-@property (nonatomic, copy, nullable) void (^clickHandler)(NSURL *url);
+@property (nonatomic, copy, nullable) void (^clickHandler)(id item);
 - (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter;
 @end
 
