@@ -8,6 +8,8 @@
 - (void)loadImageForURL:(NSURL *)url completionHandler:(void(^)(NSImage *image))completionHandler {
 
   NSString *imageName = [url lastPathComponent];
+//  NSLog(@"url: %@", url);
+//  NSLog(@"imageName: %@", imageName);
 
   NSFileManager *fileManager = NSFileManager.defaultManager;
   NSURL *supportURL = [[fileManager URLsForDirectory:NSCachesDirectory inDomains:NSAllDomainsMask] firstObject];

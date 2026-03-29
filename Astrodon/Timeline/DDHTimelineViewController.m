@@ -11,6 +11,7 @@
 #import "DDHImageLoader.h"
 #import "DDHServerInputViewController.h"
 #import "DDHImageViewerViewController.h"
+#import "DDHAccountViewController.h"
 #import "DDHKeychain.h"
 #import "DDHConstants.h"
 #import "DDHEndpoint.h"
@@ -103,6 +104,10 @@
             DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
             DDHImageViewerViewController *imageViewController = [[DDHImageViewerViewController alloc] initWithMediaAttachment:attachment imageLoader:weakSelf.imageLoader];
             [weakSelf presentViewControllerAsModalWindow:imageViewController];
+          } else if ([item isKindOfClass:[DDHAccount class]]) {
+            DDHAccount *account = (DDHAccount *)item;
+            DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:weakSelf.imageLoader];
+            [weakSelf presentViewControllerAsModalWindow:accountViewController];
           }
         };
 
@@ -183,11 +188,9 @@
 - (void)boost:(NSButton *)sender {
   NSInteger row = [self.tableView rowForView:sender];
   DDHToot *toot = self.toots[row];
-  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
-  NSLog(@"toot id: %@", toot.statusId);
-  NSLog(@"boosting toot with id: %@", tootToShow.statusId);
-  [self.apiClient boostStatusWithId:tootToShow.statusId completionHandler:^(NSError * _Nonnull error) {
+  [self.apiClient boostStatusWithId:toot.tootToShow.statusId completionHandler:^(NSError * _Nonnull error) {
     if (nil == error) {
+      toot.tootToShow.reblogged = YES;
       dispatch_async(dispatch_get_main_queue(), ^{
         sender.bezelColor = [NSColor colorNamed:@"colors/boosted"];
       });
@@ -200,11 +203,9 @@
 - (void)favorite:(NSButton *)sender {
   NSInteger row = [self.tableView rowForView:sender];
   DDHToot *toot = self.toots[row];
-  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
-  NSLog(@"toot id: %@", toot.statusId);
-  NSLog(@"replying to toot with id: %@", tootToShow.statusId);
-  [self.apiClient favoriteStatusWithId:tootToShow.statusId completionHandler:^(NSError * _Nonnull error) {
+  [self.apiClient favoriteStatusWithId:toot.tootToShow.statusId completionHandler:^(NSError * _Nonnull error) {
     if (nil == error) {
+      toot.tootToShow.favourited = YES;
       dispatch_async(dispatch_get_main_queue(), ^{
         sender.bezelColor = [NSColor colorNamed:@"colors/boosted"];
         sender.image = [NSImage imageWithSystemSymbolName:@"star.fill" accessibilityDescription:@"favorite filled"];
@@ -218,10 +219,10 @@
 - (void)reply:(NSButton *)sender {
   NSInteger row = [self.tableView rowForView:sender];
   DDHToot *toot = self.toots[row];
-  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
-  NSLog(@"toot id: %@", toot.statusId);
-  NSLog(@"replying to toot with id: %@", tootToShow.statusId);
-  [self openTootInputReplyingToToot:tootToShow];
+//  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
+//  NSLog(@"toot id: %@", toot.statusId);
+//  NSLog(@"replying to toot with id: %@", tootToShow.statusId);
+  [self openTootInputReplyingToToot:toot.tootToShow];
 }
 
 - (void)newDocument:(id)sender {

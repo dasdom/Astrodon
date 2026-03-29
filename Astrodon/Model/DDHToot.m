@@ -55,6 +55,10 @@
   return self;
 }
 
+- (DDHToot *)tootToShow {
+  return self.boostedToot ?: self;
+}
+
 - (BOOL)isBoost {
   return self.boostedToot;
 }

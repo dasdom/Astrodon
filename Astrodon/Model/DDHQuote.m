@@ -11,9 +11,11 @@
   if (self = [super init]) {
     _quoteState = [self quoteStateFromString:dict[@"state"]];
     NSDictionary *quotedStatusDict = dict[@"quoted_status"];
-    if (quotedStatusDict) {
-      _quotedStatus = [[DDHToot alloc] initWithDictionary:dict[@"quoted_status"] dateFormatter:dateFormatter];
+    NSLog(@"quotedStatusDict: %@", quotedStatusDict);
+    if ([quotedStatusDict count] > 0) {
+      _quotedStatus = [[DDHToot alloc] initWithDictionary:quotedStatusDict dateFormatter:dateFormatter];
     } else {
+      NSAssert(NO, @"quotedStatusDict is nil");
       _quotedStatus = nil;
     }
   }

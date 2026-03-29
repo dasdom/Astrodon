@@ -91,18 +91,16 @@
 
 - (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {
 
-  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
-
-  self.languageLabel.stringValue = tootToShow.language;
+  self.languageLabel.stringValue = toot.tootToShow.language;
 
   [self.tootView updateWithToot:toot imageLoader:imageLoader relativeDateTimeFormatter:relativeDateTimeFormatter];
-  [self setColorsForToot:tootToShow];
+  [self setColorsForToot:toot.tootToShow];
 
-  if (tootToShow.quote) {
+  if (toot.tootToShow.quote) {
     self.tootViewToButtonConstraint.active = NO;
     self.tootViewToQuoteViewConstraint.active = YES;
     self.quoteTootView.hidden = NO;
-    [self.quoteTootView updateWithToot:tootToShow.quote.quotedStatus imageLoader:imageLoader relativeDateTimeFormatter:relativeDateTimeFormatter];
+    [self.quoteTootView updateWithToot:toot.tootToShow.quote.quotedStatus imageLoader:imageLoader relativeDateTimeFormatter:relativeDateTimeFormatter];
   } else {
     self.quoteTootView.hidden = YES;
     self.tootViewToButtonConstraint.active = YES;

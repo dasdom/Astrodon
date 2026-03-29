@@ -11,6 +11,7 @@ NSString * const apiPath = @"/api";
 NSString * const version = @"/v1";
 NSString * const timelines = @"/timelines";
 NSString * const statuses = @"/statuses";
+NSString * const accounts = @"/accounts";
 
 @implementation DDHRequestFactory
 
@@ -34,6 +35,9 @@ NSString * const statuses = @"/statuses";
       break;
     case DDHEndpointFavorite:
       path = [NSString stringWithFormat:@"%@%@%@/%@/favourite", apiPath, version, statuses, additionalInfo];
+      break;
+    case DDHEndpointAccount:
+      path = [NSString stringWithFormat:@"%@%@%@/%@", apiPath, version, accounts, additionalInfo];
       break;
   }
   return path;
@@ -86,8 +90,8 @@ NSString * const statuses = @"/statuses";
     case DDHEndpointHome: {
       NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
       [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
-    }
       break;
+    }
     case DDHEndpointNewStatus:
     case DDHEndpointBoost:
     case DDHEndpointFavorite:
@@ -97,8 +101,13 @@ NSString * const statuses = @"/statuses";
       [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
       [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
       request.HTTPMethod = @"POST";
-    }
       break;
+    }
+    case DDHEndpointAccount: {
+      NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
+      [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
+      break;
+    }
   }
   return request;
 }

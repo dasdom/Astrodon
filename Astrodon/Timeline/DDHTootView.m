@@ -107,11 +107,11 @@
       [_tootTextField.topAnchor constraintEqualToAnchor:_acctTextField.bottomAnchor constant:10],
       [_tootTextField.leadingAnchor constraintEqualToAnchor:_acctTextField.leadingAnchor],
       _textBottomConstraint,
-      [_tootTextField.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
+      [_tootTextField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10],
 
       [_attachmentImageView.topAnchor constraintEqualToAnchor:_tootTextField.bottomAnchor constant:4],
       [_attachmentImageView.leadingAnchor constraintEqualToAnchor:_tootTextField.leadingAnchor],
-      [_attachmentImageView.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
+      [_attachmentImageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10],
     ]];
   }
   return self;
@@ -134,23 +134,22 @@
 }
 
 - (void)setTextForToot:(DDHToot *)toot relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {
-  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
 
-  NSString *trimmedContent = [tootToShow.content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+  NSString *trimmedContent = [toot.tootToShow.content stringByTrimmingCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
   NSData *contentData = [trimmedContent dataUsingEncoding:NSUTF16StringEncoding];
-  DDHAccount *account = tootToShow.account;
+  DDHAccount *account = toot.tootToShow.account;
 
-  self.displayNameTextField.stringValue = account.displayName;
-  self.acctTextField.stringValue = account.acct;
+  self.displayNameTextField.stringValue = account.displayName ?: @"";
+  self.acctTextField.stringValue = account.acct ?: @"";
 
-  self.dateTextField.stringValue = [relativeDateTimeFormatter localizedStringForDate:toot.createdAt relativeToDate:[NSDate date]];
+  self.dateTextField.stringValue = [relativeDateTimeFormatter localizedStringForDate:toot.tootToShow.createdAt relativeToDate:[NSDate date]];
 
-  if (tootToShow.sensitive && !tootToShow.showsSensitive) {
-    self.textField.stringValue = tootToShow.spoilerText;
+  if (toot.tootToShow.sensitive && !toot.tootToShow.showsSensitive) {
+    self.textField.stringValue = toot.tootToShow.spoilerText;
 
     self.showMoreButton.hidden = NO;
   } else {
-    if (tootToShow.showsSensitive) {
+    if (toot.tootToShow.showsSensitive) {
       self.showMoreButton.hidden = NO;
     }
 
@@ -174,14 +173,20 @@
 //}
 
 - (void)setImagesForToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader {
-  if ([toot isBoost]) {
-    [imageLoader loadImageForURL:toot.boostedToot.account.avatarURL completionHandler:^(NSImage *image) {
+  self.imageView.image = nil;
+  self.boostersImageView.image = nil;
+
+  if (toot.tootToShow.account.avatarURL) {
+    [imageLoader loadImageForURL:toot.tootToShow.account.avatarURL completionHandler:^(NSImage *image) {
       if (image) {
         dispatch_async(dispatch_get_main_queue(), ^{
           self.imageView.image = image;
         });
       }
     }];
+  }
+
+  if ([toot isBoost] && toot.account.avatarURL) {
     [imageLoader loadImageForURL:toot.account.avatarURL completionHandler:^(NSImage *image) {
       if (image) {
         dispatch_async(dispatch_get_main_queue(), ^{
@@ -192,26 +197,17 @@
     self.boostersImageView.hidden = NO;
     self.avatarImageWidthConstraint.constant = 45;
   } else {
-    [imageLoader loadImageForURL:toot.account.avatarURL completionHandler:^(NSImage *image) {
-      if (image) {
-        dispatch_async(dispatch_get_main_queue(), ^{
-          self.imageView.image = image;
-        });
-      }
-    }];
     self.boostersImageView.hidden = YES;
     self.avatarImageWidthConstraint.constant = 60;
   }
 }
 
 - (void)setAttachmentsForToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader {
-  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
   self.attachmentImageView.hidden = YES;
   self.attachmentBottomConstraint.active = NO;
   self.textBottomConstraint.active = YES;
   self.aspectConstraint.active = NO;
-  DDHMediaAttachment *mediaAttachment = tootToShow.mediaAttachments.firstObject;
-//  [tootToShow.mediaAttachments enumerateObjectsUsingBlock:^(DDHMediaAttachment * _Nonnull mediaAttachment, NSUInteger idx, BOOL * _Nonnull stop) {
+  DDHMediaAttachment *mediaAttachment = toot.tootToShow.mediaAttachments.firstObject;
     switch (mediaAttachment.type) {
       case DDHAttachmentTypeUnknown:
         break;
@@ -226,6 +222,8 @@
         [imageLoader loadImageForURL:mediaAttachment.previewURL completionHandler:^(NSImage *image) {
           dispatch_async(dispatch_get_main_queue(), ^{
             self.attachmentImageView.image = image;
+
+            self.needsUpdateConstraints = YES;
           });
         }];
         break;
@@ -251,8 +249,7 @@
 
   if (clickedInTextAttachmentImage) {
     NSLog(@"clicked in attachment image");
-    DDHToot *tootToShow = [self.toot isBoost] ? self.toot.boostedToot : self.toot;
-    DDHMediaAttachment *mediaAttachment = tootToShow.mediaAttachments.firstObject;
+    DDHMediaAttachment *mediaAttachment = self.toot.tootToShow.mediaAttachments.firstObject;
 
     if (mediaAttachment && self.clickHandler) {
       self.clickHandler(mediaAttachment);
@@ -264,6 +261,8 @@
 
   if (clickedAvatarImage) {
     NSLog(@"clicked avatar");
+    DDHAccount *account = self.toot.account;
+    self.clickHandler(account);
   }
 }
 

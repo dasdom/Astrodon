@@ -27,6 +27,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property BOOL reblogged;
 @property BOOL favourited;
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter;
+- (DDHToot *)tootToShow;
 - (BOOL)isBoost;
 @end
 

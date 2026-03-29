@@ -98,6 +98,27 @@
   }];
 }
 
+- (void)accountForId:(NSString *)accountId completionHandler:(void(^)(DDHAccount *account, NSError *error))completionHandler {
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointAccount additionalInfo:accountId];
+  NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+
+    NSError *requestError = [self errorFromData:data response:response error:error];
+    if (requestError) {
+      completionHandler(nil, requestError);
+      return;
+    }
+
+    NSError *jsonError = nil;
+    NSDictionary *rawDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+    os_log(OS_LOG_DEFAULT, "dict: %@", rawDictionary);
+    DDHAccount *account = [[DDHAccount alloc] initWithDictionary:rawDictionary];
+
+    completionHandler(account, nil);
+  }];
+
+  [dataTask resume];
+}
+
 - (void)executeRequest:(NSURLRequest *)request completionHandler:(void(^)(NSError *error))completionHandler {
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
     NSError *requestError = [self errorFromData:data response:response error:error];
