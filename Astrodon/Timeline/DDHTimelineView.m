@@ -15,12 +15,12 @@
     _tableView.columnAutoresizingStyle = NSTableViewLastColumnOnlyAutoresizingStyle;
     _tableView.allowsColumnResizing = YES;
     _tableView.headerView = nil;
-    _tableView.usesAlternatingRowBackgroundColors = YES;
+//    _tableView.usesAlternatingRowBackgroundColors = YES;
     _tableView.selectionHighlightStyle = NSTableViewSelectionHighlightStyleNone;
 
     NSTableColumn *column = [[NSTableColumn alloc] initWithIdentifier:@"Column"];
     column.title = @"Toots";
-    column.minWidth = 40;
+    column.minWidth = 300;
     column.maxWidth = 1000;
     column.resizingMask = NSTableColumnAutoresizingMask;
     [_tableView addTableColumn:column];
@@ -40,12 +40,6 @@
     ]];
   }
   return self;
-}
-
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
 }
 
 @end

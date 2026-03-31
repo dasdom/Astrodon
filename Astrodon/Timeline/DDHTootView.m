@@ -107,20 +107,14 @@
       [_tootTextField.topAnchor constraintEqualToAnchor:_acctTextField.bottomAnchor constant:10],
       [_tootTextField.leadingAnchor constraintEqualToAnchor:_acctTextField.leadingAnchor],
       _textBottomConstraint,
-      [_tootTextField.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10],
+      [_tootTextField.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
 
       [_attachmentImageView.topAnchor constraintEqualToAnchor:_tootTextField.bottomAnchor constant:4],
       [_attachmentImageView.leadingAnchor constraintEqualToAnchor:_tootTextField.leadingAnchor],
-      [_attachmentImageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor constant:-10],
+      [_attachmentImageView.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
     ]];
   }
   return self;
-}
-
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
 }
 
 - (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {
@@ -157,6 +151,8 @@
     [attributedString addAttributes:@{NSFontAttributeName: [NSFont preferredFontForTextStyle:NSFontTextStyleBody options:@{}]}
                               range:NSMakeRange(0, attributedString.length)];
     self.textField.attributedStringValue = attributedString;
+
+    toot.tootToShow.plainContent = [attributedString string];
 
     self.showMoreButton.hidden = YES;
 
@@ -224,6 +220,8 @@
             self.attachmentImageView.image = image;
 
             self.needsUpdateConstraints = YES;
+            self.needsLayout = YES;
+            self.needsDisplay = YES;
           });
         }];
         break;
@@ -292,6 +290,8 @@
       NSURL *url = (NSURL *)attrs[NSLinkAttributeName];
       if (url && self.clickHandler) {
         self.clickHandler(url);
+      } else {
+        self.clickHandler(self.toot);
       }
     }
   }];

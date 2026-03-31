@@ -8,6 +8,7 @@
 @class DDHToot;
 @class DDHStatus;
 @class DDHAccount;
+@class DDHContext;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -18,6 +19,7 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)accountForId:(NSString *)accountId completionHandler:(void(^)(DDHAccount *account, NSError *error))completionHandler;
+- (void)contextForId:(NSString *)statusId completionHandler:(void(^)(DDHContext *context, NSError *error))completionHandler;
 @end
 
 NS_ASSUME_NONNULL_END

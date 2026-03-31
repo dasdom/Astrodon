@@ -46,13 +46,18 @@
     _languageLabel.font = [NSFont labelFontOfSize:NSFont.smallSystemFontSize];
     _languageLabel.textColor = [NSColor secondaryLabelColor];
 
+    NSView *separatorView = [[NSView alloc] init];
+    separatorView.translatesAutoresizingMaskIntoConstraints = NO;
+    separatorView.wantsLayer = YES;
+    separatorView.layer.backgroundColor = [NSColor tertiaryLabelColor].CGColor;
+
     [self addSubview:_tootView];
     [self addSubview:_quoteTootView];
     [self addSubview:_replyButton];
     [self addSubview:_favoriteButton];
     [self addSubview:_boostButton];
     [self addSubview:_languageLabel];
-
+    [self addSubview:separatorView];
 
     _tootViewToButtonConstraint = [_boostButton.topAnchor constraintEqualToAnchor:_tootView.bottomAnchor];
     _tootViewToQuoteViewConstraint = [_quoteTootView.topAnchor constraintEqualToAnchor:_tootView.bottomAnchor];
@@ -78,15 +83,14 @@
 
       [_languageLabel.topAnchor constraintEqualToAnchor:_boostButton.bottomAnchor],
       [_languageLabel.centerXAnchor constraintEqualToAnchor:_boostButton.centerXAnchor],
+
+      [separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+      [separatorView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+      [separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+      [separatorView.heightAnchor constraintEqualToConstant:1],
     ]];
   }
   return self;
-}
-
-- (void)drawRect:(NSRect)dirtyRect {
-    [super drawRect:dirtyRect];
-    
-    // Drawing code here.
 }
 
 - (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter {

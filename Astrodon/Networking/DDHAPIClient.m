@@ -6,6 +6,7 @@
 #import "DDHToot.h"
 #import "DDHStatus.h"
 #import "DDHAccount.h"
+#import "DDHContext.h"
 #import "DDHRequestFactory.h"
 #import "DDHErrorCodes.h"
 #import <OSLog/OSLog.h>
@@ -114,6 +115,27 @@
     DDHAccount *account = [[DDHAccount alloc] initWithDictionary:rawDictionary];
 
     completionHandler(account, nil);
+  }];
+
+  [dataTask resume];
+}
+
+- (void)contextForId:(NSString *)statusId completionHandler:(void(^)(DDHContext *context, NSError *error))completionHandler {
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointContext additionalInfo:statusId];
+  typeof(self) __weak weakSelf = self;
+  NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+
+    NSError *requestError = [weakSelf errorFromData:data response:response error:error];
+    if (requestError) {
+      completionHandler(nil, requestError);
+      return;
+    }
+
+    NSError *jsonError = nil;
+    NSDictionary *rawDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+    os_log(OS_LOG_DEFAULT, "dict: %@", rawDictionary);
+    DDHContext *context = [[DDHContext alloc] initWithDictionary:rawDictionary dataFormatter:weakSelf.dateFormatter];
+    completionHandler(context, nil);
   }];
 
   [dataTask resume];

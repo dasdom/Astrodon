@@ -51,9 +51,9 @@
     [self.contentView.tootView updateWithToot:self.toot imageLoader:self.imageLoader relativeDateTimeFormatter:self.relativeDateTimeFormatter];
     [self.contentView scrollUp];
 
-    NSMutableString *string = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"@%@", self.toot.account.acct]];
+    NSMutableString *string = [[NSMutableString alloc] initWithString:[NSString stringWithFormat:@"@%@ ", self.toot.account.acct]];
     for (DDHMention *mention in self.toot.mentions) {
-      [string appendFormat:@"@%@", mention.acct];
+      [string appendFormat:@"@%@ ", mention.acct];
     }
     self.contentView.inputTextView.string = string;
   }

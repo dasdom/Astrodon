@@ -12,10 +12,10 @@
     _quoteState = [self quoteStateFromString:dict[@"state"]];
     NSDictionary *quotedStatusDict = dict[@"quoted_status"];
     NSLog(@"quotedStatusDict: %@", quotedStatusDict);
-    if ([quotedStatusDict count] > 0) {
+    if ([quotedStatusDict isKindOfClass:[NSDictionary class]] && [quotedStatusDict count] > 0) {
       _quotedStatus = [[DDHToot alloc] initWithDictionary:quotedStatusDict dateFormatter:dateFormatter];
     } else {
-      NSAssert(NO, @"quotedStatusDict is nil");
+//      NSAssert(NO, @"quotedStatusDict is nil");
       _quotedStatus = nil;
     }
   }

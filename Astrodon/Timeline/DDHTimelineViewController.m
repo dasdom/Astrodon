@@ -12,6 +12,7 @@
 #import "DDHServerInputViewController.h"
 #import "DDHImageViewerViewController.h"
 #import "DDHAccountViewController.h"
+#import "DDHStatusContextViewController.h"
 #import "DDHKeychain.h"
 #import "DDHConstants.h"
 #import "DDHEndpoint.h"
@@ -20,7 +21,7 @@
 #import "DDHMediaAttachment.h"
 #import <OSLog/OSLog.h>
 
-@interface DDHTimelineViewController () <NSTableViewDataSource, NSTableViewDelegate>
+@interface DDHTimelineViewController () <NSTableViewDelegate>
 @property (strong) NSRelativeDateTimeFormatter *relativeDateTimeFormatter;
 @property (strong) NSTableViewDiffableDataSource *dataSource;
 @property (strong) NSArray<DDHToot *> *toots;
@@ -57,10 +58,11 @@
   self.tableView.delegate = self;
 
   __weak typeof(self)weakSelf = self;
+
   _dataSource = [[NSTableViewDiffableDataSource alloc] initWithTableView:self.tableView cellProvider:^NSView * _Nonnull(NSTableView * _Nonnull tableView, NSTableColumn * _Nonnull column, NSInteger row, id  _Nonnull itemId) {
 
     DDHToot *toot = weakSelf.toots[row];
-    DDHTootCellView *cellView;
+//    DDHTootCellView *cellView;
 
     NSLog(@"%lf %lf", self.tableView.visibleRect.origin.y + self.tableView.visibleRect.size.height, self.tableView.frame.size.height);
 
@@ -108,16 +110,20 @@
             DDHAccount *account = (DDHAccount *)item;
             DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:weakSelf.imageLoader];
             [weakSelf presentViewControllerAsModalWindow:accountViewController];
+          } else if ([item isKindOfClass:[DDHToot class]]) {
+            DDHToot *toot = (DDHToot *)item;
+            DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:weakSelf.apiClient toot:toot.tootToShow imageLoader:weakSelf.imageLoader];
+            [weakSelf presentViewControllerAsModalWindow:statusContextViewController];
           }
         };
 
       }
-      cellView = tootCellView;
+//      cellView = tootCellView;
 //      }
 
-    [cellView updateWithToot:toot imageLoader:weakSelf.imageLoader relativeDateTimeFormatter:weakSelf.relativeDateTimeFormatter];
+    [tootCellView updateWithToot:toot imageLoader:weakSelf.imageLoader relativeDateTimeFormatter:weakSelf.relativeDateTimeFormatter];
 
-    return cellView;
+    return tootCellView;
   }];
 
   self.tableView.usesAutomaticRowHeights = YES;

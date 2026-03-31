@@ -39,6 +39,9 @@ NSString * const accounts = @"/accounts";
     case DDHEndpointAccount:
       path = [NSString stringWithFormat:@"%@%@%@/%@", apiPath, version, accounts, additionalInfo];
       break;
+    case DDHEndpointContext:
+      path = [NSString stringWithFormat:@"%@%@%@/%@/context", apiPath, version, statuses, additionalInfo];
+      break;
   }
   return path;
 }
@@ -87,7 +90,9 @@ NSString * const accounts = @"/accounts";
       break;
     case DDHEndpointPublic:
       break;
-    case DDHEndpointHome: {
+    case DDHEndpointHome:
+    case DDHEndpointAccount:
+    case DDHEndpointContext: {
       NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
       [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
       break;
@@ -101,11 +106,6 @@ NSString * const accounts = @"/accounts";
       [request setValue:@"application/json" forHTTPHeaderField:@"Accept"];
       [request setValue:@"application/json" forHTTPHeaderField:@"Content-Type"];
       request.HTTPMethod = @"POST";
-      break;
-    }
-    case DDHEndpointAccount: {
-      NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
-      [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
       break;
     }
   }

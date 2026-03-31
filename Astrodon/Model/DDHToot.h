@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString *statusId;
 @property (strong) DDHAccount *account;
 @property (strong) NSString *content;
+@property (strong) NSString *plainContent;
 @property (strong) NSDate *createdAt;
 @property (strong) NSString *language;
 @property (strong) NSString *spoilerText;

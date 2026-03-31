@@ -76,6 +76,7 @@
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
 				DDHAccount.m,
+				DDHContext.m,
 				DDHImageDimensions.m,
 				DDHMediaAttachment.m,
 				DDHMention.m,
@@ -95,6 +96,8 @@
 		F2ABC0BF2F701C0600FD5A57 /* Input */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F2ABC0C22F701C0600FD5A57 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Input; sourceTree = "<group>"; };
 		F2ABC0CD2F701C0A00FD5A57 /* Networking */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F2ABC0D22F701C0A00FD5A57 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Networking; sourceTree = "<group>"; };
 		F2ABC0E22F701C0D00FD5A57 /* Model */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F2ABC0EA2F701C0D00FD5A57 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Model; sourceTree = "<group>"; };
+		F2D14AC22F79684100E90947 /* Context */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Context; sourceTree = "<group>"; };
+		F2D14ACB2F7AC2F500E90947 /* Extensions */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Extensions; sourceTree = "<group>"; };
 /* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -142,6 +145,8 @@
 				F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */,
 				F2C7B1FD29350EF400554EA2 /* DDHConstants.h */,
 				F2C7B1FE29350EF400554EA2 /* DDHConstants.m */,
+				F2D14ACB2F7AC2F500E90947 /* Extensions */,
+				F2D14AC22F79684100E90947 /* Context */,
 				F2ABC0A32F701BF300FD5A57 /* Profile */,
 				F2ABC09B2F701A6200FD5A57 /* ImageViewer */,
 				F2ABC0A72F701BFE00FD5A57 /* Server Input */,
@@ -192,6 +197,8 @@
 				F2ABC09B2F701A6200FD5A57 /* ImageViewer */,
 				F2ABC0A32F701BF300FD5A57 /* Profile */,
 				F2ABC0A72F701BFE00FD5A57 /* Server Input */,
+				F2D14AC22F79684100E90947 /* Context */,
+				F2D14ACB2F7AC2F500E90947 /* Extensions */,
 			);
 			name = Astrodon;
 			productName = Astrodon;
@@ -443,6 +450,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.Astrodon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -470,6 +478,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
+				MACOSX_DEPLOYMENT_TARGET = 14.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.Astrodon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
