@@ -288,10 +288,12 @@
       //      NSLog(@"range: %@", [NSValue valueWithRange:range]);
       NSLog(@"attrs: %@", attrs);
       NSURL *url = (NSURL *)attrs[NSLinkAttributeName];
-      if (url && self.clickHandler) {
-        self.clickHandler(url);
-      } else {
-        self.clickHandler(self.toot);
+      if (self.clickHandler) {
+        if (url) {
+          self.clickHandler(url);
+        } else {
+          self.clickHandler(self.toot.tootToShow);
+        }
       }
     }
   }];

@@ -4,11 +4,15 @@
 
 
 #import <Cocoa/Cocoa.h>
+#import "DDHTimelineWindowControllerDelegate.h"
 
 NS_ASSUME_NONNULL_BEGIN
 
-@interface DDHTimelineWindowController : NSWindowController
+@class DDHImageLoader;
+@class DDHAPIClient;
 
+@interface DDHTimelineWindowController : NSWindowController
+- (instancetype)initWithDelegate:(id<DDHTimelineWindowControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient;
 @end
 
 NS_ASSUME_NONNULL_END

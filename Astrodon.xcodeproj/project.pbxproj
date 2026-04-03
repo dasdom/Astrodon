@@ -14,6 +14,7 @@
 		F23858652926BCAB0065DE0B /* DDHRequestFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858642926BCAB0065DE0B /* DDHRequestFactoryTests.m */; };
 		F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */; };
 		F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1FE29350EF400554EA2 /* DDHConstants.m */; };
+		F2D14AD42F7FA28300E90947 /* DDHAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D14AD32F7FA28300E90947 /* DDHAppCoordinator.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -40,6 +41,9 @@
 		F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHKeychain.m; sourceTree = "<group>"; };
 		F2C7B1FD29350EF400554EA2 /* DDHConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHConstants.h; sourceTree = "<group>"; };
 		F2C7B1FE29350EF400554EA2 /* DDHConstants.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHConstants.m; sourceTree = "<group>"; };
+		F2D14AD22F7FA28300E90947 /* DDHAppCoordinator.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHAppCoordinator.h; sourceTree = "<group>"; };
+		F2D14AD32F7FA28300E90947 /* DDHAppCoordinator.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHAppCoordinator.m; sourceTree = "<group>"; };
+		F2D14AD52F7FA29600E90947 /* DDHCoordinatorProtocol.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHCoordinatorProtocol.h; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFileSystemSynchronizedBuildFileExceptionSet section */
@@ -141,6 +145,9 @@
 			children = (
 				F23858382926A1C00065DE0B /* AppDelegate.h */,
 				F23858392926A1C00065DE0B /* AppDelegate.m */,
+				F2D14AD52F7FA29600E90947 /* DDHCoordinatorProtocol.h */,
+				F2D14AD22F7FA28300E90947 /* DDHAppCoordinator.h */,
+				F2D14AD32F7FA28300E90947 /* DDHAppCoordinator.m */,
 				F2C7B1F92935084B00554EA2 /* DDHKeychain.h */,
 				F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */,
 				F2C7B1FD29350EF400554EA2 /* DDHConstants.h */,
@@ -287,6 +294,7 @@
 				F23858412926A1C10065DE0B /* main.m in Sources */,
 				F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */,
 				F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */,
+				F2D14AD42F7FA28300E90947 /* DDHAppCoordinator.m in Sources */,
 				F238583A2926A1C00065DE0B /* AppDelegate.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

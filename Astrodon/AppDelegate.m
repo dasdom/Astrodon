@@ -3,19 +3,20 @@
 //
 
 #import "AppDelegate.h"
-#import "DDHTimelineWindowController.h"
+#import "DDHAppCoordinator.h"
 
 @interface AppDelegate ()
-@property (strong) DDHTimelineWindowController *windowController;
+@property (strong) DDHAppCoordinator *appCoordinator;
 @property (strong) NSWindow *window;
 @end
 
 @implementation AppDelegate
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
-  _windowController = [[DDHTimelineWindowController alloc] init];
+  _appCoordinator = [[DDHAppCoordinator alloc] init];
 
-  NSWindow *window = _windowController.window;
+  NSWindowController *windowController = [_appCoordinator start];
+  NSWindow *window = windowController.window;
   [window makeKeyAndOrderFront:self];
   self.window = window;
 }

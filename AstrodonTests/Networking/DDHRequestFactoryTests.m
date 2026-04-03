@@ -24,10 +24,16 @@
   XCTAssertEqualObjects(publicURL, [NSURL URLWithString:@"https://chaos.social/api/v1/timelines/public"]);
 }
 
-- (void)test_token {
-  NSURL *tokenURL = [DDHRequestFactory urlForEndpoint:DDHEndpointFetchToken additionalInfo:@"EH53AYi_pCwv6hb_iFd8DJP4-Ta5IiNork-PSjXVyVo"];
+- (void)test_tokenURL {
+  NSString *code = @"EH53AYi_pCwv6hb_iFd8DJP4-Ta5IiNork-PSjXVyVo";
+  NSURL *tokenURL = [DDHRequestFactory urlForEndpoint:DDHEndpointFetchToken additionalInfo:code];
 
-  XCTAssertNotNil(tokenURL);
+  NSURLComponents *components = [[NSURLComponents alloc] initWithURL:tokenURL resolvingAgainstBaseURL:false];
+  XCTAssertEqualObjects(components.scheme, @"https");
+  XCTAssertEqualObjects(components.host, @"chaos.social");
+  XCTAssertEqualObjects(components.path, @"/oauth/token");
+  NSArray<NSURLQueryItem *> *queryItems = components.queryItems;
+  XCTAssertTrue([queryItems containsObject:[[NSURLQueryItem alloc] initWithName:@"code" value:code]]);
 }
 
 

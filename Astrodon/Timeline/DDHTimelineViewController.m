@@ -5,23 +5,19 @@
 #import "DDHTimelineViewController.h"
 #import "DDHTimelineView.h"
 #import "DDHToot.h"
-#import "DDHAccount.h"
 #import "DDHAPIClient.h"
 #import "DDHTootCellView.h"
 #import "DDHImageLoader.h"
 #import "DDHServerInputViewController.h"
-#import "DDHImageViewerViewController.h"
-#import "DDHAccountViewController.h"
-#import "DDHStatusContextViewController.h"
 #import "DDHKeychain.h"
 #import "DDHConstants.h"
 #import "DDHEndpoint.h"
 #import "DDHTootInputViewController.h"
 #import "DDHTootView.h"
-#import "DDHMediaAttachment.h"
 #import <OSLog/OSLog.h>
 
 @interface DDHTimelineViewController () <NSTableViewDelegate>
+@property (strong) id<DDHTimelineViewControllerDelegate> delegate;
 @property (strong) NSRelativeDateTimeFormatter *relativeDateTimeFormatter;
 @property (strong) NSTableViewDiffableDataSource *dataSource;
 @property (strong) NSArray<DDHToot *> *toots;
@@ -31,8 +27,12 @@
 
 @implementation DDHTimelineViewController
 
-- (instancetype)init {
+- (instancetype)initWithDelegate:(id<DDHTimelineViewControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient {
   if (self = [super initWithNibName:nil bundle:nil]) {
+    _delegate = delegate;
+    _imageLoader = imageLoader;
+    _apiClient = apiClient;
+
     _relativeDateTimeFormatter = [[NSRelativeDateTimeFormatter alloc] init];
     _relativeDateTimeFormatter.unitsStyle = NSRelativeDateTimeFormatterUnitsStyleAbbreviated;
   }
@@ -66,60 +66,43 @@
 
     NSLog(@"%lf %lf", self.tableView.visibleRect.origin.y + self.tableView.visibleRect.size.height, self.tableView.frame.size.height);
 
-//    if (nil != toot.quote) {
-//      DDHTootWithQuoteCellView *tootWithQuoteCellView = [tableView makeViewWithIdentifier:@"DDHTootWithQuoteCellView" owner:self];
-//      if (nil == tootWithQuoteCellView) {
-//        tootWithQuoteCellView = [[DDHTootWithQuoteCellView alloc] init];
-//        tootWithQuoteCellView.identifier = @"DDHTootWithQuoteCellView";
-//        tootWithQuoteCellView.boostButton.target = weakSelf;
-//        tootWithQuoteCellView.boostButton.action = @selector(boost:);
-//        tootWithQuoteCellView.replyButton.target = weakSelf;
-//        tootWithQuoteCellView.replyButton.action = @selector(reply:);
-//        tootWithQuoteCellView.clickHandler = ^(NSURL *url) {
+    DDHTootCellView *tootCellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
+    if (nil == tootCellView) {
+      tootCellView = [[DDHTootCellView alloc] init];
+      tootCellView.identifier = @"DDHTimelineCellView";
+
+      tootCellView.boostButton.target = weakSelf;
+      tootCellView.boostButton.action = @selector(boost:);
+
+      tootCellView.favoriteButton.target = weakSelf;
+      tootCellView.favoriteButton.action = @selector(favorite:);
+
+      tootCellView.replyButton.target = weakSelf;
+      tootCellView.replyButton.action = @selector(reply:);
+
+      __weak typeof(self)weakSelf = self;
+      tootCellView.tootView.clickHandler = ^(id item) {
+        [weakSelf.delegate viewController:weakSelf didClickItem:item];
+//        if ([item isKindOfClass:[NSURL class]]) {
+//          NSURL *url = (NSURL *)item;
 //          NSLog(@"url: %@", url);
 //          [NSWorkspace.sharedWorkspace openURL:url];
-//        };
-//      }
-//      cellView = tootWithQuoteCellView;
-//    } else {
-      DDHTootCellView *tootCellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
-      if (nil == tootCellView) {
-        tootCellView = [[DDHTootCellView alloc] init];
-        tootCellView.identifier = @"DDHTimelineCellView";
+//        } else if ([item isKindOfClass:[DDHMediaAttachment class]]) {
+//          DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
+//          DDHImageViewerViewController *imageViewController = [[DDHImageViewerViewController alloc] initWithMediaAttachment:attachment imageLoader:weakSelf.imageLoader];
+//          [weakSelf presentViewControllerAsModalWindow:imageViewController];
+//        } else if ([item isKindOfClass:[DDHAccount class]]) {
+//          DDHAccount *account = (DDHAccount *)item;
+//          DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:weakSelf.imageLoader];
+//          [weakSelf presentViewControllerAsModalWindow:accountViewController];
+//        } else if ([item isKindOfClass:[DDHToot class]]) {
+//          DDHToot *toot = (DDHToot *)item;
+//          DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:weakSelf.apiClient toot:toot.tootToShow imageLoader:weakSelf.imageLoader];
+//          [weakSelf presentViewControllerAsModalWindow:statusContextViewController];
+//        }
+      };
 
-        tootCellView.boostButton.target = weakSelf;
-        tootCellView.boostButton.action = @selector(boost:);
-
-        tootCellView.favoriteButton.target = weakSelf;
-        tootCellView.favoriteButton.action = @selector(favorite:);
-
-        tootCellView.replyButton.target = weakSelf;
-        tootCellView.replyButton.action = @selector(reply:);
-
-        __weak typeof(self)weakSelf = self;
-        tootCellView.tootView.clickHandler = ^(id item) {
-          if ([item isKindOfClass:[NSURL class]]) {
-            NSURL *url = (NSURL *)item;
-            NSLog(@"url: %@", url);
-            [NSWorkspace.sharedWorkspace openURL:url];
-          } else if ([item isKindOfClass:[DDHMediaAttachment class]]) {
-            DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
-            DDHImageViewerViewController *imageViewController = [[DDHImageViewerViewController alloc] initWithMediaAttachment:attachment imageLoader:weakSelf.imageLoader];
-            [weakSelf presentViewControllerAsModalWindow:imageViewController];
-          } else if ([item isKindOfClass:[DDHAccount class]]) {
-            DDHAccount *account = (DDHAccount *)item;
-            DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:weakSelf.imageLoader];
-            [weakSelf presentViewControllerAsModalWindow:accountViewController];
-          } else if ([item isKindOfClass:[DDHToot class]]) {
-            DDHToot *toot = (DDHToot *)item;
-            DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:weakSelf.apiClient toot:toot.tootToShow imageLoader:weakSelf.imageLoader];
-            [weakSelf presentViewControllerAsModalWindow:statusContextViewController];
-          }
-        };
-
-      }
-//      cellView = tootCellView;
-//      }
+    }
 
     [tootCellView updateWithToot:toot imageLoader:weakSelf.imageLoader relativeDateTimeFormatter:weakSelf.relativeDateTimeFormatter];
 
@@ -130,8 +113,6 @@
   [self.tableView sizeLastColumnToFit];
 
   self.toots = @[];
-  self.apiClient = [DDHAPIClient new];
-  self.imageLoader = [DDHImageLoader new];
 }
 
 - (void)viewWillAppear {
