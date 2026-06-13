@@ -25,6 +25,7 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
 @implementation DDHTimelineWindowController
 
 - (instancetype)initWithDelegate:(id<DDHTimelineWindowControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient {
+
   DDHTimelineViewController *timeLineViewController = [[DDHTimelineViewController alloc] initWithDelegate:self imageLoader:imageLoader apiClient:apiClient];
   timeLineViewController.title = @"Timeline";
 

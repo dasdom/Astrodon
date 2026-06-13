@@ -8,6 +8,7 @@
 #import "DDHToot.h"
 #import "DDHAccount.h"
 #import "DDHMediaAttachment.h"
+#import "DDHAttachmentsView.h"
 
 @interface DDHTootView ()
 @property (strong) NSImageView *imageView;
@@ -20,8 +21,8 @@
 @property (strong) NSTextField *tootTextField;
 @property (strong) NSLayoutConstraint *avatarImageWidthConstraint;
 @property (strong) NSButton *showMoreButton;
-@property (strong) NSImageView *attachmentImageView;
-@property (strong) NSLayoutConstraint *aspectConstraint;
+@property (strong) DDHAttachmentsView *attachmentsView;
+//@property (strong) NSLayoutConstraint *aspectConstraint;
 @property (strong) NSLayoutConstraint *textBottomConstraint;
 @property (strong) NSLayoutConstraint *attachmentBottomConstraint;
 @property (strong) DDHToot *toot;
@@ -64,11 +65,8 @@
 
     _showMoreButton = [NSButton buttonWithTitle:@"show more" target:nil action:nil];
 
-    _attachmentImageView = [[NSImageView alloc] initWithFrame:CGRectMake(0, 0, 400, 0)];
-    _attachmentImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    _attachmentImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
-    [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
-    [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationVertical];
+    _attachmentsView = [[DDHAttachmentsView alloc] initWithFrame:CGRectMake(0, 0, 400, 0)];
+    _attachmentsView.translatesAutoresizingMaskIntoConstraints = NO;
 
     [self addSubview:_avatarImageView];
     [self addSubview:_boostersImageView];
@@ -76,12 +74,12 @@
     [self addSubview:_dateTextField];
     [self addSubview:_acctTextField];
     [self addSubview:_tootTextField];
-    [self addSubview:_attachmentImageView];
+    [self addSubview:_attachmentsView];
 
     _avatarImageWidthConstraint = [_avatarImageView.widthAnchor constraintEqualToConstant:60];
     _textBottomConstraint = [_tootTextField.bottomAnchor constraintEqualToAnchor:self.bottomAnchor];
     _textBottomConstraint.priority = 999;
-    _attachmentBottomConstraint = [_attachmentImageView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4];
+    _attachmentBottomConstraint = [_attachmentsView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4];
 
     [NSLayoutConstraint activateConstraints:@[
       [_avatarImageView.topAnchor constraintEqualToAnchor:self.layoutMarginsGuide.topAnchor],
@@ -109,9 +107,9 @@
       _textBottomConstraint,
       [_tootTextField.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
 
-      [_attachmentImageView.topAnchor constraintEqualToAnchor:_tootTextField.bottomAnchor constant:4],
-      [_attachmentImageView.leadingAnchor constraintEqualToAnchor:_tootTextField.leadingAnchor],
-      [_attachmentImageView.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
+      [_attachmentsView.topAnchor constraintEqualToAnchor:_tootTextField.bottomAnchor constant:4],
+      [_attachmentsView.leadingAnchor constraintEqualToAnchor:_tootTextField.leadingAnchor],
+      [_attachmentsView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
     ]];
   }
   return self;
@@ -199,34 +197,16 @@
 }
 
 - (void)setAttachmentsForToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader {
-  self.attachmentImageView.hidden = YES;
-  self.attachmentBottomConstraint.active = NO;
-  self.textBottomConstraint.active = YES;
-  self.aspectConstraint.active = NO;
-  DDHMediaAttachment *mediaAttachment = toot.tootToShow.mediaAttachments.firstObject;
-    switch (mediaAttachment.type) {
-      case DDHAttachmentTypeUnknown:
-        break;
-      case DDHAttachmentTypeImage:
-        self.attachmentImageView.hidden = NO;
-        self.textBottomConstraint.active = NO;
-        self.attachmentBottomConstraint.active = YES;
 
-        self.aspectConstraint = [self.attachmentImageView.widthAnchor constraintEqualToAnchor:self.attachmentImageView.heightAnchor multiplier:mediaAttachment.smallDimensions.aspect];
-        self.aspectConstraint.active = YES;
+  [self.attachmentsView updateWithMediaAttachments:toot.tootToShow.mediaAttachments imageLoader:imageLoader];
 
-        [imageLoader loadImageForURL:mediaAttachment.previewURL completionHandler:^(NSImage *image) {
-          dispatch_async(dispatch_get_main_queue(), ^{
-            self.attachmentImageView.image = image;
-
-            self.needsUpdateConstraints = YES;
-            self.needsLayout = YES;
-            self.needsDisplay = YES;
-          });
-        }];
-        break;
-    }
-//  }];
+  if ([self.attachmentsView attachmentsVisible]) {
+    self.textBottomConstraint.active = NO;
+    self.attachmentBottomConstraint.active = YES;
+  } else {
+    self.attachmentBottomConstraint.active = NO;
+    self.textBottomConstraint.active = YES;
+  }
 }
 
 - (void)mouseDown:(NSEvent *)event {
@@ -243,7 +223,7 @@
     return;
   }
 
-  BOOL clickedInTextAttachmentImage = [self mouse:convertedPointInSelf inRect:self.attachmentImageView.frame];
+  BOOL clickedInTextAttachmentImage = [self mouse:convertedPointInSelf inRect:self.attachmentsView.frame];
 
   if (clickedInTextAttachmentImage) {
     NSLog(@"clicked in attachment image");

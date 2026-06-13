@@ -50,6 +50,7 @@
 		F2ABC0BA2F701C0200FD5A57 /* PBXFileSystemSynchronizedBuildFileExceptionSet */ = {
 			isa = PBXFileSystemSynchronizedBuildFileExceptionSet;
 			membershipExceptions = (
+				DDHAttachmentsView.m,
 				DDHTimelineView.m,
 				DDHTimelineViewController.m,
 				DDHTimelineWindowController.m,

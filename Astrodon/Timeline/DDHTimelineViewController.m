@@ -33,6 +33,8 @@
     _imageLoader = imageLoader;
     _apiClient = apiClient;
 
+    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints"];
+
     _relativeDateTimeFormatter = [[NSRelativeDateTimeFormatter alloc] init];
     _relativeDateTimeFormatter.unitsStyle = NSRelativeDateTimeFormatterUnitsStyleAbbreviated;
   }
@@ -48,7 +50,7 @@
 }
 
 - (void)loadView {
-  self.view = [[DDHTimelineView alloc] initWithFrame:CGRectMake(0, 0, 480, 600)];
+  self.view = [[DDHTimelineView alloc] initWithFrame:CGRectMake(0, 0, 600, 600)];
 }
 
 - (void)viewDidLoad {
