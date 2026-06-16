@@ -23,6 +23,7 @@
 @property (strong) NSArray<DDHToot *> *toots;
 @property (strong) DDHAPIClient *apiClient;
 @property (strong) DDHImageLoader *imageLoader;
+@property BOOL updatingTimeline;
 @end
 
 @implementation DDHTimelineViewController
@@ -32,8 +33,6 @@
     _delegate = delegate;
     _imageLoader = imageLoader;
     _apiClient = apiClient;
-
-    [[NSUserDefaults standardUserDefaults] setBool:NO forKey:@"NSConstraintBasedLayoutVisualizeMutuallyExclusiveConstraints"];
 
     _relativeDateTimeFormatter = [[NSRelativeDateTimeFormatter alloc] init];
     _relativeDateTimeFormatter.unitsStyle = NSRelativeDateTimeFormatterUnitsStyleAbbreviated;
@@ -49,8 +48,16 @@
   return self.contentView.tableView;
 }
 
+- (NSScrollView *)scrollView {
+  return self.contentView.scrollView;
+}
+
 - (void)loadView {
   self.view = [[DDHTimelineView alloc] initWithFrame:CGRectMake(0, 0, 600, 600)];
+
+  self.scrollView.contentView.postsBoundsChangedNotifications = YES;
+
+  [[NSNotificationCenter defaultCenter] addObserver:self selector:@selector(contentViewDidChangeBounds:) name:NSViewBoundsDidChangeNotification object:self.scrollView.contentView];
 }
 
 - (void)viewDidLoad {
@@ -65,8 +72,6 @@
 
     DDHToot *toot = weakSelf.toots[row];
 //    DDHTootCellView *cellView;
-
-    NSLog(@"%lf %lf", self.tableView.visibleRect.origin.y + self.tableView.visibleRect.size.height, self.tableView.frame.size.height);
 
     DDHTootCellView *tootCellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
     if (nil == tootCellView) {
@@ -85,23 +90,6 @@
       __weak typeof(self)weakSelf = self;
       tootCellView.tootView.clickHandler = ^(id item) {
         [weakSelf.delegate viewController:weakSelf didClickItem:item];
-//        if ([item isKindOfClass:[NSURL class]]) {
-//          NSURL *url = (NSURL *)item;
-//          NSLog(@"url: %@", url);
-//          [NSWorkspace.sharedWorkspace openURL:url];
-//        } else if ([item isKindOfClass:[DDHMediaAttachment class]]) {
-//          DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
-//          DDHImageViewerViewController *imageViewController = [[DDHImageViewerViewController alloc] initWithMediaAttachment:attachment imageLoader:weakSelf.imageLoader];
-//          [weakSelf presentViewControllerAsModalWindow:imageViewController];
-//        } else if ([item isKindOfClass:[DDHAccount class]]) {
-//          DDHAccount *account = (DDHAccount *)item;
-//          DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:weakSelf.imageLoader];
-//          [weakSelf presentViewControllerAsModalWindow:accountViewController];
-//        } else if ([item isKindOfClass:[DDHToot class]]) {
-//          DDHToot *toot = (DDHToot *)item;
-//          DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:weakSelf.apiClient toot:toot.tootToShow imageLoader:weakSelf.imageLoader];
-//          [weakSelf presentViewControllerAsModalWindow:statusContextViewController];
-//        }
       };
 
     }
@@ -135,6 +123,7 @@
   for (DDHToot *toot in toots) {
     [tootsIds addObject:toot.statusId];
   }
+  os_log(OS_LOG_DEFAULT, "%@", tootsIds);
   [snapshot appendItemsWithIdentifiers:tootsIds];
   [self.dataSource applySnapshot:snapshot animatingDifferences:true];
 }
@@ -145,21 +134,28 @@
   if (code.length < 1) {
     [self presentViewControllerAsSheet:[DDHServerInputViewController new]];
   } else {
+
+    if (self.updatingTimeline) {
+      return;
+    }
+
+    self.updatingTimeline = YES;
+
     __weak typeof(self)weakSelf = self;
     DDHToot *firstToot = self.toots.firstObject;
-    [self.apiClient timelineFromEndpoint:DDHEndpointHome sinceId:firstToot.statusId completionHandler:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+    [self.apiClient homeTimelineSinceToot:firstToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+      weakSelf.updatingTimeline = NO;
+
       if (completionHandler) {
         completionHandler();
       }
       NSLog(@"error: %@", error);
       if ([weakSelf.toots count] > 0) {
+        // Add fetched toots at the beginning of the existing toots.
         weakSelf.toots = [toots arrayByAddingObjectsFromArray:weakSelf.toots];
       } else {
         weakSelf.toots = toots;
       }
-//      dispatch_async(dispatch_get_main_queue(), ^{
-//        [self.tableView reloadData];
-//      });
       [weakSelf updateWithToots:weakSelf.toots];
     }];
   }
@@ -224,6 +220,46 @@
 
   NSWindow *inputWindow = [NSWindow windowWithContentViewController:tootInputViewController];
   [inputWindow makeKeyAndOrderFront:self];
+}
+
+// MARK: - Notification observer
+- (void)contentViewDidChangeBounds:(NSNotification *)notification {
+  NSView *documentView = self.scrollView.documentView;
+  NSClipView *clipView = self.scrollView.contentView;
+
+//  os_log(OS_LOG_DEFAULT, "clipView y: %lf, clipView height: %lf, documentView height: %lf", clipView.bounds.origin.y, clipView.bounds.size.height, documentView.bounds.size.height);
+
+  if (clipView.bounds.origin.y + clipView.bounds.size.height > documentView.bounds.size.height) {
+    if (self.toots.count < 1) {
+      return;
+    }
+    os_log(OS_LOG_DEFAULT, "load more");
+
+    if (self.updatingTimeline) {
+      return;
+    }
+
+    [self.delegate viewControllerStartedLoading:self];
+
+    self.updatingTimeline = YES;
+    __weak typeof(self)weakSelf = self;
+    DDHToot *lastToot = self.toots.lastObject;
+    [self.apiClient homeTimelineBeforeToot:lastToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+      NSLog(@"error: %@", error);
+
+      [self.delegate viewControllerStoppedLoading:self];
+      
+      weakSelf.updatingTimeline = NO;
+
+      if ([weakSelf.toots count] > 0) {
+        // Add fetched toots at the beginning of the existing toots.
+        weakSelf.toots = [weakSelf.toots arrayByAddingObjectsFromArray:toots];
+      } else {
+        weakSelf.toots = toots;
+      }
+      [weakSelf updateWithToots:weakSelf.toots];
+    }];
+  }
 }
 
 @end

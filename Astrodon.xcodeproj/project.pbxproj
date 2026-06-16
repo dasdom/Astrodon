@@ -94,6 +94,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F295BE1C2FDF2462005B2FE6 /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
 		F2ABC09B2F701A6200FD5A57 /* ImageViewer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ImageViewer; sourceTree = "<group>"; };
 		F2ABC0A32F701BF300FD5A57 /* Profile */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Profile; sourceTree = "<group>"; };
 		F2ABC0A72F701BFE00FD5A57 /* Server Input */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Server Input"; sourceTree = "<group>"; };
@@ -162,6 +163,7 @@
 				F2ABC0BF2F701C0600FD5A57 /* Input */,
 				F2ABC0CD2F701C0A00FD5A57 /* Networking */,
 				F2ABC0E22F701C0D00FD5A57 /* Model */,
+				F295BE1C2FDF2462005B2FE6 /* UI */,
 				F238583B2926A1C10065DE0B /* Assets.xcassets */,
 				F238583D2926A1C10065DE0B /* MainMenu.xib */,
 				F23858402926A1C10065DE0B /* main.m */,
@@ -202,6 +204,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				F295BE1C2FDF2462005B2FE6 /* UI */,
 				F2ABC09B2F701A6200FD5A57 /* ImageViewer */,
 				F2ABC0A32F701BF300FD5A57 /* Profile */,
 				F2ABC0A72F701BFE00FD5A57 /* Server Input */,
@@ -459,7 +462,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.Astrodon;
 				PRODUCT_NAME = "$(TARGET_NAME)";
@@ -487,7 +490,7 @@
 					"$(inherited)",
 					"@executable_path/../Frameworks",
 				);
-				MACOSX_DEPLOYMENT_TARGET = 14.6;
+				MACOSX_DEPLOYMENT_TARGET = 15.6;
 				MARKETING_VERSION = 1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = de.dasdom.Astrodon;
 				PRODUCT_NAME = "$(TARGET_NAME)";

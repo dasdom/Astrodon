@@ -51,12 +51,29 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
 
 - (void)reloadTimeline:(id)sender {
   DDHTimelineViewController *timelineViewController = (DDHTimelineViewController *)self.contentViewController;
-  [self.window.toolbar insertItemWithItemIdentifier:spinnerIdentifier atIndex:0];
+  [self startSpinner];
+  __weak typeof(self) weakSelf = self;
   [timelineViewController loadToots:sender withCompletionHandler:^{
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [weakSelf stopSpinner];
+    });
+  }];
+}
+
+- (void)startSpinner {
+  if (NO == [self.window.toolbar.itemIdentifiers containsObject:spinnerIdentifier]) {
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [self.window.toolbar insertItemWithItemIdentifier:spinnerIdentifier atIndex:0];
+    });
+  }
+}
+
+- (void)stopSpinner {
+  if ([self.window.toolbar.itemIdentifiers containsObject:spinnerIdentifier]) {
     dispatch_async(dispatch_get_main_queue(), ^{
       [self.window.toolbar removeItemAtIndex:0];
     });
-  }];
+  }
 }
 
 // MARK: - NSToolbarDelegate
@@ -110,6 +127,14 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
     DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:self.apiClient toot:toot.tootToShow imageLoader:self.imageLoader];
     [viewController presentViewControllerAsModalWindow:statusContextViewController];
   }
+}
+
+- (void)viewControllerStartedLoading:(NSViewController *)viewController {
+  [self startSpinner];
+}
+
+- (void)viewControllerStoppedLoading:(NSViewController *)viewController {
+  [self stopSpinner];
 }
 
 @end

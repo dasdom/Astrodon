@@ -15,7 +15,7 @@ NSString * const accounts = @"/accounts";
 
 @implementation DDHRequestFactory
 
-+ (NSString *)pathForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo {
++ (NSString *)pathForEndpoint:(DDHEndpoint)endpoint subPath:(NSString *)subPath {
   NSString *path;
   switch (endpoint) {
     case DDHEndpointFetchToken:
@@ -31,58 +31,55 @@ NSString * const accounts = @"/accounts";
       path = [NSString stringWithFormat:@"%@%@%@", apiPath, version, statuses];
       break;
     case DDHEndpointBoost:
-      path = [NSString stringWithFormat:@"%@%@%@/%@/reblog", apiPath, version, statuses, additionalInfo];
+      path = [NSString stringWithFormat:@"%@%@%@/%@/reblog", apiPath, version, statuses, subPath];
       break;
     case DDHEndpointFavorite:
-      path = [NSString stringWithFormat:@"%@%@%@/%@/favourite", apiPath, version, statuses, additionalInfo];
+      path = [NSString stringWithFormat:@"%@%@%@/%@/favourite", apiPath, version, statuses, subPath];
       break;
     case DDHEndpointAccount:
-      path = [NSString stringWithFormat:@"%@%@%@/%@", apiPath, version, accounts, additionalInfo];
+      path = [NSString stringWithFormat:@"%@%@%@/%@", apiPath, version, accounts, subPath];
       break;
     case DDHEndpointContext:
-      path = [NSString stringWithFormat:@"%@%@%@/%@/context", apiPath, version, statuses, additionalInfo];
+      path = [NSString stringWithFormat:@"%@%@%@/%@/context", apiPath, version, statuses, subPath];
       break;
   }
   return path;
 }
 
-+ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo {
++ (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint subPath:(NSString *)subPath queryItemsDictionary:(NSDictionary<NSString *, NSString *> *)queryItemsDictionary {
   NSURLComponents *urlComponents = [NSURLComponents new];
   urlComponents.scheme = @"https";
   urlComponents.host = @"chaos.social";
+  NSMutableArray<NSURLQueryItem *> *queryItems = [[NSMutableArray alloc] init];
   switch (endpoint) {
     case DDHEndpointFetchToken: {
-      urlComponents.queryItems = @[
+      [queryItems addObjectsFromArray:@[
         [NSURLQueryItem queryItemWithName:@"client_id" value:client_id],
         [NSURLQueryItem queryItemWithName:@"client_secret" value:client_secret],
         [NSURLQueryItem queryItemWithName:@"redirect_uri" value:redirect_uri],
         [NSURLQueryItem queryItemWithName:@"grant_type" value:@"authorization_code"],
-        [NSURLQueryItem queryItemWithName:@"code" value:additionalInfo],
         [NSURLQueryItem queryItemWithName:@"scope" value:@"read+write+follow+push"],
-      ];
-      break;
-    }
-    case DDHEndpointHome: {
-      if (additionalInfo.length > 0) {
-        urlComponents.queryItems = @[
-          [NSURLQueryItem queryItemWithName:@"since_id" value:additionalInfo],
-        ];
-      }
+      ]];
       break;
     }
     default:
       break;
   }
-  urlComponents.path = [self pathForEndpoint:endpoint additionalInfo:additionalInfo];
+  for (NSString *key in queryItemsDictionary.allKeys) {
+    NSURLQueryItem *queryItem = [NSURLQueryItem queryItemWithName:key value:queryItemsDictionary[key]];
+    [queryItems addObject:queryItem];
+  }
+  urlComponents.queryItems = [queryItems copy];
+  urlComponents.path = [self pathForEndpoint:endpoint subPath:subPath];
   return [urlComponents URL];
 }
 
 + (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint {
-  return [self requestForEndpoint:endpoint additionalInfo:nil];
+  return [self requestForEndpoint:endpoint subPath:nil queryItemsDictionary:nil];
 }
 
-+ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo {
-  NSURL *url = [self urlForEndpoint:endpoint additionalInfo:additionalInfo];
++ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint subPath:(NSString *)subPath queryItemsDictionary:(NSDictionary<NSString *, NSString *> *)queryItemsDictionary {
+  NSURL *url = [self urlForEndpoint:endpoint subPath:subPath queryItemsDictionary:queryItemsDictionary];
   NSMutableURLRequest *request = [[NSMutableURLRequest alloc] initWithURL:url];
   switch (endpoint) {
     case DDHEndpointFetchToken:

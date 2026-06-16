@@ -25,18 +25,18 @@
     column.resizingMask = NSTableColumnAutoresizingMask;
     [_tableView addTableColumn:column];
 
-    NSScrollView *scrollView = [[NSScrollView alloc] initWithFrame:frameRect];
-    scrollView.translatesAutoresizingMaskIntoConstraints = NO;
-    scrollView.documentView = _tableView;
-    scrollView.hasVerticalScroller = YES;
+    _scrollView = [[NSScrollView alloc] initWithFrame:frameRect];
+    _scrollView.translatesAutoresizingMaskIntoConstraints = NO;
+    _scrollView.documentView = _tableView;
+    _scrollView.hasVerticalScroller = YES;
 
-    [self addSubview:scrollView];
+    [self addSubview:_scrollView];
 
     [NSLayoutConstraint activateConstraints:@[
-      [scrollView.topAnchor constraintEqualToAnchor:self.topAnchor],
-      [scrollView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
-      [scrollView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
-      [scrollView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
+      [_scrollView.topAnchor constraintEqualToAnchor:self.topAnchor],
+      [_scrollView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
+      [_scrollView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor],
+      [_scrollView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
     ]];
   }
   return self;

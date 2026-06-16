@@ -14,6 +14,8 @@
 @interface DDHAPIClient ()
 @property (strong) NSURLSession *session;
 @property (strong) NSISO8601DateFormatter *dateFormatter;
+@property BOOL fetchingToots;
+@property (strong) NSURL *lastRequestURL;
 @end
 
 @implementation DDHAPIClient
@@ -23,13 +25,14 @@
     _session = [NSURLSession sharedSession];
     _dateFormatter = [[NSISO8601DateFormatter alloc] init];
     _dateFormatter.formatOptions = _dateFormatter.formatOptions | NSISO8601DateFormatWithFractionalSeconds;
+    _fetchingToots = NO;
   }
   return self;
 }
 
 - (void)fetchTokenWithCode:(NSString *)code completionHandler:(void(^)(NSString *token, NSError *error))completionHandler {
 
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointFetchToken additionalInfo:code];
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointFetchToken subPath:nil queryItemsDictionary:@{@"code" : code}];
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
     NSError *requestError = [self errorFromData:data response:response error:error];
@@ -47,34 +50,24 @@
   [dataTask resume];
 }
 
-- (void)timelineFromEndpoint:(DDHEndpoint)endpoint sinceId:(NSString *)sinceId completionHandler:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
-
-  if (endpoint != DDHEndpointPublic && endpoint != DDHEndpointHome) {
-    return;
+- (void)homeTimelineSinceToot:(DDHToot *)toot completionHander:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
+  NSDictionary<NSString *, NSString *> *queryItemsDictionary = nil;
+  if (toot) {
+    queryItemsDictionary = @{@"since_id": toot.statusId};
   }
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:endpoint additionalInfo:sinceId];
-  NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointHome subPath:nil queryItemsDictionary:queryItemsDictionary];
 
-    NSError *requestError = [self errorFromData:data response:response error:error];
-    if (requestError) {
-      completionHandler(nil, requestError);
-      return;
-    }
+  [self executeRequest:request tootsCompletionHandler:completionHandler];
+}
 
-    NSError *jsonError = nil;
-    NSArray<NSDictionary *> *rawArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-    NSMutableArray *toots = [NSMutableArray new];
-    typeof(self) __weak weakSelf = self;
-    [rawArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dict, NSUInteger idx, BOOL * _Nonnull stop) {
-      os_log(OS_LOG_DEFAULT, "dict: %@", dict);
-      DDHToot *toot = [[DDHToot alloc] initWithDictionary:dict dateFormatter:weakSelf.dateFormatter];
-      [toots addObject:toot];
-    }];
+- (void)homeTimelineBeforeToot:(DDHToot *)toot completionHander:(void (^)(NSArray<DDHToot *> * _Nonnull, NSError * _Nonnull))completionHandler {
+  NSDictionary<NSString *, NSString *> *queryItemsDictionary = nil;
+  if (toot) {
+    queryItemsDictionary = @{@"max_id": toot.statusId};
+  }
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointHome subPath:nil queryItemsDictionary:queryItemsDictionary];
 
-    completionHandler(toots, nil);
-  }];
-
-  [dataTask resume];
+  [self executeRequest:request tootsCompletionHandler:completionHandler];
 }
 
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler {
@@ -86,21 +79,21 @@
 }
 
 - (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler {
-  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointBoost additionalInfo:statusId] mutableCopy];
+  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointBoost subPath:statusId queryItemsDictionary:nil] mutableCopy];
   [self executeRequest:request completionHandler:^(NSError *error) {
     completionHandler(error);
   }];
 }
 
 - (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler {
-  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointFavorite additionalInfo:statusId] mutableCopy];
+  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointFavorite subPath:statusId queryItemsDictionary:nil] mutableCopy];
   [self executeRequest:request completionHandler:^(NSError *error) {
     completionHandler(error);
   }];
 }
 
 - (void)accountForId:(NSString *)accountId completionHandler:(void(^)(DDHAccount *account, NSError *error))completionHandler {
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointAccount additionalInfo:accountId];
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointAccount subPath:accountId queryItemsDictionary:nil];
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
     NSError *requestError = [self errorFromData:data response:response error:error];
@@ -121,7 +114,7 @@
 }
 
 - (void)contextForId:(NSString *)statusId completionHandler:(void(^)(DDHContext *context, NSError *error))completionHandler {
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointContext additionalInfo:statusId];
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointContext subPath:statusId queryItemsDictionary:nil];
   typeof(self) __weak weakSelf = self;
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
@@ -149,6 +142,42 @@
       return;
     }
     completionHandler(nil);
+  }];
+
+  [dataTask resume];
+}
+
+- (void)executeRequest:(NSURLRequest *)request tootsCompletionHandler:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
+
+  if (self.lastRequestURL) {
+    if ([[request URL] isEqualTo:self.lastRequestURL]) {
+      os_log(OS_LOG_DEFAULT, "skipping because repetition %@", self.lastRequestURL);
+      completionHandler(@[], nil);
+    }
+  }
+  self.lastRequestURL = [request URL];
+
+  typeof(self) __weak weakSelf = self;
+  NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+
+    NSError *requestError = [weakSelf errorFromData:data response:response error:error];
+    if (requestError) {
+      completionHandler(nil, requestError);
+      weakSelf.fetchingToots = NO;
+      return;
+    }
+
+    NSError *jsonError = nil;
+    NSArray<NSDictionary *> *rawArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+    NSMutableArray *toots = [NSMutableArray new];
+    [rawArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dict, NSUInteger idx, BOOL * _Nonnull stop) {
+      os_log(OS_LOG_DEFAULT, "dict: %@", dict);
+      DDHToot *toot = [[DDHToot alloc] initWithDictionary:dict dateFormatter:weakSelf.dateFormatter];
+      [toots addObject:toot];
+    }];
+
+    completionHandler(toots, nil);
+    weakSelf.fetchingToots = NO;
   }];
 
   [dataTask resume];

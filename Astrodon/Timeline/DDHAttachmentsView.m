@@ -6,9 +6,10 @@
 #import "DDHAttachmentsView.h"
 #import "DDHMediaAttachment.h"
 #import "DDHImageLoader.h"
+#import "DDHImageView.h"
 
 @interface DDHAttachmentsView ()
-@property (strong) NSImageView *attachmentImageView;
+@property (strong) DDHImageView *attachmentImageView;
 @property (strong) NSLayoutConstraint *aspectConstraint;
 @end
 
@@ -16,9 +17,9 @@
 
 - (instancetype)initWithFrame:(NSRect)frame {
   if (self = [super initWithFrame:frame]) {
-    _attachmentImageView = [[NSImageView alloc] initWithFrame:frame];
+    _attachmentImageView = [[DDHImageView alloc] initWithFrame:frame];
     _attachmentImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    _attachmentImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
+    _attachmentImageView.clipsToBounds = YES;
     [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
     [_attachmentImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationVertical];
 
@@ -46,7 +47,8 @@
       self.hidden = NO;
 
       self.aspectConstraint.active = NO;
-      self.aspectConstraint = [self.attachmentImageView.widthAnchor constraintEqualToAnchor:self.attachmentImageView.heightAnchor multiplier:mediaAttachment.smallDimensions.aspect];
+//      self.aspectConstraint = [self.attachmentImageView.widthAnchor constraintEqualToAnchor:self.attachmentImageView.heightAnchor multiplier:mediaAttachment.smallDimensions.aspect];
+      self.aspectConstraint = [self.attachmentImageView.widthAnchor constraintEqualToAnchor:self.attachmentImageView.heightAnchor multiplier:3.0/2];
       self.aspectConstraint.active = YES;
 
       [imageLoader loadImageForURL:mediaAttachment.previewURL completionHandler:^(NSImage *image) {

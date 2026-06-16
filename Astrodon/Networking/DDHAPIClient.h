@@ -14,7 +14,8 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHAPIClient : NSObject
 - (void)fetchTokenWithCode:(NSString *)code completionHandler:(void(^)(NSString *token, NSError *error))completionHandler;
-- (void)timelineFromEndpoint:(DDHEndpoint)endpoint sinceId:(NSString *)sinceId completionHandler:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler;
+- (void)homeTimelineSinceToot:(DDHToot *)toot completionHander:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler;
+- (void)homeTimelineBeforeToot:(DDHToot *)toot completionHander:(void (^)(NSArray<DDHToot *> * _Nonnull, NSError * _Nonnull))completionHandler;
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;

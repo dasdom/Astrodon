@@ -8,5 +8,5 @@
 @interface DDHRequestFactory : NSObject
 + (NSURL *)urlForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)code;
 + (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint;
-+ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint additionalInfo:(NSString *)additionalInfo;
++ (NSURLRequest *)requestForEndpoint:(DDHEndpoint)endpoint subPath:(NSString *)subPath queryItemsDictionary:(NSDictionary<NSString *, NSString *> *)queryItemsDictionary;
 @end
