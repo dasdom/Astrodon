@@ -15,6 +15,7 @@
   if (self = [super initWithFrame:frameRect]) {
     _imageView = [[NSImageView alloc] init];
     _imageView.translatesAutoresizingMaskIntoConstraints = NO;
+    _imageView.imageScaling = NSImageScaleProportionallyUpOrDown;
 
     [self addSubview:_imageView];
 

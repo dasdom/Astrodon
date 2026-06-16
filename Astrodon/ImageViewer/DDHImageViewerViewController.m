@@ -36,6 +36,15 @@
 
   __weak typeof(self)weakSelf = self;
   [self.imageLoader loadImageForURL:self.mediaAttachment.url completionHandler:^(NSImage *image) {
+
+    CGFloat screenHeight = [NSScreen mainScreen].frame.size.height;
+    if (screenHeight - 100 < image.size.height) {
+      CGFloat imageHeight = screenHeight - 100;
+      CGFloat imageWidth = imageHeight * image.size.width / image.size.height;
+
+      image.size = NSMakeSize(imageWidth, imageHeight);
+    }
+
     [weakSelf.contentView updateWithImage:image];
   }];
 }
