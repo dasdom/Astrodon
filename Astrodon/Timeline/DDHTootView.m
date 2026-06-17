@@ -239,7 +239,7 @@
 
   if (clickedAvatarImage) {
     NSLog(@"clicked avatar");
-    DDHAccount *account = self.toot.account;
+    DDHAccount *account = self.toot.tootToShow.account;
     self.clickHandler(account);
   }
 }

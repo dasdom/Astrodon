@@ -6,22 +6,22 @@
 #import "DDHAccountView.h"
 #import "DDHAccount.h"
 #import "DDHImageLoader.h"
+#import "DDHImageView.h"
 
 @interface DDHAccountView ()
-@property (strong) NSImageView *headerImageView;
+@property (strong) DDHImageView *headerImageView;
 @property (strong) NSImageView *avatarImageView;
-@property (strong) NSLayoutConstraint *headerAspectRationConstraint;
+//@property (strong) NSLayoutConstraint *headerAspectRationConstraint;
 @end
 
 @implementation DDHAccountView
 
 - (instancetype)initWithFrame:(NSRect)frameRect {
   if (self = [super initWithFrame:frameRect]) {
-    _headerImageView = [[NSImageView alloc] init];
+    _headerImageView = [[DDHImageView alloc] init];
     _headerImageView.translatesAutoresizingMaskIntoConstraints = NO;
-    _headerImageView.imageAlignment = NSImageAlignTop;
-    _headerImageView.imageScaling = NSImageScaleProportionallyUpOrDown;
     _headerImageView.hidden = YES;
+    _headerImageView.clipsToBounds = YES;
 
     NSView *avatarHostView = [[NSView alloc] init];
     avatarHostView.translatesAutoresizingMaskIntoConstraints = NO;
@@ -52,20 +52,21 @@
     [_headerImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationHorizontal];
     [_headerImageView setContentCompressionResistancePriority:NSLayoutPriorityDefaultLow forOrientation:NSLayoutConstraintOrientationVertical];
 
-    _headerAspectRationConstraint = [_headerImageView.heightAnchor constraintEqualToAnchor:_headerImageView.widthAnchor multiplier:0.2];
+//    _headerAspectRationConstraint = [_headerImageView.heightAnchor constraintEqualToAnchor:_headerImageView.widthAnchor multiplier:0.2];
 
     [NSLayoutConstraint activateConstraints:@[
       [_headerImageView.topAnchor constraintEqualToAnchor:self.topAnchor],
       [_headerImageView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],
       [_headerImageView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
-      _headerAspectRationConstraint,
+//      _headerAspectRationConstraint,
+      [_headerImageView.heightAnchor constraintEqualToConstant:150],
 
 //      [headerOverlay.topAnchor constraintEqualToAnchor:avatarHostView.centerYAnchor],
 //      [headerOverlay.leadingAnchor constraintEqualToAnchor:_headerImageView.leadingAnchor],
 //      [headerOverlay.bottomAnchor constraintEqualToAnchor:_headerImageView.bottomAnchor],
 //      [headerOverlay.trailingAnchor constraintEqualToAnchor:_headerImageView.trailingAnchor],
 
-      [avatarHostView.topAnchor constraintEqualToAnchor:self.topAnchor constant:50],
+      [avatarHostView.topAnchor constraintEqualToAnchor:self.topAnchor constant:80],
       [avatarHostView.centerXAnchor constraintEqualToAnchor:self.centerXAnchor],
       [avatarHostView.widthAnchor constraintEqualToConstant:100],
       [avatarHostView.heightAnchor constraintEqualToAnchor:avatarHostView.widthAnchor],
@@ -100,12 +101,12 @@
       NSLog(@"size: %@, ratio: %lf", [NSValue valueWithSize:image.size], image.size.width / image.size.height);
 
       weakSelf.headerImageView.hidden = NO;
-
-      weakSelf.headerAspectRationConstraint.active = NO;
-
-      weakSelf.headerAspectRationConstraint = [weakSelf.headerImageView.heightAnchor constraintEqualToAnchor:weakSelf.headerImageView.widthAnchor multiplier:image.size.height / image.size.width];
 //
-      weakSelf.headerAspectRationConstraint.active = YES;
+//      weakSelf.headerAspectRationConstraint.active = NO;
+//
+//      weakSelf.headerAspectRationConstraint = [weakSelf.headerImageView.heightAnchor constraintEqualToAnchor:weakSelf.headerImageView.widthAnchor multiplier:image.size.height / image.size.width];
+////
+//      weakSelf.headerAspectRationConstraint.active = YES;
 
       weakSelf.headerImageView.image = image;
     });
