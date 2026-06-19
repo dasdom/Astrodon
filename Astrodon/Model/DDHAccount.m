@@ -10,6 +10,7 @@
     _acct = dict[@"acct"];
     _displayName = dict[@"display_name"];
     _accountId = dict[@"id"];
+    _note = dict[@"note"];
 
     NSString *avatarURLString = dict[@"avatar"];
     _avatarURL = [NSURL URLWithString:avatarURLString];

@@ -10,6 +10,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString *displayName;
 @property (strong) NSString *acct;
 @property (strong) NSString *accountId;
+@property (strong) NSString *note;
 @property (strong) NSURL *avatarURL;
 @property (strong) NSURL *headerURL;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
