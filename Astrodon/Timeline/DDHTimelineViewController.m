@@ -24,6 +24,7 @@
 @property (strong) DDHAPIClient *apiClient;
 @property (strong) DDHImageLoader *imageLoader;
 @property BOOL updatingTimeline;
+@property BOOL loadingBecauseScrolledNegative;
 @end
 
 @implementation DDHTimelineViewController
@@ -71,7 +72,6 @@
   _dataSource = [[NSTableViewDiffableDataSource alloc] initWithTableView:self.tableView cellProvider:^NSView * _Nonnull(NSTableView * _Nonnull tableView, NSTableColumn * _Nonnull column, NSInteger row, id  _Nonnull itemId) {
 
     DDHToot *toot = weakSelf.toots[row];
-//    DDHTootCellView *cellView;
 
     DDHTootCellView *tootCellView = [tableView makeViewWithIdentifier:@"DDHTimelineCellView" owner:self];
     if (nil == tootCellView) {
@@ -117,6 +117,9 @@
 }
 
 - (void)updateWithToots:(NSArray<DDHToot *> *)toots {
+  if ([toots count] < 1) {
+    return;
+  }
   NSDiffableDataSourceSnapshot *snapshot = [[NSDiffableDataSourceSnapshot alloc] init];
   [snapshot appendSectionsWithIdentifiers:@[@"Main"]];
   NSMutableArray<NSString *> *tootsIds = [[NSMutableArray alloc] initWithCapacity:[toots count]];
@@ -125,7 +128,10 @@
   }
   os_log(OS_LOG_DEFAULT, "%@", tootsIds);
   [snapshot appendItemsWithIdentifiers:tootsIds];
-  [self.dataSource applySnapshot:snapshot animatingDifferences:true];
+  __weak typeof(self) weakSelf = self;
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [weakSelf.dataSource applySnapshot:snapshot animatingDifferences:true];
+  });
 }
 
 // MARK: - Actions
@@ -144,19 +150,22 @@
     __weak typeof(self)weakSelf = self;
     DDHToot *firstToot = self.toots.firstObject;
     [self.apiClient homeTimelineSinceToot:firstToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
-      weakSelf.updatingTimeline = NO;
 
       if (completionHandler) {
         completionHandler();
       }
-      NSLog(@"error: %@", error);
-      if ([weakSelf.toots count] > 0) {
-        // Add fetched toots at the beginning of the existing toots.
-        weakSelf.toots = [toots arrayByAddingObjectsFromArray:weakSelf.toots];
-      } else {
-        weakSelf.toots = toots;
+
+      if ([toots count] > 0) {
+        NSLog(@"error: %@", error);
+        if ([weakSelf.toots count] > 0) {
+          // Add fetched toots at the beginning of the existing toots.
+          weakSelf.toots = [toots arrayByAddingObjectsFromArray:weakSelf.toots];
+        } else {
+          weakSelf.toots = toots;
+        }
+        [weakSelf updateWithToots:weakSelf.toots];
       }
-      [weakSelf updateWithToots:weakSelf.toots];
+      weakSelf.updatingTimeline = NO;
     }];
   }
 }
@@ -227,8 +236,6 @@
   NSView *documentView = self.scrollView.documentView;
   NSClipView *clipView = self.scrollView.contentView;
 
-//  os_log(OS_LOG_DEFAULT, "clipView y: %lf, clipView height: %lf, documentView height: %lf", clipView.bounds.origin.y, clipView.bounds.size.height, documentView.bounds.size.height);
-
   if (clipView.bounds.origin.y + clipView.bounds.size.height > documentView.bounds.size.height) {
     if (self.toots.count < 1) {
       return;
@@ -248,8 +255,6 @@
       NSLog(@"error: %@", error);
 
       [self.delegate viewControllerStoppedLoading:self];
-      
-      weakSelf.updatingTimeline = NO;
 
       if ([weakSelf.toots count] > 0) {
         // Add fetched toots at the beginning of the existing toots.
@@ -258,7 +263,16 @@
         weakSelf.toots = toots;
       }
       [weakSelf updateWithToots:weakSelf.toots];
+      weakSelf.updatingTimeline = NO;
     }];
+  } else if (clipView.bounds.origin.y < 0) {
+    if (self.loadingBecauseScrolledNegative) {
+      return;
+    }
+    self.loadingBecauseScrolledNegative = YES;
+    [self loadToots:nil withCompletionHandler:^{}];
+  } else {
+    self.loadingBecauseScrolledNegative = NO;
   }
 }
 

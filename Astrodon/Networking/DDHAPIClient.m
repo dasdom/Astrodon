@@ -153,9 +153,11 @@
     if ([[request URL] isEqualTo:self.lastRequestURL]) {
       os_log(OS_LOG_DEFAULT, "skipping because repetition %@", self.lastRequestURL);
       completionHandler(@[], nil);
+      return;
     }
   }
   self.lastRequestURL = [request URL];
+  os_log(OS_LOG_DEFAULT, "request %@", self.lastRequestURL);
 
   typeof(self) __weak weakSelf = self;
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
@@ -170,6 +172,12 @@
     NSError *jsonError = nil;
     NSArray<NSDictionary *> *rawArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
     NSMutableArray *toots = [NSMutableArray new];
+
+    if ([toots count] < 1) {
+      dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(1 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
+        weakSelf.lastRequestURL = nil;
+      });
+    }
     [rawArray enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull dict, NSUInteger idx, BOOL * _Nonnull stop) {
       os_log(OS_LOG_DEFAULT, "dict: %@", dict);
       DDHToot *toot = [[DDHToot alloc] initWithDictionary:dict dateFormatter:weakSelf.dateFormatter];
@@ -191,7 +199,7 @@
 
   NSHTTPURLResponse *httpResponse = (NSHTTPURLResponse *)response;
   if (httpResponse.statusCode != 200) {
-    NSError *responseError = [[NSError alloc] initWithDomain:@"DDHAPIClientErrorDomain" code:DDHErrorCodeResponseNotOK userInfo:nil];
+    NSError *responseError = [[NSError alloc] initWithDomain:@"DDHAPIClientErrorDomain" code:httpResponse.statusCode userInfo:nil];
     return responseError;
   }
 
