@@ -147,6 +147,7 @@
 
     self.updatingTimeline = YES;
 
+    [self.contentView startTopSpinner];
     __weak typeof(self)weakSelf = self;
     DDHToot *firstToot = self.toots.firstObject;
     [self.apiClient homeTimelineSinceToot:firstToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
@@ -166,6 +167,7 @@
         [weakSelf updateWithToots:weakSelf.toots];
       }
       weakSelf.updatingTimeline = NO;
+      [weakSelf.contentView stopTopSpinner];
     }];
   }
 }
@@ -249,6 +251,8 @@
     [self.delegate viewControllerStartedLoading:self];
 
     self.updatingTimeline = YES;
+
+    [self.contentView startBottomSpinner];
     __weak typeof(self)weakSelf = self;
     DDHToot *lastToot = self.toots.lastObject;
     [self.apiClient homeTimelineBeforeToot:lastToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
@@ -264,6 +268,7 @@
       }
       [weakSelf updateWithToots:weakSelf.toots];
       weakSelf.updatingTimeline = NO;
+      [weakSelf.contentView stopBottomSpinner];
     }];
   } else if (clipView.bounds.origin.y < 0) {
     if (self.loadingBecauseScrolledNegative) {
