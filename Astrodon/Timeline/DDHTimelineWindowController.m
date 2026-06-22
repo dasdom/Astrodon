@@ -120,7 +120,7 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
     [viewController presentViewControllerAsModalWindow:imageViewController];
   } else if ([item isKindOfClass:[DDHAccount class]]) {
     DDHAccount *account = (DDHAccount *)item;
-    DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:self.imageLoader];
+    DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:self.imageLoader apiClient:self.apiClient];
     [viewController presentViewControllerAsModalWindow:accountViewController];
   } else if ([item isKindOfClass:[DDHToot class]]) {
     DDHToot *toot = (DDHToot *)item;

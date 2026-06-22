@@ -12,7 +12,9 @@
     _attachmentId = [dict[@"id"] integerValue];
 
     NSString *previewURLString = dict[@"preview_url"];
-    _previewURL = [NSURL URLWithString:previewURLString];
+    if (NO == [previewURLString isEqual:[NSNull null]]) {
+      _previewURL = [NSURL URLWithString:previewURLString];
+    }
 
     NSString *urlString = dict[@"url"];
     _url = [NSURL URLWithString:urlString];

@@ -86,6 +86,7 @@
 				DDHMediaAttachment.m,
 				DDHMention.m,
 				DDHQuote.m,
+				DDHRelationship.m,
 				DDHStatus.m,
 				DDHToot.m,
 			);
@@ -96,7 +97,7 @@
 /* Begin PBXFileSystemSynchronizedRootGroup section */
 		F295BE1C2FDF2462005B2FE6 /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
 		F2ABC09B2F701A6200FD5A57 /* ImageViewer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ImageViewer; sourceTree = "<group>"; };
-		F2ABC0A32F701BF300FD5A57 /* Profile */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Profile; sourceTree = "<group>"; };
+		F2ABC0A32F701BF300FD5A57 /* Account */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Account; sourceTree = "<group>"; };
 		F2ABC0A72F701BFE00FD5A57 /* Server Input */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = "Server Input"; sourceTree = "<group>"; };
 		F2ABC0B42F701C0200FD5A57 /* Timeline */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F2ABC0BA2F701C0200FD5A57 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Timeline; sourceTree = "<group>"; };
 		F2ABC0BF2F701C0600FD5A57 /* Input */ = {isa = PBXFileSystemSynchronizedRootGroup; exceptions = (F2ABC0C22F701C0600FD5A57 /* PBXFileSystemSynchronizedBuildFileExceptionSet */, ); explicitFileTypes = {}; explicitFolders = (); path = Input; sourceTree = "<group>"; };
@@ -156,7 +157,7 @@
 				F2C7B1FE29350EF400554EA2 /* DDHConstants.m */,
 				F2D14ACB2F7AC2F500E90947 /* Extensions */,
 				F2D14AC22F79684100E90947 /* Context */,
-				F2ABC0A32F701BF300FD5A57 /* Profile */,
+				F2ABC0A32F701BF300FD5A57 /* Account */,
 				F2ABC09B2F701A6200FD5A57 /* ImageViewer */,
 				F2ABC0A72F701BFE00FD5A57 /* Server Input */,
 				F2ABC0B42F701C0200FD5A57 /* Timeline */,
@@ -206,7 +207,7 @@
 			fileSystemSynchronizedGroups = (
 				F295BE1C2FDF2462005B2FE6 /* UI */,
 				F2ABC09B2F701A6200FD5A57 /* ImageViewer */,
-				F2ABC0A32F701BF300FD5A57 /* Profile */,
+				F2ABC0A32F701BF300FD5A57 /* Account */,
 				F2ABC0A72F701BFE00FD5A57 /* Server Input */,
 				F2D14AC22F79684100E90947 /* Context */,
 				F2D14ACB2F7AC2F500E90947 /* Extensions */,

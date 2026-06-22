@@ -12,6 +12,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHAccountHeaderView : NSView
 - (void)updateWithAccount:(DDHAccount *)account imageLoader:(DDHImageLoader *)imageLoader;
+- (NSView *)anchorView;
 @end
 
 NS_ASSUME_NONNULL_END

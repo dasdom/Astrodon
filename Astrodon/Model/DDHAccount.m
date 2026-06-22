@@ -9,6 +9,7 @@
   if (self = [super init]) {
     _acct = dict[@"acct"];
     _displayName = dict[@"display_name"];
+    _username = dict[@"username"];
     _accountId = dict[@"id"];
     _note = dict[@"note"];
 

@@ -7,11 +7,13 @@
 
 @class DDHAccount;
 @class DDHImageLoader;
+@class DDHRelationship;
 
 NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHAccountView : NSView
 - (void)updateWithAccount:(DDHAccount *)account imageLoader:(DDHImageLoader *)imageLoader;
+- (void)updateWithAccount:(DDHAccount *)account relationship:(DDHRelationship *)relationship;
 @end
 
 NS_ASSUME_NONNULL_END

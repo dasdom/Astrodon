@@ -37,6 +37,8 @@
     _avatarImageView.clipsToBounds = YES;
     [avatarHostView addSubview:_avatarImageView];
 
+    _headerImageView.wantsLayer = YES;
+
     [self addSubview:_headerImageView];
     [self addSubview:avatarHostView];
 
@@ -65,6 +67,10 @@
   return self;
 }
 
+- (void)viewWillMoveToWindow:(NSWindow *)newWindow {
+  self.headerImageView.layer.backgroundColor = [NSColor whiteColor].CGColor;
+}
+
 - (void)updateWithAccount:(DDHAccount *)account imageLoader:(DDHImageLoader *)imageLoader {
   __weak typeof(self)weakSelf = self;
   [imageLoader loadImageForURL:account.avatarURL completionHandler:^(NSImage *image) {
@@ -81,6 +87,10 @@
       weakSelf.headerImageView.image = image;
     });
   }];
+}
+
+- (NSView *)anchorView {
+  return self.headerImageView;
 }
 
 @end

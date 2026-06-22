@@ -8,6 +8,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHAccount : NSObject
 @property (strong) NSString *displayName;
+@property (strong) NSString *username;
 @property (strong) NSString *acct;
 @property (strong) NSString *accountId;
 @property (strong) NSString *note;

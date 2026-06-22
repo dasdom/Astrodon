@@ -167,7 +167,9 @@
         [weakSelf updateWithToots:weakSelf.toots];
       }
       weakSelf.updatingTimeline = NO;
-      [weakSelf.contentView stopTopSpinner];
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.contentView stopTopSpinner];
+      });
     }];
   }
 }
@@ -268,7 +270,9 @@
       }
       [weakSelf updateWithToots:weakSelf.toots];
       weakSelf.updatingTimeline = NO;
-      [weakSelf.contentView stopBottomSpinner];
+      dispatch_async(dispatch_get_main_queue(), ^{
+        [weakSelf.contentView stopBottomSpinner];
+      });
     }];
   } else if (clipView.bounds.origin.y < 0) {
     if (self.loadingBecauseScrolledNegative) {

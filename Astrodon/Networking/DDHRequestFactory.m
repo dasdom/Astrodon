@@ -12,6 +12,7 @@ NSString * const version = @"/v1";
 NSString * const timelines = @"/timelines";
 NSString * const statuses = @"/statuses";
 NSString * const accounts = @"/accounts";
+NSString * const relationships = @"/relationships";
 
 @implementation DDHRequestFactory
 
@@ -41,6 +42,9 @@ NSString * const accounts = @"/accounts";
       break;
     case DDHEndpointContext:
       path = [NSString stringWithFormat:@"%@%@%@/%@/context", apiPath, version, statuses, subPath];
+      break;
+    case DDHEndpointRelationship:
+      path = [NSString stringWithFormat:@"%@%@%@%@", apiPath, version, accounts, relationships];
       break;
   }
   return path;
@@ -89,7 +93,8 @@ NSString * const accounts = @"/accounts";
       break;
     case DDHEndpointHome:
     case DDHEndpointAccount:
-    case DDHEndpointContext: {
+    case DDHEndpointContext:
+    case DDHEndpointRelationship: {
       NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
       [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];
       break;

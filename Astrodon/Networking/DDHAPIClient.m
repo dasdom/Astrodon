@@ -6,6 +6,7 @@
 #import "DDHToot.h"
 #import "DDHStatus.h"
 #import "DDHAccount.h"
+#import "DDHRelationship.h"
 #import "DDHContext.h"
 #import "DDHRequestFactory.h"
 #import "DDHErrorCodes.h"
@@ -92,8 +93,30 @@
   }];
 }
 
-- (void)accountForId:(NSString *)accountId completionHandler:(void(^)(DDHAccount *account, NSError *error))completionHandler {
-  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointAccount subPath:accountId queryItemsDictionary:nil];
+//- (void)accountForId:(NSString *)accountId completionHandler:(void(^)(DDHAccount *account, NSError *error))completionHandler {
+//  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointAccount subPath:accountId queryItemsDictionary:nil];
+//  NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
+//
+//    NSError *requestError = [self errorFromData:data response:response error:error];
+//    if (requestError) {
+//      completionHandler(nil, requestError);
+//      return;
+//    }
+//
+//    NSError *jsonError = nil;
+//    NSDictionary *rawDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+//    os_log(OS_LOG_DEFAULT, "dict: %@", rawDictionary);
+//    DDHAccount *account = [[DDHAccount alloc] initWithDictionary:rawDictionary];
+//
+//    completionHandler(account, nil);
+//  }];
+//
+//  [dataTask resume];
+//}
+
+- (void)relationshipForId:(NSString *)accountId completionHandler:(void(^)(DDHRelationship *relationship, NSError *error))completionHandler {
+  NSDictionary<NSString *, NSString *> *queryItemsDictionary = @{@"id[]": accountId};
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointRelationship subPath:nil queryItemsDictionary:queryItemsDictionary];
   NSURLSessionDataTask *dataTask = [self.session dataTaskWithRequest:request completionHandler:^(NSData * _Nullable data, NSURLResponse * _Nullable response, NSError * _Nullable error) {
 
     NSError *requestError = [self errorFromData:data response:response error:error];
@@ -103,11 +126,11 @@
     }
 
     NSError *jsonError = nil;
-    NSDictionary *rawDictionary = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
-    os_log(OS_LOG_DEFAULT, "dict: %@", rawDictionary);
-    DDHAccount *account = [[DDHAccount alloc] initWithDictionary:rawDictionary];
+    NSArray *rawArray = [NSJSONSerialization JSONObjectWithData:data options:0 error:&jsonError];
+    os_log(OS_LOG_DEFAULT, "array: %@", rawArray);
+    DDHRelationship *relationship = [[DDHRelationship alloc] initWithDictionary:rawArray.firstObject];
 
-    completionHandler(account, nil);
+    completionHandler(relationship, nil);
   }];
 
   [dataTask resume];

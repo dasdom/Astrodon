@@ -107,7 +107,7 @@
           [weakSelf presentViewControllerAsModalWindow:imageViewController];
         } else if ([item isKindOfClass:[DDHAccount class]]) {
           DDHAccount *account = (DDHAccount *)item;
-          DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:weakSelf.imageLoader];
+          DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:weakSelf.imageLoader apiClient:self.apiClient];
           [weakSelf presentViewControllerAsModalWindow:accountViewController];
         } else if ([item isKindOfClass:[DDHToot class]]) {
           DDHToot *toot = (DDHToot *)item;
