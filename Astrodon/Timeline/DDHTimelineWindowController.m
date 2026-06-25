@@ -69,11 +69,11 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
 }
 
 - (void)stopSpinner {
-  if ([self.window.toolbar.itemIdentifiers containsObject:spinnerIdentifier]) {
-    dispatch_async(dispatch_get_main_queue(), ^{
+  dispatch_async(dispatch_get_main_queue(), ^{
+    if ([self.window.toolbar.itemIdentifiers containsObject:spinnerIdentifier]) {
       [self.window.toolbar removeItemAtIndex:0];
-    });
-  }
+    }
+  });
 }
 
 // MARK: - NSToolbarDelegate

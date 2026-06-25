@@ -15,6 +15,8 @@ typedef NS_ENUM(NSInteger, DDHEndpoint) {
   DDHEndpointAccount,
   DDHEndpointContext,
   DDHEndpointRelationship,
+  DDHEndpointFollow,
+  DDHEndpointUnfollow,
 };
 
 #endif /* DDHEndpoint_h */

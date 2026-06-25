@@ -74,23 +74,27 @@
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler {
   NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointNewStatus] mutableCopy];
   request.HTTPBody = status.data;
-  [self executeRequest:request completionHandler:^(NSError *error) {
-    completionHandler(error);
-  }];
+  [self executeRequest:request completionHandler:completionHandler];
 }
 
 - (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler {
   NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointBoost subPath:statusId queryItemsDictionary:nil] mutableCopy];
-  [self executeRequest:request completionHandler:^(NSError *error) {
-    completionHandler(error);
-  }];
+  [self executeRequest:request completionHandler:completionHandler];
 }
 
 - (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler {
-  NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointFavorite subPath:statusId queryItemsDictionary:nil] mutableCopy];
-  [self executeRequest:request completionHandler:^(NSError *error) {
-    completionHandler(error);
-  }];
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointFavorite subPath:statusId queryItemsDictionary:nil];
+  [self executeRequest:request completionHandler:completionHandler];
+}
+
+- (void)followAccountWithId:(NSString *)accountId completionHandler:(void(^)(NSError *error))completionHandler {
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointFollow subPath:accountId queryItemsDictionary:nil];
+  [self executeRequest:request completionHandler:completionHandler];
+}
+
+- (void)unfollowAccountWithId:(NSString *)accountId completionHandler:(void(^)(NSError *error))completionHandler {
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointUnfollow subPath:accountId queryItemsDictionary:nil];
+  [self executeRequest:request completionHandler:completionHandler];
 }
 
 //- (void)accountForId:(NSString *)accountId completionHandler:(void(^)(DDHAccount *account, NSError *error))completionHandler {

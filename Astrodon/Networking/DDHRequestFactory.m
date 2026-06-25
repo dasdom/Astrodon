@@ -46,6 +46,12 @@ NSString * const relationships = @"/relationships";
     case DDHEndpointRelationship:
       path = [NSString stringWithFormat:@"%@%@%@%@", apiPath, version, accounts, relationships];
       break;
+    case DDHEndpointFollow:
+      path = [NSString stringWithFormat:@"%@%@%@/%@/follow", apiPath, version, accounts, subPath];
+      break;
+    case DDHEndpointUnfollow:
+      path = [NSString stringWithFormat:@"%@%@%@/%@/unfollow", apiPath, version, accounts, subPath];
+      break;
   }
   return path;
 }
@@ -102,6 +108,8 @@ NSString * const relationships = @"/relationships";
     case DDHEndpointNewStatus:
     case DDHEndpointBoost:
     case DDHEndpointFavorite:
+    case DDHEndpointFollow:
+    case DDHEndpointUnfollow:
     {
       NSString *code = [DDHKeychain loadStringForKey:codeKeychainName];
       [request addValue:[NSString stringWithFormat:@"Bearer %@", code] forHTTPHeaderField:@"Authorization"];

@@ -20,6 +20,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
+- (void)followAccountWithId:(NSString *)accountId completionHandler:(void(^)(NSError *error))completionHandler;
+- (void)unfollowAccountWithId:(NSString *)accountId completionHandler:(void(^)(NSError *error))completionHandler;
 //- (void)accountForId:(NSString *)accountId completionHandler:(void(^)(DDHAccount *account, NSError *error))completionHandler;
 - (void)relationshipForId:(NSString *)accountId completionHandler:(void(^)(DDHRelationship *relationship, NSError *error))completionHandler;
 - (void)contextForId:(NSString *)statusId completionHandler:(void(^)(DDHContext *context, NSError *error))completionHandler;

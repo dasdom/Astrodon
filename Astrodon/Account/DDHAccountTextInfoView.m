@@ -27,6 +27,7 @@
 
     _noteLabel = [NSTextField wrappingLabelWithString:@""];
     _noteLabel.translatesAutoresizingMaskIntoConstraints = NO;
+    _noteLabel.selectable = NO;
     _noteLabel.font = [NSFont preferredFontForTextStyle:NSFontTextStyleBody options:@{}];
     [_noteLabel setContentCompressionResistancePriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];
     [_noteLabel setContentHuggingPriority:NSLayoutPriorityRequired forOrientation:NSLayoutConstraintOrientationVertical];

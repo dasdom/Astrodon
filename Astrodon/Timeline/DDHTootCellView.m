@@ -107,8 +107,8 @@
     [self.quoteTootView updateWithToot:toot.tootToShow.quote.quotedStatus imageLoader:imageLoader relativeDateTimeFormatter:relativeDateTimeFormatter];
   } else {
     self.quoteTootView.hidden = YES;
-    self.tootViewToButtonConstraint.active = YES;
     self.tootViewToQuoteViewConstraint.active = NO;
+    self.tootViewToButtonConstraint.active = YES;
   }
 }
 
