@@ -91,7 +91,6 @@
       tootCellView.tootView.clickHandler = ^(id item) {
         [weakSelf.delegate viewController:weakSelf didClickItem:item];
       };
-
     }
 
     [tootCellView updateWithToot:toot imageLoader:weakSelf.imageLoader relativeDateTimeFormatter:weakSelf.relativeDateTimeFormatter];

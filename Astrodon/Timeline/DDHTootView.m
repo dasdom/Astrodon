@@ -120,7 +120,6 @@
   [self setImagesForToot:toot imageLoader:imageLoader];
   [self setTextForToot:toot relativeDateTimeFormatter:relativeDateTimeFormatter];
   [self setAttachmentsForToot:toot imageLoader:imageLoader];
-//  [self setColorsForToot:toot];
 
   self.toot = toot;
 }
@@ -157,14 +156,6 @@
 //    self.languageLabel.stringValue = tootToShow.language;
   }
 }
-
-//- (void)setColorsForToot:(DDHToot *)toot {
-//  if (toot.reblogged) {
-//    self.boostButton.bezelColor = [NSColor colorNamed:@"colors/boosted"];
-//  } else {
-//    self.boostButton.bezelColor = nil;
-//  }
-//}
 
 - (void)setImagesForToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader {
   self.imageView.image = nil;
@@ -278,4 +269,5 @@
     }
   }];
 }
+
 @end

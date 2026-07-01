@@ -44,8 +44,9 @@
 
       image.size = NSMakeSize(imageWidth, imageHeight);
     }
-
-    [weakSelf.contentView updateWithImage:image];
+    dispatch_async(dispatch_get_main_queue(), ^{
+      [weakSelf.contentView updateWithImage:image];
+    });
   }];
 }
 

@@ -7,6 +7,7 @@
 #import "DDHMediaAttachment.h"
 #import "DDHQuote.h"
 #import "DDHMention.h"
+#import "DDHTag.h"
 
 @implementation DDHToot
 - (instancetype)initWithDictionary:(NSDictionary *)dict dateFormatter:(NSISO8601DateFormatter *)dateFormatter {
@@ -51,6 +52,14 @@
       [mentions addObject:mention];
     }];
     _mentions = mentions;
+
+    NSMutableArray<DDHTag *> *tags = [[NSMutableArray alloc] init];
+    NSArray<NSDictionary *> *rawTags = dict[@"tags"];
+    [rawTags enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull rawTag, NSUInteger idx, BOOL * _Nonnull stop) {
+      DDHTag *tag = [[DDHTag alloc] initWithDictionary:rawTag];
+      [tags addObject:tag];
+    }];
+    _tags = tags;
   }
   return self;
 }

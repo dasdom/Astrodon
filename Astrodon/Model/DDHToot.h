@@ -8,6 +8,7 @@
 @class DDHMediaAttachment;
 @class DDHQuote;
 @class DDHMention;
+@class DDHTag;
 
 NS_ASSUME_NONNULL_BEGIN
 
@@ -21,6 +22,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSString *spoilerText;
 @property (strong) NSArray<DDHMediaAttachment *> *mediaAttachments;
 @property (strong) NSArray<DDHMention *> *mentions;
+@property (strong) NSArray<DDHTag *> *tags;
 @property (nullable, strong) DDHToot *boostedToot;
 @property (nullable, strong) DDHQuote *quote;
 @property BOOL sensitive;

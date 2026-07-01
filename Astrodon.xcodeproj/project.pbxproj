@@ -88,6 +88,7 @@
 				DDHQuote.m,
 				DDHRelationship.m,
 				DDHStatus.m,
+				DDHTag.m,
 				DDHToot.m,
 			);
 			target = F23858342926A1C00065DE0B /* Astrodon */;

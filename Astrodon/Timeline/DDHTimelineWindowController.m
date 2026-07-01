@@ -15,6 +15,7 @@
 
 NSString * const reloadIdentifier = @"reloadIdentifier";
 NSString * const spinnerIdentifier = @"spinnerIdentifier";
+NSString * const composeIdentifier = @"composeIdentifier";
 
 @interface DDHTimelineWindowController () <NSToolbarDelegate, DDHTimelineViewControllerDelegate>
 @property (strong) id<DDHTimelineWindowControllerDelegate> delegate;
@@ -38,6 +39,7 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
     NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Timeline"];
     toolbar.delegate = self;
     [toolbar insertItemWithItemIdentifier:reloadIdentifier atIndex:0];
+    [toolbar insertItemWithItemIdentifier:composeIdentifier atIndex:1];
 
     window.toolbar = toolbar;
   }
@@ -49,6 +51,7 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
     
 }
 
+// MARK: - Actions
 - (void)reloadTimeline:(id)sender {
   DDHTimelineViewController *timelineViewController = (DDHTimelineViewController *)self.contentViewController;
   [self startSpinner];
@@ -60,6 +63,12 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
   }];
 }
 
+- (void)compose:(NSToolbarItem *)sender {
+  DDHTimelineViewController *timelineViewController = (DDHTimelineViewController *)self.contentViewController;
+  [timelineViewController openTootInputReplyingToToot:nil];
+}
+
+// MARK: - Spinner
 - (void)startSpinner {
   if (NO == [self.window.toolbar.itemIdentifiers containsObject:spinnerIdentifier]) {
     dispatch_async(dispatch_get_main_queue(), ^{
@@ -78,11 +87,11 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
 
 // MARK: - NSToolbarDelegate
 - (NSArray<NSToolbarItemIdentifier> *)toolbarAllowedItemIdentifiers:(NSToolbar *)toolbar {
-  return @[reloadIdentifier];
+  return @[reloadIdentifier, composeIdentifier];
 }
 
 - (NSArray<NSToolbarItemIdentifier> *)toolbarDefaultItemIdentifiers:(NSToolbar *)toolbar {
-  return @[reloadIdentifier];
+  return @[reloadIdentifier, composeIdentifier];
 }
 
 - (NSToolbarItem *)toolbar:(NSToolbar *)toolbar itemForItemIdentifier:(NSToolbarItemIdentifier)itemIdentifier willBeInsertedIntoToolbar:(BOOL)flag {
@@ -101,6 +110,12 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
     [progressIndicator startAnimation:nil];
     spinnerItem.view = progressIndicator;
     toolBarItem = spinnerItem;
+  } else if ([itemIdentifier isEqualToString:composeIdentifier]) {
+    NSToolbarItem *composeItem = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
+    composeItem.image = [NSImage imageWithSystemSymbolName:@"square.and.pencil" accessibilityDescription:@"compose"];
+    composeItem.target = self;
+    composeItem.action = @selector(compose:);
+    toolBarItem = composeItem;
   } else {
     NSToolbarItem *item = [[NSToolbarItem alloc] initWithItemIdentifier:itemIdentifier];
     toolBarItem = item;
@@ -111,18 +126,25 @@ NSString * const spinnerIdentifier = @"spinnerIdentifier";
 // MARK: - DDHTimelineViewControllerDelegate
 - (void)viewController:(NSViewController *)viewController didClickItem:(id)item {
   if ([item isKindOfClass:[NSURL class]]) {
+    // Link in post
     NSURL *url = (NSURL *)item;
     NSLog(@"url: %@", url);
     [NSWorkspace.sharedWorkspace openURL:url];
+
   } else if ([item isKindOfClass:[DDHMediaAttachment class]]) {
+    // Image
     DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
     DDHImageViewerViewController *imageViewController = [[DDHImageViewerViewController alloc] initWithMediaAttachment:attachment imageLoader:self.imageLoader];
     [viewController presentViewControllerAsModalWindow:imageViewController];
+
   } else if ([item isKindOfClass:[DDHAccount class]]) {
+    // Account
     DDHAccount *account = (DDHAccount *)item;
     DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:self.imageLoader apiClient:self.apiClient];
     [viewController presentViewControllerAsModalWindow:accountViewController];
+
   } else if ([item isKindOfClass:[DDHToot class]]) {
+    // Thread
     DDHToot *toot = (DDHToot *)item;
     DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:self.apiClient toot:toot.tootToShow imageLoader:self.imageLoader];
     [viewController presentViewControllerAsModalWindow:statusContextViewController];
