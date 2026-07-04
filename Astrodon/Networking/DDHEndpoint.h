@@ -9,6 +9,7 @@ typedef NS_ENUM(NSInteger, DDHEndpoint) {
   DDHEndpointFetchToken,
   DDHEndpointPublic,
   DDHEndpointHome,
+  DDHEndpointTagTimeline,
   DDHEndpointNewStatus,
   DDHEndpointBoost,
   DDHEndpointFavorite,

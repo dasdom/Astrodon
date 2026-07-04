@@ -12,7 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 @class DDHToot;
 
 @interface DDHTimelineViewController : NSViewController
-- (instancetype)initWithDelegate:(id<DDHTimelineViewControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient;
+- (instancetype)initWithDelegate:(id<DDHTimelineViewControllerDelegate>)delegate
+                     imageLoader:(DDHImageLoader *)imageLoader
+                       apiClient:(DDHAPIClient *)apiClient;
+- (instancetype)initWithDelegate:(id<DDHTimelineViewControllerDelegate>)delegate
+                         hashtag:(nullable NSString *)hashtag
+                     imageLoader:(DDHImageLoader *)imageLoader
+                       apiClient:(DDHAPIClient *)apiClient;
 - (void)loadToots:(nullable id)sender withCompletionHandler:(nullable void(^)(void))completionHandler;
 - (void)openTootInputReplyingToToot:(nullable DDHToot *)toot;
 @end

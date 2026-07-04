@@ -10,6 +10,7 @@
 NSString * const apiPath = @"/api";
 NSString * const version = @"/v1";
 NSString * const timelines = @"/timelines";
+NSString * const tag = @"/tag";
 NSString * const statuses = @"/statuses";
 NSString * const accounts = @"/accounts";
 NSString * const relationships = @"/relationships";
@@ -27,6 +28,9 @@ NSString * const relationships = @"/relationships";
       break;
     case DDHEndpointHome:
       path = [NSString stringWithFormat:@"%@%@%@/home", apiPath, version, timelines];
+      break;
+    case DDHEndpointTagTimeline:
+      path = [NSString stringWithFormat:@"%@%@%@%@/%@", apiPath, version, timelines, tag, subPath];
       break;
     case DDHEndpointNewStatus:
       path = [NSString stringWithFormat:@"%@%@%@", apiPath, version, statuses];
@@ -98,6 +102,7 @@ NSString * const relationships = @"/relationships";
     case DDHEndpointPublic:
       break;
     case DDHEndpointHome:
+    case DDHEndpointTagTimeline:
     case DDHEndpointAccount:
     case DDHEndpointContext:
     case DDHEndpointRelationship: {

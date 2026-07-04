@@ -9,6 +9,7 @@
 #import "DDHAccount.h"
 #import "DDHMediaAttachment.h"
 #import "DDHAttachmentsView.h"
+#import "DDHTag.h"
 
 @interface DDHTootView ()
 @property (strong) NSImageView *imageView;
@@ -79,7 +80,7 @@
     _avatarImageWidthConstraint = [_avatarImageView.widthAnchor constraintEqualToConstant:60];
     _textBottomConstraint = [_tootTextField.bottomAnchor constraintEqualToAnchor:self.bottomAnchor];
     _textBottomConstraint.priority = 999;
-    _attachmentBottomConstraint = [_attachmentsView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-4];
+    _attachmentBottomConstraint = [_attachmentsView.bottomAnchor constraintEqualToAnchor:self.bottomAnchor constant:-10];
 
     [NSLayoutConstraint activateConstraints:@[
       [_avatarImageView.topAnchor constraintEqualToAnchor:self.layoutMarginsGuide.topAnchor],
@@ -259,8 +260,15 @@
       //      NSLog(@"range: %@", [NSValue valueWithRange:range]);
       NSLog(@"attrs: %@", attrs);
       NSURL *url = (NSURL *)attrs[NSLinkAttributeName];
+
       if (self.clickHandler) {
         if (url) {
+          for (DDHTag *tag in self.toot.tootToShow.tags) {
+            if (NSOrderedSame == [tag.url.path caseInsensitiveCompare:url.path]) {
+              self.clickHandler(tag);
+              return;
+            }
+          }
           self.clickHandler(url);
         } else {
           self.clickHandler(self.toot.tootToShow);

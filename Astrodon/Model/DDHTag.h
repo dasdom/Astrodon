@@ -9,7 +9,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @interface DDHTag : NSObject
 @property (strong) NSString *name;
-@property (strong) NSString *urlString;
+@property (strong) NSURL *url;
 - (instancetype)initWithDictionary:(NSDictionary *)dict;
 @end
 

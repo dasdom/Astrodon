@@ -31,14 +31,29 @@
 
     _replyButton = [[NSButton alloc] init];
     _replyButton.translatesAutoresizingMaskIntoConstraints = NO;
+    if (@available(macOS 26.0, *)) {
+      _replyButton.bezelStyle = NSBezelStyleGlass;
+    } else {
+      _replyButton.bezelStyle = NSBezelStyleShadowlessSquare;
+    }
     _replyButton.image = [NSImage imageWithSystemSymbolName:@"arrow.turn.up.left" accessibilityDescription:@"reply"];
 
     _favoriteButton = [[NSButton alloc] init];
     _favoriteButton.translatesAutoresizingMaskIntoConstraints = NO;
+    if (@available(macOS 26.0, *)) {
+      _favoriteButton.bezelStyle = NSBezelStyleGlass;
+    } else {
+      _favoriteButton.bezelStyle = NSBezelStyleShadowlessSquare;
+    }
     _favoriteButton.image = [NSImage imageWithSystemSymbolName:@"star" accessibilityDescription:@"favorite"];
 
     _boostButton = [[NSButton alloc] init];
     _boostButton.translatesAutoresizingMaskIntoConstraints = NO;
+    if (@available(macOS 26.0, *)) {
+      _boostButton.bezelStyle = NSBezelStyleGlass;
+    } else {
+      _boostButton.bezelStyle = NSBezelStyleShadowlessSquare;
+    }
     _boostButton.image = [NSImage imageWithSystemSymbolName:@"arrow.2.squarepath" accessibilityDescription:@"reply"];
 
     _languageLabel = [NSTextField labelWithString:@"en"];
@@ -68,20 +83,23 @@
       [_tootView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
 
       [_quoteTootView.leadingAnchor constraintEqualToAnchor:_tootView.leadingAnchor constant:4],
-      [_quoteTootView.bottomAnchor constraintEqualToAnchor:_boostButton.topAnchor constant:-4],
+      [_quoteTootView.bottomAnchor constraintEqualToAnchor:_boostButton.topAnchor constant:-10],
       [_quoteTootView.trailingAnchor constraintEqualToAnchor:_tootView.trailingAnchor constant:-4],
 
       _tootViewToButtonConstraint,
       [_boostButton.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
-      [_boostButton.bottomAnchor constraintEqualToAnchor:self.layoutMarginsGuide.bottomAnchor],
+      [_boostButton.bottomAnchor constraintEqualToAnchor:self.layoutMarginsGuide.bottomAnchor constant:-10],
+      [_boostButton.heightAnchor constraintEqualToConstant:30],
 
-      [_favoriteButton.trailingAnchor constraintEqualToAnchor:_boostButton.leadingAnchor constant:-4],
+      [_favoriteButton.trailingAnchor constraintEqualToAnchor:_boostButton.leadingAnchor constant:-10],
       [_favoriteButton.bottomAnchor constraintEqualToAnchor:_boostButton.bottomAnchor],
+      [_favoriteButton.heightAnchor constraintEqualToAnchor:_boostButton.heightAnchor],
 
-      [_replyButton.trailingAnchor constraintEqualToAnchor:_favoriteButton.leadingAnchor constant:-4],
+      [_replyButton.trailingAnchor constraintEqualToAnchor:_favoriteButton.leadingAnchor constant:-10],
       [_replyButton.bottomAnchor constraintEqualToAnchor:_favoriteButton.bottomAnchor],
+      [_replyButton.heightAnchor constraintEqualToAnchor:_favoriteButton.heightAnchor],
 
-      [_languageLabel.topAnchor constraintEqualToAnchor:_boostButton.bottomAnchor],
+      [_languageLabel.topAnchor constraintEqualToAnchor:_boostButton.bottomAnchor constant:4],
       [_languageLabel.centerXAnchor constraintEqualToAnchor:_boostButton.centerXAnchor],
 
       [separatorView.leadingAnchor constraintEqualToAnchor:self.leadingAnchor],

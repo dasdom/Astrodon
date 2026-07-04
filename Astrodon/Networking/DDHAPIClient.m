@@ -71,6 +71,27 @@
   [self executeRequest:request tootsCompletionHandler:completionHandler];
 }
 
+- (void)tagTimelineSinceToot:(DDHToot *)toot forTag:(NSString *)tag completionHander:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler {
+  NSDictionary<NSString *, NSString *> *queryItemsDictionary = nil;
+  if (toot) {
+    queryItemsDictionary = @{@"since_id": toot.statusId};
+  }
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointTagTimeline subPath:tag queryItemsDictionary:queryItemsDictionary];
+
+  [self executeRequest:request tootsCompletionHandler:completionHandler];
+}
+
+- (void)tagTimelineBeforeToot:(DDHToot *)toot forTag:(NSString *)tag completionHander:(void (^)(NSArray<DDHToot *> * _Nonnull, NSError * _Nonnull))completionHandler {
+  NSDictionary<NSString *, NSString *> *queryItemsDictionary = nil;
+  if (toot) {
+    queryItemsDictionary = @{@"max_id": toot.statusId};
+  }
+  NSURLRequest *request = [DDHRequestFactory requestForEndpoint:DDHEndpointTagTimeline subPath:tag queryItemsDictionary:queryItemsDictionary];
+
+  [self executeRequest:request tootsCompletionHandler:completionHandler];
+}
+
+
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler {
   NSMutableURLRequest *request = [[DDHRequestFactory requestForEndpoint:DDHEndpointNewStatus] mutableCopy];
   request.HTTPBody = status.data;

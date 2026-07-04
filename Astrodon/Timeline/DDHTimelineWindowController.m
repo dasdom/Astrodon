@@ -11,6 +11,7 @@
 #import "DDHAccount.h"
 #import "DDHAccountViewController.h"
 #import "DDHToot.h"
+#import "DDHTag.h"
 #import "DDHStatusContextViewController.h"
 
 NSString * const reloadIdentifier = @"reloadIdentifier";
@@ -148,6 +149,13 @@ NSString * const composeIdentifier = @"composeIdentifier";
     DDHToot *toot = (DDHToot *)item;
     DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:self.apiClient toot:toot.tootToShow imageLoader:self.imageLoader];
     [viewController presentViewControllerAsModalWindow:statusContextViewController];
+  } else if ([item isKindOfClass:[DDHTag class]]) {
+    DDHTag *hashtag = (DDHTag *)item;
+    DDHTimelineViewController *timeLineViewController = [[DDHTimelineViewController alloc] initWithDelegate:self hashtag:hashtag.name imageLoader:self.imageLoader apiClient:self.apiClient];
+    timeLineViewController.title = hashtag.name;
+
+    NSWindow *hashtagWindow = [NSWindow windowWithContentViewController:timeLineViewController];
+    [hashtagWindow makeKeyAndOrderFront:self];
   }
 }
 

@@ -23,22 +23,28 @@
 @property (strong) NSArray<DDHToot *> *toots;
 @property (strong) DDHAPIClient *apiClient;
 @property (strong) DDHImageLoader *imageLoader;
+@property (strong) NSString *hashtag;
 @property BOOL updatingTimeline;
 @property BOOL loadingBecauseScrolledNegative;
 @end
 
 @implementation DDHTimelineViewController
 
-- (instancetype)initWithDelegate:(id<DDHTimelineViewControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient {
+- (instancetype)initWithDelegate:(id<DDHTimelineViewControllerDelegate>)delegate hashtag:(NSString *)hashtag imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient {
   if (self = [super initWithNibName:nil bundle:nil]) {
     _delegate = delegate;
     _imageLoader = imageLoader;
     _apiClient = apiClient;
+    _hashtag = hashtag;
 
     _relativeDateTimeFormatter = [[NSRelativeDateTimeFormatter alloc] init];
     _relativeDateTimeFormatter.unitsStyle = NSRelativeDateTimeFormatterUnitsStyleAbbreviated;
   }
   return self;
+}
+
+- (instancetype)initWithDelegate:(id<DDHTimelineViewControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient {
+  return [self initWithDelegate:delegate hashtag:nil imageLoader:imageLoader apiClient:apiClient];
 }
 
 - (DDHTimelineView *)contentView {
@@ -149,28 +155,49 @@
     [self.contentView startTopSpinner];
     __weak typeof(self)weakSelf = self;
     DDHToot *firstToot = self.toots.firstObject;
-    [self.apiClient homeTimelineSinceToot:firstToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
 
-      if (completionHandler) {
-        completionHandler();
-      }
+    if (self.hashtag) {
+      [self.apiClient tagTimelineSinceToot:firstToot forTag:self.hashtag completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
 
-      if ([toots count] > 0) {
-        NSLog(@"error: %@", error);
-        if ([weakSelf.toots count] > 0) {
-          // Add fetched toots at the beginning of the existing toots.
-          weakSelf.toots = [toots arrayByAddingObjectsFromArray:weakSelf.toots];
-        } else {
-          weakSelf.toots = toots;
+        if (completionHandler) {
+          completionHandler();
         }
-        [weakSelf updateWithToots:weakSelf.toots];
-      }
-      weakSelf.updatingTimeline = NO;
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.contentView stopTopSpinner];
-      });
-    }];
+
+        NSLog(@"error: %@", error);
+        [weakSelf addToots:toots append:NO];
+      }];
+    } else {
+      [self.apiClient homeTimelineSinceToot:firstToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+
+        if (completionHandler) {
+          completionHandler();
+        }
+
+        NSLog(@"error: %@", error);
+        [weakSelf addToots:toots append:NO];
+      }];
+    }
   }
+}
+
+- (void)addToots:(NSArray<DDHToot *> *)toots append:(BOOL)append {
+  if ([toots count] > 0) {
+    if ([self.toots count] > 0) {
+      if (append) {
+        self.toots = [self.toots arrayByAddingObjectsFromArray:toots];
+      } else {
+        // Add fetched toots at the beginning of the existing toots.
+        self.toots = [toots arrayByAddingObjectsFromArray:self.toots];
+      }
+    } else {
+      self.toots = toots;
+    }
+    [self updateWithToots:self.toots];
+  }
+  self.updatingTimeline = NO;
+  dispatch_async(dispatch_get_main_queue(), ^{
+    [self.contentView stopTopSpinner];
+  });
 }
 
 - (IBAction)showMore:(NSButton *)sender {
@@ -256,23 +283,24 @@
     [self.contentView startBottomSpinner];
     __weak typeof(self)weakSelf = self;
     DDHToot *lastToot = self.toots.lastObject;
-    [self.apiClient homeTimelineBeforeToot:lastToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
-      NSLog(@"error: %@", error);
 
-      [self.delegate viewControllerStoppedLoading:self];
+    if (self.hashtag) {
+      [self.apiClient tagTimelineBeforeToot:lastToot forTag:self.hashtag completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+        NSLog(@"error: %@", error);
 
-      if ([weakSelf.toots count] > 0) {
-        // Add fetched toots at the beginning of the existing toots.
-        weakSelf.toots = [weakSelf.toots arrayByAddingObjectsFromArray:toots];
-      } else {
-        weakSelf.toots = toots;
-      }
-      [weakSelf updateWithToots:weakSelf.toots];
-      weakSelf.updatingTimeline = NO;
-      dispatch_async(dispatch_get_main_queue(), ^{
-        [weakSelf.contentView stopBottomSpinner];
-      });
-    }];
+        [weakSelf.delegate viewControllerStoppedLoading:self];
+
+        [weakSelf addToots:toots append:YES];
+      }];
+    } else {
+      [self.apiClient homeTimelineBeforeToot:lastToot completionHander:^(NSArray<DDHToot *> * _Nonnull toots, NSError * _Nonnull error) {
+        NSLog(@"error: %@", error);
+
+        [weakSelf.delegate viewControllerStoppedLoading:self];
+
+        [weakSelf addToots:toots append:YES];
+      }];
+    }
   } else if (clipView.bounds.origin.y < 0) {
     if (self.loadingBecauseScrolledNegative) {
       return;

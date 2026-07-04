@@ -17,6 +17,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)fetchTokenWithCode:(NSString *)code completionHandler:(void(^)(NSString *token, NSError *error))completionHandler;
 - (void)homeTimelineSinceToot:(DDHToot *)toot completionHander:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler;
 - (void)homeTimelineBeforeToot:(DDHToot *)toot completionHander:(void (^)(NSArray<DDHToot *> * _Nonnull, NSError * _Nonnull))completionHandler;
+- (void)tagTimelineSinceToot:(DDHToot *)toot forTag:(NSString *)tag completionHander:(void(^)(NSArray<DDHToot *> *toots, NSError *error))completionHandler;
+- (void)tagTimelineBeforeToot:(DDHToot *)toot forTag:(NSString *)tag completionHander:(void (^)(NSArray<DDHToot *> * _Nonnull, NSError * _Nonnull))completionHandler;
 - (void)postNewStatus:(DDHStatus *)status completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)boostStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
 - (void)favoriteStatusWithId:(NSString *)statusId completionHandler:(void(^)(NSError *error))completionHandler;
