@@ -16,6 +16,7 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSButton *favoriteButton;
 @property (strong) NSButton *boostButton;
 @property (strong) NSTextField *languageLabel;
+@property (assign) BOOL active;
 - (void)updateWithToot:(DDHToot *)toot imageLoader:(DDHImageLoader *)imageLoader relativeDateTimeFormatter:(NSRelativeDateTimeFormatter *)relativeDateTimeFormatter;
 @end
 

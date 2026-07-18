@@ -17,6 +17,7 @@
 #import "DDHStatusContextViewController.h"
 #import "DDHMediaAttachment.h"
 #import "DDHAccount.h"
+#import "DDHTableView.h"
 
 @interface DDHStatusContextViewController ()
 @property (strong) DDHAPIClient *apiClient;
@@ -47,7 +48,7 @@
   return (DDHTimelineView *)self.view;
 }
 
-- (NSTableView *)tableView {
+- (DDHTableView *)tableView {
   return self.contentView.tableView;
 }
 
@@ -62,7 +63,7 @@
 
   typeof(self) __weak weakSelf = self;
 
-  _dataSource = [[NSTableViewDiffableDataSource alloc] initWithTableView:self.tableView cellProvider:^NSView * _Nonnull(NSTableView * _Nonnull tableView, NSTableColumn * _Nonnull column, NSInteger row, NSString * _Nonnull itemId) {
+  _dataSource = [[NSTableViewDiffableDataSource alloc] initWithTableView:(NSTableView *)self.tableView cellProvider:^NSView * _Nonnull(NSTableView * _Nonnull tableView, NSTableColumn * _Nonnull column, NSInteger row, NSString * _Nonnull itemId) {
 
     DDHToot *toot;
     NSColor *backgroundColor;

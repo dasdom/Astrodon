@@ -4,6 +4,7 @@
 
 
 #import "DDHTimelineView.h"
+#import "DDHTableView.h"
 
 @interface DDHTimelineView ()
 @property (nonatomic, strong) NSProgressIndicator *topProgressIndicator;

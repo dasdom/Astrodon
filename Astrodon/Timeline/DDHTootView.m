@@ -18,6 +18,7 @@
 @property (strong) NSImageView *boostersImageView;
 @property (strong) NSTextField *displayNameTextField;
 @property (strong) NSTextField *dateTextField;
+@property (strong) NSImageView *threadIconView;
 @property (strong) NSTextField *acctTextField;
 @property (strong) NSTextField *tootTextField;
 @property (strong) NSLayoutConstraint *avatarImageWidthConstraint;
@@ -51,6 +52,10 @@
     _dateTextField.translatesAutoresizingMaskIntoConstraints = NO;
     _dateTextField.textColor = [NSColor systemGrayColor];
 
+    _threadIconView = [NSImageView imageViewWithImage:[NSImage imageWithSystemSymbolName:@"bubble.left.and.bubble.right" accessibilityDescription:@"Has thread"]];
+    _threadIconView.translatesAutoresizingMaskIntoConstraints = NO;
+    _threadIconView.hidden = YES;
+
     _acctTextField = [NSTextField labelWithString:@"acct"];
     _acctTextField.translatesAutoresizingMaskIntoConstraints = NO;
     _acctTextField.font = [NSFont preferredFontForTextStyle:NSFontTextStyleFootnote options:@{}];
@@ -73,6 +78,7 @@
     [self addSubview:_boostersImageView];
     [self addSubview:_displayNameTextField];
     [self addSubview:_dateTextField];
+    [self addSubview:_threadIconView];
     [self addSubview:_acctTextField];
     [self addSubview:_tootTextField];
     [self addSubview:_attachmentsView];
@@ -99,6 +105,9 @@
       [_dateTextField.leadingAnchor constraintEqualToAnchor:_displayNameTextField.trailingAnchor constant:8],
       [_dateTextField.centerYAnchor constraintEqualToAnchor:_displayNameTextField.centerYAnchor],
       [_dateTextField.trailingAnchor constraintEqualToAnchor:self.layoutMarginsGuide.trailingAnchor],
+
+      [_threadIconView.trailingAnchor constraintEqualToAnchor:_dateTextField.leadingAnchor constant:-10],
+      [_threadIconView.centerYAnchor constraintEqualToAnchor:_dateTextField.centerYAnchor],
 
       [_acctTextField.topAnchor constraintEqualToAnchor:_displayNameTextField.bottomAnchor],
       [_acctTextField.leadingAnchor constraintEqualToAnchor:_displayNameTextField.leadingAnchor],
@@ -133,6 +142,12 @@
 
   self.displayNameTextField.stringValue = account.displayName ?: @"";
   self.acctTextField.stringValue = account.acct ?: @"";
+
+  if (toot.inReplyToId || toot.repliesCount > 0) {
+    self.threadIconView.hidden = NO;
+  } else {
+    self.threadIconView.hidden = YES;
+  }
 
   self.dateTextField.stringValue = [relativeDateTimeFormatter localizedStringForDate:toot.tootToShow.createdAt relativeToDate:[NSDate date]];
 
@@ -258,13 +273,13 @@
   [attributedString enumerateAttributesInRange:NSMakeRange(0, attributedString.length) options:0 usingBlock:^(NSDictionary<NSAttributedStringKey,id> * _Nonnull attrs, NSRange range, BOOL * _Nonnull stop) {
     if (NSLocationInRange(characterIndex, range)) {
       //      NSLog(@"range: %@", [NSValue valueWithRange:range]);
-      NSLog(@"attrs: %@", attrs);
+//      NSLog(@"attrs: %@", attrs);
       NSURL *url = (NSURL *)attrs[NSLinkAttributeName];
 
       if (self.clickHandler) {
         if (url) {
           for (DDHTag *tag in self.toot.tootToShow.tags) {
-            if (NSOrderedSame == [tag.url.path caseInsensitiveCompare:url.path]) {
+            if ([url.path.lowercaseString hasSuffix:tag.url.path.lowercaseString]) {
               self.clickHandler(tag);
               return;
             }

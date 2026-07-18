@@ -6,38 +6,41 @@
 #import "DDHTimelineWindowController.h"
 #import "DDHTimelineViewController.h"
 #import "DDHTimelineViewControllerDelegate.h"
-#import "DDHMediaAttachment.h"
-#import "DDHImageViewerViewController.h"
-#import "DDHAccount.h"
-#import "DDHAccountViewController.h"
-#import "DDHToot.h"
-#import "DDHTag.h"
-#import "DDHStatusContextViewController.h"
 
 NSString * const reloadIdentifier = @"reloadIdentifier";
 NSString * const spinnerIdentifier = @"spinnerIdentifier";
 NSString * const composeIdentifier = @"composeIdentifier";
 
-@interface DDHTimelineWindowController () <NSToolbarDelegate, DDHTimelineViewControllerDelegate>
+@interface DDHTimelineWindowController () <DDHTimelineViewControllerDelegate, NSToolbarDelegate>
 @property (strong) id<DDHTimelineWindowControllerDelegate> delegate;
 @property (strong) DDHImageLoader *imageLoader;
 @property (strong) DDHAPIClient *apiClient;
+@property (strong) NSString *hashtag;
 @end
 
 @implementation DDHTimelineWindowController
 
 - (instancetype)initWithDelegate:(id<DDHTimelineWindowControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient {
+  return [self initWithDelegate:delegate hashtag:nil imageLoader:imageLoader apiClient:apiClient];
+}
 
-  DDHTimelineViewController *timeLineViewController = [[DDHTimelineViewController alloc] initWithDelegate:self imageLoader:imageLoader apiClient:apiClient];
-  timeLineViewController.title = @"Timeline";
+- (instancetype)initWithDelegate:(id<DDHTimelineWindowControllerDelegate>)delegate hashtag:(NSString *)hashtag imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient {
+
+  DDHTimelineViewController *timeLineViewController = [[DDHTimelineViewController alloc] initWithDelegate:self hashtag:hashtag imageLoader:imageLoader apiClient:apiClient];
+  if (hashtag) {
+    timeLineViewController.title = [NSString stringWithFormat:@"#%@", hashtag];
+  } else {
+    timeLineViewController.title = @"Home";
+  }
 
   NSWindow *window = [NSWindow windowWithContentViewController:timeLineViewController];
   if (self = [super initWithWindow:window]) {
     _delegate = delegate;
     _imageLoader = imageLoader;
     _apiClient = apiClient;
+    _hashtag = hashtag;
 
-    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:@"Timeline"];
+    NSToolbar *toolbar = [[NSToolbar alloc] initWithIdentifier:timeLineViewController.title];
     toolbar.delegate = self;
     [toolbar insertItemWithItemIdentifier:reloadIdentifier atIndex:0];
     [toolbar insertItemWithItemIdentifier:composeIdentifier atIndex:1];
@@ -126,37 +129,7 @@ NSString * const composeIdentifier = @"composeIdentifier";
 
 // MARK: - DDHTimelineViewControllerDelegate
 - (void)viewController:(NSViewController *)viewController didClickItem:(id)item {
-  if ([item isKindOfClass:[NSURL class]]) {
-    // Link in post
-    NSURL *url = (NSURL *)item;
-    NSLog(@"url: %@", url);
-    [NSWorkspace.sharedWorkspace openURL:url];
-
-  } else if ([item isKindOfClass:[DDHMediaAttachment class]]) {
-    // Image
-    DDHMediaAttachment *attachment = (DDHMediaAttachment *)item;
-    DDHImageViewerViewController *imageViewController = [[DDHImageViewerViewController alloc] initWithMediaAttachment:attachment imageLoader:self.imageLoader];
-    [viewController presentViewControllerAsModalWindow:imageViewController];
-
-  } else if ([item isKindOfClass:[DDHAccount class]]) {
-    // Account
-    DDHAccount *account = (DDHAccount *)item;
-    DDHAccountViewController *accountViewController = [[DDHAccountViewController alloc] initWithAccount:account imageLoader:self.imageLoader apiClient:self.apiClient];
-    [viewController presentViewControllerAsModalWindow:accountViewController];
-
-  } else if ([item isKindOfClass:[DDHToot class]]) {
-    // Thread
-    DDHToot *toot = (DDHToot *)item;
-    DDHStatusContextViewController *statusContextViewController = [[DDHStatusContextViewController alloc] initWithAPIClient:self.apiClient toot:toot.tootToShow imageLoader:self.imageLoader];
-    [viewController presentViewControllerAsModalWindow:statusContextViewController];
-  } else if ([item isKindOfClass:[DDHTag class]]) {
-    DDHTag *hashtag = (DDHTag *)item;
-    DDHTimelineViewController *timeLineViewController = [[DDHTimelineViewController alloc] initWithDelegate:self hashtag:hashtag.name imageLoader:self.imageLoader apiClient:self.apiClient];
-    timeLineViewController.title = hashtag.name;
-
-    NSWindow *hashtagWindow = [NSWindow windowWithContentViewController:timeLineViewController];
-    [hashtagWindow makeKeyAndOrderFront:self];
-  }
+  [self.delegate windowController:self didClickItem:item];
 }
 
 - (void)viewControllerStartedLoading:(NSViewController *)viewController {

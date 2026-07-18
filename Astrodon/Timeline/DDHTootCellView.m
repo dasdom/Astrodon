@@ -107,6 +107,8 @@
       [separatorView.trailingAnchor constraintEqualToAnchor:self.trailingAnchor],
       [separatorView.heightAnchor constraintEqualToConstant:1],
     ]];
+
+    self.wantsLayer = YES;
   }
   return self;
 }
@@ -143,6 +145,18 @@
     self.favoriteButton.bezelColor = nil;
     self.favoriteButton.image = [NSImage imageWithSystemSymbolName:@"star" accessibilityDescription:@"favorite"];
   }
+}
+
+- (BOOL)canBecomeKeyView {
+  return YES;
+}
+
+- (NSRect)focusRingMaskBounds {
+  return self.bounds;
+}
+
+- (void)drawFocusRingMask {
+  [[NSBezierPath bezierPathWithRoundedRect:self.bounds xRadius:5 yRadius:5] fill];
 }
 
 @end

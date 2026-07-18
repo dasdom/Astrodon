@@ -12,6 +12,8 @@
 		F238583F2926A1C10065DE0B /* MainMenu.xib in Resources */ = {isa = PBXBuildFile; fileRef = F238583D2926A1C10065DE0B /* MainMenu.xib */; };
 		F23858412926A1C10065DE0B /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858402926A1C10065DE0B /* main.m */; };
 		F23858652926BCAB0065DE0B /* DDHRequestFactoryTests.m in Sources */ = {isa = PBXBuildFile; fileRef = F23858642926BCAB0065DE0B /* DDHRequestFactoryTests.m */; };
+		F23F01222FFA4FFD00FF3077 /* DDHMainWindowController.m in Sources */ = {isa = PBXBuildFile; fileRef = F23F01212FFA4FFD00FF3077 /* DDHMainWindowController.m */; };
+		F23F01252FFA515100FF3077 /* DDHMainViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = F23F01242FFA515100FF3077 /* DDHMainViewController.m */; };
 		F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */; };
 		F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = F2C7B1FE29350EF400554EA2 /* DDHConstants.m */; };
 		F2D14AD42F7FA28300E90947 /* DDHAppCoordinator.m in Sources */ = {isa = PBXBuildFile; fileRef = F2D14AD32F7FA28300E90947 /* DDHAppCoordinator.m */; };
@@ -37,6 +39,11 @@
 		F23858422926A1C10065DE0B /* Astrodon.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = Astrodon.entitlements; sourceTree = "<group>"; };
 		F238584C2926A1D60065DE0B /* AstrodonTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = AstrodonTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		F23858642926BCAB0065DE0B /* DDHRequestFactoryTests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHRequestFactoryTests.m; sourceTree = "<group>"; };
+		F23F01202FFA4FFD00FF3077 /* DDHMainWindowController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHMainWindowController.h; sourceTree = "<group>"; };
+		F23F01212FFA4FFD00FF3077 /* DDHMainWindowController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHMainWindowController.m; sourceTree = "<group>"; };
+		F23F01232FFA515100FF3077 /* DDHMainViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHMainViewController.h; sourceTree = "<group>"; };
+		F23F01242FFA515100FF3077 /* DDHMainViewController.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHMainViewController.m; sourceTree = "<group>"; };
+		F23F01262FFA537600FF3077 /* DDHMainWindowControllerDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHMainWindowControllerDelegate.h; sourceTree = "<group>"; };
 		F2C7B1F92935084B00554EA2 /* DDHKeychain.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHKeychain.h; sourceTree = "<group>"; };
 		F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = DDHKeychain.m; sourceTree = "<group>"; };
 		F2C7B1FD29350EF400554EA2 /* DDHConstants.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = DDHConstants.h; sourceTree = "<group>"; };
@@ -96,6 +103,7 @@
 /* End PBXFileSystemSynchronizedBuildFileExceptionSet section */
 
 /* Begin PBXFileSystemSynchronizedRootGroup section */
+		F23F017E300231A200FF3077 /* CustomViews */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = CustomViews; sourceTree = "<group>"; };
 		F295BE1C2FDF2462005B2FE6 /* UI */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = UI; sourceTree = "<group>"; };
 		F2ABC09B2F701A6200FD5A57 /* ImageViewer */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = ImageViewer; sourceTree = "<group>"; };
 		F2ABC0A32F701BF300FD5A57 /* Account */ = {isa = PBXFileSystemSynchronizedRootGroup; explicitFileTypes = {}; explicitFolders = (); path = Account; sourceTree = "<group>"; };
@@ -152,6 +160,11 @@
 				F2D14AD52F7FA29600E90947 /* DDHCoordinatorProtocol.h */,
 				F2D14AD22F7FA28300E90947 /* DDHAppCoordinator.h */,
 				F2D14AD32F7FA28300E90947 /* DDHAppCoordinator.m */,
+				F23F01202FFA4FFD00FF3077 /* DDHMainWindowController.h */,
+				F23F01212FFA4FFD00FF3077 /* DDHMainWindowController.m */,
+				F23F01232FFA515100FF3077 /* DDHMainViewController.h */,
+				F23F01242FFA515100FF3077 /* DDHMainViewController.m */,
+				F23F01262FFA537600FF3077 /* DDHMainWindowControllerDelegate.h */,
 				F2C7B1F92935084B00554EA2 /* DDHKeychain.h */,
 				F2C7B1FA2935084B00554EA2 /* DDHKeychain.m */,
 				F2C7B1FD29350EF400554EA2 /* DDHConstants.h */,
@@ -166,6 +179,7 @@
 				F2ABC0CD2F701C0A00FD5A57 /* Networking */,
 				F2ABC0E22F701C0D00FD5A57 /* Model */,
 				F295BE1C2FDF2462005B2FE6 /* UI */,
+				F23F017E300231A200FF3077 /* CustomViews */,
 				F238583B2926A1C10065DE0B /* Assets.xcassets */,
 				F238583D2926A1C10065DE0B /* MainMenu.xib */,
 				F23858402926A1C10065DE0B /* main.m */,
@@ -206,6 +220,7 @@
 			dependencies = (
 			);
 			fileSystemSynchronizedGroups = (
+				F23F017E300231A200FF3077 /* CustomViews */,
 				F295BE1C2FDF2462005B2FE6 /* UI */,
 				F2ABC09B2F701A6200FD5A57 /* ImageViewer */,
 				F2ABC0A32F701BF300FD5A57 /* Account */,
@@ -301,7 +316,9 @@
 				F2C7B1FB2935084B00554EA2 /* DDHKeychain.m in Sources */,
 				F2C7B1FF29350EF400554EA2 /* DDHConstants.m in Sources */,
 				F2D14AD42F7FA28300E90947 /* DDHAppCoordinator.m in Sources */,
+				F23F01222FFA4FFD00FF3077 /* DDHMainWindowController.m in Sources */,
 				F238583A2926A1C00065DE0B /* AppDelegate.m in Sources */,
+				F23F01252FFA515100FF3077 /* DDHMainViewController.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

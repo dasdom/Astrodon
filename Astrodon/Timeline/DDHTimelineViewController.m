@@ -14,6 +14,7 @@
 #import "DDHEndpoint.h"
 #import "DDHTootInputViewController.h"
 #import "DDHTootView.h"
+#import "DDHTableView.h"
 #import <OSLog/OSLog.h>
 
 @interface DDHTimelineViewController () <NSTableViewDelegate>
@@ -136,6 +137,11 @@
   __weak typeof(self) weakSelf = self;
   dispatch_async(dispatch_get_main_queue(), ^{
     [weakSelf.dataSource applySnapshot:snapshot animatingDifferences:true];
+
+//    DDHTootCellView *tootCellView = [weakSelf.contentView.tableView viewAtColumn:0 row:0 makeIfNecessary:NO];
+//    [weakSelf.view.window makeFirstResponder:tootCellView];
+//    tootCellView.active = YES;
+//    tootCellView.needsDisplay = YES;
   });
 }
 
@@ -243,9 +249,6 @@
 - (void)reply:(NSButton *)sender {
   NSInteger row = [self.tableView rowForView:sender];
   DDHToot *toot = self.toots[row];
-//  DDHToot *tootToShow = [toot isBoost] ? toot.boostedToot : toot;
-//  NSLog(@"toot id: %@", toot.statusId);
-//  NSLog(@"replying to toot with id: %@", tootToShow.statusId);
   [self openTootInputReplyingToToot:toot.tootToShow];
 }
 
@@ -309,6 +312,23 @@
     [self loadToots:nil withCompletionHandler:^{}];
   } else {
     self.loadingBecauseScrolledNegative = NO;
+  }
+}
+
+- (void)keyDown:(NSEvent *)event {
+  NSLog(@"global event %@", event);
+
+//#error "Select next toot on key down"
+//#error "Select previous toot on key up"
+  if (event.keyCode == 36) {
+    DDHTootCellView *tootCellView = (DDHTootCellView *)self.view.window.firstResponder;
+
+    if ([tootCellView isKindOfClass:[DDHTootCellView class]]) {
+      NSInteger row = [self.contentView.tableView rowForView:tootCellView];
+      DDHToot *toot = self.toots[row];
+
+      [self.delegate viewController:self didClickItem:toot];
+    }
   }
 }
 

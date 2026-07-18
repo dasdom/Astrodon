@@ -27,6 +27,12 @@
 
     _statusId = dict[@"id"];
 
+    NSString *inReplyToId = dict[@"in_reply_to_id"];
+    if ([inReplyToId isKindOfClass:[NSString class]]) {
+      _inReplyToId = inReplyToId;
+    }
+    _repliesCount = [dict[@"replies_count"] integerValue];
+
     NSMutableArray<DDHMediaAttachment *> *mediaAttachments = [NSMutableArray new];
     NSArray<NSDictionary *> *rawMediaAttachments = dict[@"media_attachments"];
     [rawMediaAttachments enumerateObjectsUsingBlock:^(NSDictionary * _Nonnull rawAttachment, NSUInteger idx, BOOL * _Nonnull stop) {

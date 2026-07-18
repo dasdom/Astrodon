@@ -23,6 +23,8 @@ NS_ASSUME_NONNULL_BEGIN
 @property (strong) NSArray<DDHMediaAttachment *> *mediaAttachments;
 @property (strong) NSArray<DDHMention *> *mentions;
 @property (strong) NSArray<DDHTag *> *tags;
+@property (strong) NSString *inReplyToId;
+@property (assign) NSInteger repliesCount;
 @property (nullable, strong) DDHToot *boostedToot;
 @property (nullable, strong) DDHQuote *quote;
 @property BOOL sensitive;

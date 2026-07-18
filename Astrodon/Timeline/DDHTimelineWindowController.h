@@ -12,7 +12,13 @@ NS_ASSUME_NONNULL_BEGIN
 @class DDHAPIClient;
 
 @interface DDHTimelineWindowController : NSWindowController
-- (instancetype)initWithDelegate:(id<DDHTimelineWindowControllerDelegate>)delegate imageLoader:(DDHImageLoader *)imageLoader apiClient:(DDHAPIClient *)apiClient;
+- (instancetype)initWithDelegate:(id<DDHTimelineWindowControllerDelegate>)delegate
+                         hashtag:(nullable NSString *)hashtag
+                     imageLoader:(DDHImageLoader *)imageLoader
+                       apiClient:(DDHAPIClient *)apiClient;
+- (instancetype)initWithDelegate:(id<DDHTimelineWindowControllerDelegate>)delegate
+                     imageLoader:(DDHImageLoader *)imageLoader
+                       apiClient:(DDHAPIClient *)apiClient;
 @end
 
 NS_ASSUME_NONNULL_END

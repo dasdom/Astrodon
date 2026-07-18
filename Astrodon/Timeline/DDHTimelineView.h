@@ -7,6 +7,8 @@
 
 NS_ASSUME_NONNULL_BEGIN
 
+//@class DDHTableView;
+
 @interface DDHTimelineView : NSView
 @property (nonatomic, strong) NSTableView *tableView;
 @property (nonatomic, strong) NSScrollView *scrollView;
